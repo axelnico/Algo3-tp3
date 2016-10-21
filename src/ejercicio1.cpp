@@ -19,7 +19,7 @@ void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int
     for (int i = 0; i < visitados.size(); ++i) {
       camino.push_back(visitados[i].id);
     }
-    soluciones = (make_tuple(visitados.size(), distancia, camino));
+    soluciones = (make_tuple(distancia, visitados.size(), camino));
   }
   else{
     for (int i = 0; i < estaciones.size(); ++i) {
@@ -29,9 +29,8 @@ void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int
         int proxima_distancia = distancias[id_ultimo_visitado][estaciones[i].id];
         nueva_distancia = proxima_distancia + distancia_acumulada(visitados,distancias);
       }
-      cout << nueva_distancia << endl;
-      if ( (get<1>(soluciones) >= 0 && nueva_distancia < get<1>(soluciones)) || (get<1>(soluciones) < 0) ) {        //Poda: solucion posible no sea peor que solucion actual
-        if (estaciones[i].esGimnasio && estaciones[i].potas <= potasActuales){
+      if ( (get<0>(soluciones) >= 0 && nueva_distancia < get<0>(soluciones)) || (get<0>(soluciones) < 0) ) {        //Poda: solucion posible no sea peor que solucion actual
+        if (estaciones[i].esGimnasio && (estaciones[i].potas+potasActuales >= 0) ){
           visitados.push_back(estaciones[i]);
           potasActuales += estaciones[i].potas;
           estaciones.erase(estaciones.begin() + i);
@@ -40,7 +39,7 @@ void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int
           visitados.pop_back();
           estaciones.insert(estaciones.begin() + i, ultimaEstacion);
         }
-        else if (!estaciones[i].esGimnasio && potasActuales <= k-3) {
+        else if ( (!estaciones[i].esGimnasio) && (potasActuales+3 <= k) ) {
           visitados.push_back(estaciones[i]);
           potasActuales += estaciones[i].potas;
           estaciones.erase(estaciones.begin() + i);
@@ -58,7 +57,7 @@ void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int
 bool tiene_solucion(vector<Estacion> &estaciones, int k){
   int potasNecesarias = 0;
   int potasPosibles = 0;
-  for (int i = 0; i < estaciones.size(); i++) {
+  for (int i = 0; i  < estaciones.size(); i++) {
     if(estaciones[i].esGimnasio){
       int potas_gym = estaciones[i].potas;
       if (k + potas_gym < 0) return false;
