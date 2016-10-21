@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     cin >> n >> m >> k;
     cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
     cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
-    vector< tuple <int, int, int> > gimnasios_y_paradas(n+m);
+    vector< tuple <int, int, int> > gimnasios_y_paradas;
 
     for (int i = 0; i < n; i++) {
       int x,y,p;
@@ -68,19 +68,26 @@ int main(int argc, char *argv[]) {
       gimnasios_y_paradas.push_back(pp);
     }
 
-    vector<vector<int> > distancias;
+    vector<vector<int> > distancias(n+m);
     for (int i = 0; i < n+m; ++i) {
-      for (int k = i; k < n+m; ++k) {
-        distancias[i][k].push_back(distTrigonometrica(gimnasios_y_paradas[i], gimnasios_y_paradas[k]));
+      for (int k = 0; k < n+m; ++k) {
+        int dist_ik = distTrigonometrica(gimnasios_y_paradas[i], gimnasios_y_paradas[k]);
+        distancias[i].push_back(dist_ik);
       }
     }
+    vector<vector<int> > distancias_const(distancias);
     vector<Estacion> estaciones(n+m);
-    for (i = 0; i < gimnasios_y_paradas.size(); i++){
-      bool esGimnasio = i < n ? true : false;
+    for (int i = 0; i < gimnasios_y_paradas.size(); i++){
+      bool esGimnasio = i < n;
       int potas = get<2>(gimnasios_y_paradas[i]);
-      estaciones[i] = Estacion(esEstado, potas, i);
+      estaciones[i] = Estacion(esGimnasio, potas, i);
     }
-    tuple<int, int, vector<int> > solverEj1(estaciones, distancias, n, m, k);
+    std::tuple<int, int, std::vector<int> > res = solverEj1(estaciones, distancias_const, n, m, k);
+    cout << get<0>(res) << " " << get<1>(res) << " ";
+    for (int i = 0; i < get<2>(res).size(); ++i) {
+      cout << get<2>(res)[i]+3 << " ";
+    }
+    cout << endl;
   }
 
 

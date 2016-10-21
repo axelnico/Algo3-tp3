@@ -5,7 +5,8 @@
 #include "Estacion.h"
 
 
-tuple<int, int, vector<int> > solverEj1(std::vector<Estacion> &estaciones, vector<vector<int> > distancias, int n, int m, int k);
-tuple<int, int, vector<int> > BT_capturar_gimnasios(std::vector<Estacion> &estaciones, vector<vector<int> > distancias, int n, int m, int k, std::vector<Estacion> &visitados, std::tuple<int,int,std::vector<int> > soluciones);
-bool tiene_solucion(std::vector<Estacion> &estaciones);
+std::tuple<int, int, std::vector<int> > solverEj1(std::vector<Estacion> &estaciones, const std::vector<std::vector<int> > &distancias, int n, int m, int k);
+void BT_capturar_gimnasios(std::vector<Estacion> estaciones, const std::vector<std::vector<int> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, std::tuple<int,int,std::vector<int> > &soluciones);
+bool tiene_solucion(std::vector<Estacion> &estaciones, int k);
 bool es_solucion(std::vector<Estacion> &estaciones);
+int distancia_acumulada(std::vector<Estacion> &visitados, const std::vector<std::vector<int> > &distancias);
