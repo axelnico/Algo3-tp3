@@ -68,11 +68,10 @@ int main(int argc, char *argv[]) {
       gimnasios_y_paradas.push_back(pp);
     }
 
-    int indicesMatriz = gimnasios_y_paradas.size()*m + gimnasios_y_paradas.size();
-    vector<int> distancias(indicesMatriz);
+    vector<vector<int> > distancias;
     for (int i = 0; i < n+m; ++i) {
       for (int k = i; k < n+m; ++k) {
-        distancias[i*gimnasios_y_paradas.size() + k] = distTrigonometrica(gimnasios_y_paradas[i], gimnasios_y_paradas[k]);
+        distancias[i][k].push_back(distTrigonometrica(gimnasios_y_paradas[i], gimnasios_y_paradas[k]));
       }
     }
     vector<Estacion> estaciones(n+m);
@@ -81,7 +80,7 @@ int main(int argc, char *argv[]) {
       int potas = get<2>(gimnasios_y_paradas[i]);
       estaciones[i] = Estacion(esEstado, potas, i);
     }
-    tuple<int, int, vector<int> > solverEj1(estaciones, n, m, k);
+    tuple<int, int, vector<int> > solverEj1(estaciones, distancias, n, m, k);
   }
 
 
