@@ -1,5 +1,8 @@
 #include <vector>
 
+#ifndef ESTACIONES_CLASS
+#define ESTACIONES_CLASS
+
 class Estacion{
     public:
         bool esGimnasio;
@@ -12,3 +15,5 @@ class Estacion{
 
     private:
 };
+
+#endif
