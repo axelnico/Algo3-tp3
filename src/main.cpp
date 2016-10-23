@@ -75,14 +75,13 @@ int main(int argc, char *argv[]) {
         distancias[i].push_back(dist_ik);
       }
     }
-    vector<vector<int> > distancias_const(distancias);
     vector<Estacion> estaciones(n+m);
     for (int i = 0; i < gimnasios_y_paradas.size(); i++){
       bool esGimnasio = i < n;
       int potas = get<2>(gimnasios_y_paradas[i]);
       estaciones[i] = Estacion(esGimnasio, potas, i);
     }
-    std::tuple<int, int, std::vector<int> > res = solverEj1(estaciones, distancias_const, n, m, k);
+    std::tuple<int, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
     cout << "D= " << get<0>(res) << " k= " << get<1>(res) << " i= ";
     for (int i = 0; i < get<1>(res); ++i) {
       cout << get<2>(res)[i]+1 << " ";
