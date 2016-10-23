@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
     std::tuple<int, int, std::vector<int> > res = solverEj1(estaciones, distancias_const, n, m, k);
     cout << "D= " << get<0>(res) << " k= " << get<1>(res) << " i= ";
     for (int i = 0; i < get<1>(res); ++i) {
-      cout << get<2>(res)[i]+2 << " ";
+      cout << get<2>(res)[i]+1 << " ";
     }
     cout << endl;
   }

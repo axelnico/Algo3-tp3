@@ -30,16 +30,7 @@ void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int
         nueva_distancia = proxima_distancia + distancia_acumulada(visitados,distancias);
       }
       if ( (get<0>(soluciones) >= 0 && nueva_distancia < get<0>(soluciones)) || (get<0>(soluciones) < 0) ) {        //Poda: solucion posible no sea peor que solucion actual
-        if (estaciones[i].esGimnasio && (estaciones[i].potas+potasActuales >= 0) ){
-          visitados.push_back(estaciones[i]);
-          potasActuales += estaciones[i].potas;
-          estaciones.erase(estaciones.begin() + i);
-          BT_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,potasActuales,soluciones);
-          Estacion ultimaEstacion(visitados.back());
-          visitados.pop_back();
-          estaciones.insert(estaciones.begin() + i, ultimaEstacion);
-        }
-        else if ( (!estaciones[i].esGimnasio) && (potasActuales+3 <= k) ) {
+        if (puede_ganar_gimnasio(estaciones[i],potasActuales) || puede_recibir_potas(estaciones[i],potasActuales,k)) {
           visitados.push_back(estaciones[i]);
           potasActuales += estaciones[i].potas;
           estaciones.erase(estaciones.begin() + i);
@@ -52,6 +43,14 @@ void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int
     }
   }
 
+}
+
+bool puede_ganar_gimnasio(Estacion &estacion,int potas){
+    return estacion.esGimnasio && estacion.potas+potas >= 0;
+}
+
+bool puede_recibir_potas(Estacion &estacion,int potas,int tamano_mochila){
+  return (!estacion.esGimnasio) && (potas+3 <= tamano_mochila);
 }
 
 bool tiene_solucion(vector<Estacion> &estaciones, int k){
