@@ -9,6 +9,7 @@
 #include <string>
 #include <chrono>
 #include "ejercicio1.h"
+#include "ejercicio2.h"
 
 
 using namespace std;
@@ -24,7 +25,11 @@ double stop_timer() {
 	return double(chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count());
 }
 
+tuple<vector<vector<int> >, vector<Estacion> > cargar_input(int n, int m);
+
 int distTrigonometrica(tuple<int, int, int> a, tuple<int, int, int> b);
+
+void imprimir_res(tuple<int,int,vector<int > > res);
 
 int main(int argc, char *argv[]) {
 	int numeroDeEjercicio = 0;
@@ -51,47 +56,64 @@ int main(int argc, char *argv[]) {
     cin >> n >> m >> k;
     cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
     cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
-    vector< tuple <int, int, int> > gimnasios_y_paradas;
 
-    for (int i = 0; i < n; i++) {
-      int x,y,p;
-      cin >> x >> y >> p;
-      p = 0-p;
-      tuple<int,int,int> gym = make_tuple(x,y,p);
-      gimnasios_y_paradas.push_back(gym);
-    }
-
-    for (int i = 0; i < m; i++) {
-      int x,y;
-      cin >> x >> y;
-      tuple<int,int,int> pp = make_tuple(x,y,3);
-      gimnasios_y_paradas.push_back(pp);
-    }
-
-    vector<vector<int> > distancias(n+m);
-    for (int i = 0; i < n+m; ++i) {
-      for (int k = 0; k < n+m; ++k) {
-        int dist_ik = distTrigonometrica(gimnasios_y_paradas[i], gimnasios_y_paradas[k]);
-        distancias[i].push_back(dist_ik);
-      }
-    }
-    vector<Estacion> estaciones(n+m);
-    for (int i = 0; i < gimnasios_y_paradas.size(); i++){
-      bool esGimnasio = i < n;
-      int potas = get<2>(gimnasios_y_paradas[i]);
-      estaciones[i] = Estacion(esGimnasio, potas, i);
-    }
+    tuple<vector<vector<int> >, vector<Estacion> > input = cargar_input(n,m);
+    vector<vector<int> > distancias = get<0>(input);
+    vector<Estacion> estaciones = get<1>(input);
     std::tuple<int, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
-    cout << "D= " << get<0>(res) << " k= " << get<1>(res) << " i= ";
-    for (int i = 0; i < get<1>(res); ++i) {
-      cout << get<2>(res)[i]+1 << " ";
-    }
-    cout << endl;
+    imprimir_res(res);
+  }
+  else if (numeroDeEjercicio == 2) {
+    cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
+    int n,m,k;
+    cin >> n >> m >> k;
+    cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
+    cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
+
+    tuple<vector<vector<int> >, vector<Estacion> > input = cargar_input(n,m);
+    vector<vector<int> > distancias = get<0>(input);
+    vector<Estacion> estaciones = get<1>(input);
+    std::tuple<int, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
+    imprimir_res(res);
   }
 
 
 
   return 0;
+}
+
+tuple<vector<vector<int> >, vector<Estacion> > cargar_input(int n, int m){
+  vector< tuple <int, int, int> > gimnasios_y_paradas;
+
+  for (int i = 0; i < n; i++) {
+    int x,y,p;
+    cin >> x >> y >> p;
+    p = 0-p;
+    tuple<int,int,int> gym = make_tuple(x,y,p);
+    gimnasios_y_paradas.push_back(gym);
+  }
+
+  for (int i = 0; i < m; i++) {
+    int x,y;
+    cin >> x >> y;
+    tuple<int,int,int> pp = make_tuple(x,y,3);
+    gimnasios_y_paradas.push_back(pp);
+  }
+
+  vector<vector<int> > distancias(n+m);
+  for (int i = 0; i < n+m; ++i) {
+    for (int k = 0; k < n+m; ++k) {
+      int dist_ik = distTrigonometrica(gimnasios_y_paradas[i], gimnasios_y_paradas[k]);
+      distancias[i].push_back(dist_ik);
+    }
+  }
+  vector<Estacion> estaciones(n+m);
+  for (int i = 0; i < gimnasios_y_paradas.size(); i++){
+    bool esGimnasio = i < n;
+    int potas = get<2>(gimnasios_y_paradas[i]);
+    estaciones[i] = Estacion(esGimnasio, potas, i);
+  }
+  return make_tuple(distancias,estaciones);
 }
 
 
@@ -103,4 +125,12 @@ int distTrigonometrica(tuple<int, int, int> a, tuple<int, int, int> b){
   int x = (xa - xb)*(xa - xb);
   int y = (ya - yb)*(ya - yb);
   return (int) sqrt(x+y);
+}
+
+void imprimir_res(tuple<int,int,vector<int > > res){
+  cout << "D= " << get<0>(res) << " k= " << get<1>(res) << " i= ";
+    for (int i = 0; i < get<1>(res); ++i) {
+      cout << get<2>(res)[i]+1 << " ";
+    }
+    cout << endl;
 }
