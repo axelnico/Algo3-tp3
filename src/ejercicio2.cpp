@@ -9,69 +9,33 @@ tuple<int, int, vector<int> > solverEj2(vector<Estacion> &estaciones, vector<vec
   if(tiene_solucion(estaciones,k)){   //Poda: 3*nroPokeParadas >= potasTotales para todos los gym  //  O(n+m)
 	  vector<Estacion> visitados;
     int id = donde_voy(estaciones, 0, k);
-	  greedy_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,0,id,solucion);
+    int index = indice_estacion_con_id(id, estaciones);
+    visitados.push_back(estaciones[index]);
+    int potasActuales = estaciones[index].potas;
+    estaciones.erase(estaciones.begin() + index);
+    cout << id << "id" << endl;
+	  greedy_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,potasActuales,id,solucion);
   }
   return solucion;
 }
 
-void greedy_capturar_gimnasios(vector<Estacion> estaciones, vector< vector<int> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, int id_estacion_actual, tuple<int,int,vector<int> > &soluciones){
-  for (int i = 0; i < n+m; ++i) {
+void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<int> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, int id_estacion_actual, tuple<int,int,vector<int> > &soluciones){
+  for (int s = 1; s < n+m; ++s) {
     ordenar(estaciones, distancias, id_estacion_actual);
     int id = donde_voy(estaciones, potasActuales, k);
+    cout << id << "id" << endl;
     int index = indice_estacion_con_id(id, estaciones);
     visitados.push_back(estaciones[index]);
-    visitados.push_back(estaciones[i]);
-    potasActuales += estaciones[i].potas;
-    estaciones.erase(estaciones.begin() + i);
+    potasActuales += estaciones[index].potas;
+    estaciones.erase(estaciones.begin() + index);
   }
   int distancia = distancia_acumulada(visitados,distancias);
   vector<int> camino;
-  for (int i = 0; i < visitados.size(); ++i) {
-    camino.push_back(visitados[i].id);
+  for (int u = 0; u < visitados.size(); ++u) {
+    camino.push_back(visitados[u].id);
   }
   soluciones = make_tuple(distancia, visitados.size(), camino);
 }
-
-// bool tiene_solucion(vector<Estacion> &estaciones, int k){
-//   int potasNecesarias = 0;
-//   int potasPosibles = 0;
-//   for (int i = 0; i  < estaciones.size(); i++) {
-//     if(estaciones[i].esGimnasio){
-//       int potas_gym = estaciones[i].potas;
-//       if (k + potas_gym < 0) return false;
-//       potasNecesarias += potas_gym;
-//     }
-//     else{
-//       potasPosibles += 3;
-//     }
-//   }
-//   return potasNecesarias <= potasPosibles;
-// }
-
-// bool puede_ganar_gimnasio(Estacion &estacion,int potas){
-//     return estacion.esGimnasio && estacion.potas+potas >= 0;
-// }
-
-// bool puede_recibir_potas(Estacion &estacion,int potas,int tamano_mochila){
-//   return (!estacion.esGimnasio) && (potas+3 <= tamano_mochila);
-// }
-
-// bool es_solucion(std::vector<Estacion> &estaciones){
-//   for (int i = 0; i < estaciones.size(); i++) {
-//     if(estaciones[i].esGimnasio) {
-//       return false;
-//     }
-//   }
-//   return true;
-// }
-
-// int distancia_acumulada(vector<Estacion> &visitados, std::vector<std::vector<int> > &distancias){
-//   int distancia = 0;
-//   for (int i = 0; i < visitados.size() - 1; ++i) {
-//     distancia += distancias[visitados[i].id][visitados[i+1].id];
-//   }
-//   return distancia;
-// }
 
 void ordenar(vector<Estacion> &estaciones, vector< vector<int> > distancias, int id_estacion_actual){
   for (int i = 0; i < estaciones.size(); ++i) {
