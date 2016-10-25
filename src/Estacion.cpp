@@ -12,8 +12,15 @@ Estacion::Estacion(bool EsGimnasio, int nroPotas, int Id){
   this->id = Id;
 }
 
+Estacion::Estacion(const Estacion &copia){
+  this->esGimnasio = copia.esGimnasio;
+  this->potas = copia.potas;
+  this->id = copia.id;
+}
+
 void Estacion::set_estacion(bool EsGimnasio, int nroPotas, int Id){
   this->esGimnasio = EsGimnasio;
   this->potas = nroPotas;
   this->id = Id;
 }
+

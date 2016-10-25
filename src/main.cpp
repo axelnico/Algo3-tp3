@@ -122,8 +122,8 @@ int distTrigonometrica(tuple<int, int, int> a, tuple<int, int, int> b){
   int ya = get<1>(a);
   int xb = get<0>(b);
   int yb = get<1>(b);
-  int x = (xa - xb)*(xa - xb);
-  int y = (ya - yb)*(ya - yb);
+  int x = (abs(xa - xb))*(abs(xa - xb));
+  int y = (abs(ya - yb))*(abs(ya - yb));
   return (int) sqrt(x+y);
 }
 

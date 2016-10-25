@@ -13,21 +13,20 @@ tuple<int, int, vector<int> > solverEj2(vector<Estacion> &estaciones, vector<vec
     visitados.push_back(estaciones[index]);
     int potasActuales = estaciones[index].potas;
     estaciones.erase(estaciones.begin() + index);
-    cout << id << "id" << endl;
-	  greedy_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,potasActuales,id,solucion);
+    greedy_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,potasActuales,id,solucion);
   }
   return solucion;
 }
 
 void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<int> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, int id_estacion_actual, tuple<int,int,vector<int> > &soluciones){
-  for (int s = 1; s < n+m; ++s) {
+  while(!es_solucion(estaciones)) {
     ordenar(estaciones, distancias, id_estacion_actual);
     int id = donde_voy(estaciones, potasActuales, k);
-    cout << id << "id" << endl;
     int index = indice_estacion_con_id(id, estaciones);
     visitados.push_back(estaciones[index]);
     potasActuales += estaciones[index].potas;
     estaciones.erase(estaciones.begin() + index);
+    id_estacion_actual = id;
   }
   int distancia = distancia_acumulada(visitados,distancias);
   vector<int> camino;
@@ -38,20 +37,22 @@ void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<int>
 }
 
 void ordenar(vector<Estacion> &estaciones, vector< vector<int> > distancias, int id_estacion_actual){
+  vector<int> ids_vistos;
+  ids_vistos.push_back(id_estacion_actual);
   for (int i = 0; i < estaciones.size(); ++i) {
-    int id_mas_cercano = id_mas_cercano_que_no_viste(distancias[id_estacion_actual]);
+    int id_mas_cercano = id_mas_cercano_que_no_viste(distancias[id_estacion_actual], ids_vistos, estaciones);
+    ids_vistos.push_back(id_mas_cercano);
     swap(id_mas_cercano, i, estaciones);
   }
 }
 
-int id_mas_cercano_que_no_viste(vector<int> &distancias){
+int id_mas_cercano_que_no_viste(vector<int> &distancias, vector<int> &vistos, vector<Estacion> &estaciones){
   int actual = 0;
   for (int j = 0; j < distancias.size(); ++j) {
-    if (distancias[j] < distancias[actual]) {
+    if ((distancias[j] <= distancias[actual]) && !esta(vistos, j) && (indice_estacion_con_id(j, estaciones) > -1) ) {
       actual = j;
     }
   }
-  distancias.erase(distancias.begin() + actual);
   return actual;
 }
 
@@ -78,4 +79,11 @@ int donde_voy(vector<Estacion> estaciones, int potasActuales, int k){
     }
   }
   return -1;
+}
+
+bool esta(vector<int> &vistos, int j){
+  for (int i = 0; i < vistos.size(); ++i) {
+    if (vistos[i] == j) return true;
+  }
+  return false;
 }

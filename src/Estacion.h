@@ -11,6 +11,7 @@ class Estacion{
         void set_estacion(bool EsGimnasio, int nroPotas, int Id);
         Estacion();
         Estacion(bool EsGimnasio, int nroPotas, int Id);
+        Estacion(const Estacion &copia);
 
 
     private:
