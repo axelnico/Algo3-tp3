@@ -13,3 +13,4 @@ void swap(int id_mas_cercano, int i, std::vector<Estacion> &estaciones);
 int indice_estacion_con_id(int id, std::vector<Estacion> &estaciones);
 int donde_voy(std::vector<Estacion> estaciones, int potasActuales, int k);
 bool esta(std::vector<int> &vistos, int j);
+int id_del_max(std::vector<int> &distancias);
