@@ -1,9 +1,8 @@
 \section{Introducción}
 
-En este trabajo se tienen tres problemas que se resolvieron aplicando las
-técnicas algorítmicas estudiadas en la materia. Los mismos presentaron cada uno un desafío
-distinto, teniendo que aplicar métodos diferentes para resolverlos y cumplir
-con los requisitos exigidos.
+Este trabajo es el resultado del estudio de una instancia del \textit{Traveling Salesman Problem}. El TSP (por sus siglas) es conocido en español como "Provlema del viajante", el cual sitúa a un viajero en búsqueda del camino más corto que cumpla ciertas condiciones las cuales, en general, son que debe recorrer distintas ciudades interconectadas sin pasar más de una vez por cada una. En nuestro caso de estudio, tenemos un jugador de \textit{Pokémon GO} en una ciudad en la que hay distintos puntos con 2 posibles características: los \textbf{gimnasios} y las \textbf{poke paradas}. Los primeros son lugares que el jugador desea conquistar siendo que están, en un comienzo, bajo control del enemigo y para ello debe vencer a los pokemones enemigos utilizando los propios. Un pokemon es una criatura virtual que tiene un poder de ataque y de vida. Para vencer a los enemigos es necesaria una cierta cantidad de posiones, las cuales se obtienen de las poke-paradas. Cada una de ellas le otorga 3 posiones al jugador y la forma en que éste las guarda es en una mochila que tiene una capacidad máxima; si la mochila está llena y el jugador pasa por una poke-parada, las posiones son descartadas. Relacionando ambas ideas, estudiamos nuestra problemática considerando que las restricciones para hallar el camíno mínimo es que dados $n$ la cantidad de gimnasios, $m$ la cantidad de poke-paradas y $k$ el tamaño de la mochila, queremos pasar por todos los gimnasios siempre que tengamos la cantidad de posiones necesarias para capturarlo, que en ningún momento tengamos más posiones que $k$ y, obviamente, no pasar dos veces por el mismo lugar.
+
+Para obtener la solución a este problema, se plantearon 4 formas distintas utilizando las técnicas algorítmicas vistas en la materia. Los mismos presentaron cada uno un desafío distinto, teniendo que aplicar métodos diferentes para resolverlos y cumplir con los requisitos exigidos.
 
 Además de la resolución de los mismos, se procedió a demostrar la correctitud de
 cada implementación. Esto fue acompañado a su vez de una justificación de la

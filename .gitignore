@@ -31,7 +31,7 @@ tp3
 
 # Latex
 *.log
-*.pdf
+informe.pdf
 *.fls
 *.aux
 *.toc
