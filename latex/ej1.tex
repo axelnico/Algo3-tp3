@@ -1,4 +1,4 @@
-\section{Ejercicio 1: Laberinto}
+\section{Ejercicio 1: Solución exacta}
 
   \begin{figure}[ht]
     \begin{center}
@@ -8,34 +8,19 @@
   \end{figure}
 
     % 1. Describir detalladamente el problema a resolver dando ejemplos del mismo y sus soluciones.
-    \subsection{Descripción del problema}
-		    Indiana Jones continua en su expedición en la fortaleza de alguna civilización antigua. Mientras llenaban las mochilas con los tesoros que más les convenian encontraron un mapa peculiar. El mapa se parece mucho a un laberinto salvo por el hecho de que no estan conectados todos los puntos. En el mapa hay un punto que parece indicar el lugar en donde se encuentran juntando tesoros, y hay un lugar que esta indicado con una cruz. Intrigados por saber lo que se encuentra en ese lugar, se proponen como objetivo ir hacia ahi. Como nuestro equipo vino equipado con pico y pala, pueden derribar algunas paredes. Por otro lado el equipo ya se encuentra cansado y no desea recorrer mucha distancia ni esforzarse rompiendo paredes. Entonces, nos pidieron ayuda con lo siguiente: Teniendo un mapa indicando un punto de origen (identificado con una $o$) y un punto de destino (identificado con una $x$), quieren caminar lo menos posible desde el origen al destino rompiendo a lo sumo una cierta cantidad de paredes.
-
-        La resolución del problema consiste en encontrar el camino más corto que derribe a los sumo $P$ paredes, las cuales se reconocen de un mapa dibujado con $.$ y $\#$ que indican los lugares por donde se puede pasar y las paredes respectivamente. Cada paso cuenta como 1 avance desde el origen y cuando una pared es derribada, se toma en cuenta como un lugar por el que se puede pasar, por lo que suma 1 también como parte del camino. El mapa tiene tamaño $F$ filas y $C$ columnas, los cuales se pasan por parametro al programa junto con la cantidad de paredes y el mapa. En caso de que este camino no exista, entonces la salida será solamente $-1$
-
-        Por ejemplo, si el programa recibe lo siguiente como entrada: \newline
-        \texttt{5} \texttt{9} \texttt{2} \newline
-        \texttt{\# \# \# \# \# \# \# \# \#} \newline
-        \texttt{\# o \# . \# . \# x \#} \newline
-        \texttt{\# . \# . \# . \# . \#} \newline
-        \texttt{\# . \# . \# . . . \#} \newline
-        \texttt{\# \# \# \# \# \# \# \# \#} \newline
-
-        La salida correcta sería: \newline
-        \texttt{10}
+    \subsection{Descripción del problema y solución propuesta}
+        En este primer acercamiento, se pidió realizar un algoritmo exacto que resuelva el problema en cuetión. El mísmo debía contener podas y estrategias que permitan mejorar el tiempo de ejecución pero que aseguren devolver la solución correcta (en caso de haber).
 
     % 2. Explicar de forma clara, sencilla, estructurada y concisa, las ideas desarrolladas para la resolución del problema. Utilizar pseudocódigo y lenguaje coloquial (no código fuente). Justificar por qué el procedimiento resuelve efectivamente el problema.
-    \subsection{Solución propuesta}
-        Este problema resulta más simple de entender cuando se piensa el mapa como un grafo dirigido en tres dimensiones, donde la cantidad de nodos será de $FC(P+1)$ y en cada nivel habrá $FC$ nodos. De esta manera, podemos ver a cada piso del grafo (comenzando en el piso 0) como la cantidad de parades que se rompieron hasta ese punto. Los nodos estarán conectados cada uno con sus vecinos, aunque si uno de ellos es una pared, entonces el nodo se conectará con el vecino que representa a la pared pero un nivel más arriba. Hay que tener en cuenta que los nodos se modelan, para cada nivel, simplemente como el número de nodo en el grafo base (el del nivel 0) más la cantidad de nodos de cada nivel, y sus conexiónes (o aristas) se almacenan en listas de adyacencias.
-
-        Teniendo el mapa representado de esta manera, sabemos en todo momento que la cantidad de paredes derribadas es menor o igual al límite establecido, por lo que si se puede llegar a la $x$ destruyendo una cantidad menor o igual de paredes que $P$, entonces existe un camino entre el origen y el destino.
-
-        Para encontrar el camino mínimo entre $o$ y $x$ utilizamos el algoritmo conocido como \textit{Breadth-first Search} o \textit{BFS}, el cual conciste en recorrer el grafo analizando una sola vez cada nodo y desde éllos, observar sus vecinos. Si los vecinos de ese nodo aún no fueron analizados, se agregan a una cola para ser revisados después. Cada vez que se observa un vecino, chequeamos que no haya sido visto con anterioridad y si ese es el caso, se marca como visto cargando su distancia al origen en una \textit{lista de distancias} y agregándolo a la cola. Este algoritmo funciona en grafos donde las aristas no tienen peso o sus pesos son todos iguales, como en este ejercicio que como se dijo anteriormente, avanzar en el mapa implica sumar 1 a la cantidad de pasos, o bien aumentar en 1 la distancia al origen. Luego, los pesos de las aristas serán todos de valor 1 y puede utilizarse BFS.
-
-        La \textit{lista de distancias} tiene el tamaño de la cantidad de nodos totales y cada posición $i$ representa al nodo $i$ del grafo. Esta lista solamente contiene la distancia al origen de cada nodo, inicializándose con $-1$ para todos y a medida que avanza el algoritmo, si el vecino $k$ del nodo $i$, que es el que se está analizando tiene distancia menor a $0$, entonces quiere decir que aún no ha sido observado.
+        Dado que nuestro problema es una instancia del TSP mencionado en la introducción, resolvimos encontrar la solución exacta utilizando la técnica de \textit{backtracking}. Esto es probar todas las soluciones posibles, descartando la mayor cantidad de soluciones no correctas a la vez mediante el uso de \textit{podas} y así obtener lo más rápido posible la solución correcta. Para este caso, lo que se hace es recorrer el grafo desde cada nodo probando todos los caminos posibles, es decir, partiendo de cada gimnasio o pokeparada, ir a todos los demas de todas las formas posibles sin pasar dos veces por el mismo lugar. Las podas utilizadas fueron las siguientes:
+            \begin{itemize}
+                \item{Verificar al principio que dado posiones($g$) el número de posiones para un gimnasio $g$, \newline $\sum_{g \in Gimnasios} posiones(g) \leq m*3$ con $m$ cantidad de pokeparadas}
+                \item{Verificar al principio que $k \geq$ max(posiones($g$)) para algún $g \in Gimnasios$ y $k$ el tamaño de la mochila}
+                \item{Chequear que en todo momento el recorrido que se está llevando a cabo tiene longitud menor o igual a la solución actual si es que ya se encontró una}
+                \item{No pasar por pokeparadas si la mochila está llena}
 
 
-        \subsubsection{Detalles implementativos}
+        \subsection{Detalles implementativos}
             Para poder manejar correctamente el grafo, se creó la clase ListaAdy con namespace Grafos, la cual modela un grafo representado con listas de adyacencias. Las únicas operaciones que tiene la clase son el constructor, que recibe la cantidad de nodos totales, agregarArista, que recibe dos enteros $u,v$ y agrega $v$ a la lista de adyacencias de $u$, y BFS que recibe el número de nodo origen $s$, el número de origen de destino $t$, y la cantidad $f$ de filas y $c$ de columnas.
             La forma en que se almacenan las listas de adyacencias es con un vector de vectores de enteros, tipo que se provee de la librería estándar de C++.
 
