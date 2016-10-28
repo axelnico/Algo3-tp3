@@ -3,9 +3,9 @@
 
 using namespace std;
 
-tuple<int, int, vector<int> > solverEj2(vector<Estacion> &estaciones, vector<vector<int> > &distancias, int n, int m, int k){ // n == gimnasios, m == paradas, k == tam_mochila
+tuple<double, int, vector<int> > solverEj2(vector<Estacion> &estaciones, vector<vector<double> > &distancias, int n, int m, int k){ // n == gimnasios, m == paradas, k == tam_mochila
   vector<int> camino_nulo;
-  tuple<int, int, vector<int> > solucion = make_tuple(-1,-1,camino_nulo);
+  tuple<double, int, vector<int> > solucion = make_tuple(-1,-1,camino_nulo);
   if(tiene_solucion(estaciones,k)){   //Poda: 3*nroPokeParadas >= potasTotales para todos los gym  //  O(n+m)
 	  vector<Estacion> visitados;
     int id = donde_voy(estaciones, 0, k);
@@ -18,7 +18,7 @@ tuple<int, int, vector<int> > solverEj2(vector<Estacion> &estaciones, vector<vec
   return solucion;
 }
 
-void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<int> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, int id_estacion_actual, tuple<int,int,vector<int> > &soluciones){
+void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<double> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, int id_estacion_actual, tuple<double,int,vector<int> > &soluciones){
   while(!es_solucion(estaciones)) {
     ordenar(estaciones, distancias, id_estacion_actual);
     int id = donde_voy(estaciones, potasActuales, k);
@@ -36,7 +36,7 @@ void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<int>
   soluciones = make_tuple(distancia, visitados.size(), camino);
 }
 
-void ordenar(vector<Estacion> &estaciones, vector< vector<int> > distancias, int id_estacion_actual){
+void ordenar(vector<Estacion> &estaciones, vector< vector<double> > distancias, int id_estacion_actual){
   vector<int> ids_vistos;
   ids_vistos.push_back(id_estacion_actual);
   for (int i = 0; i < estaciones.size(); ++i) {
@@ -46,7 +46,7 @@ void ordenar(vector<Estacion> &estaciones, vector< vector<int> > distancias, int
   }
 }
 
-int id_mas_cercano_que_no_viste(vector<int> &distancias, vector<int> &vistos, vector<Estacion> &estaciones){
+int id_mas_cercano_que_no_viste(vector<double> &distancias, vector<int> &vistos, vector<Estacion> &estaciones){
   int actual = id_del_max(distancias);
   for (int j = 0; j < distancias.size(); ++j) {
     if ((distancias[j] <= distancias[actual]) && !esta(vistos, j) && (indice_estacion_con_id(j, estaciones) > -1) ) {
@@ -88,7 +88,7 @@ bool esta(vector<int> &vistos, int j){
   return false;
 }
 
-int id_del_max(vector<int> &distancias){
+int id_del_max(vector<double> &distancias){
   int res = 0;
   int max_actual = -1;
   for (int l = 0; l < distancias.size(); ++l) {

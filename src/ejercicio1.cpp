@@ -2,9 +2,9 @@
 
 using namespace std;
 
-tuple<int, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const vector<vector<int> > &distancias, int n, int m, int k){
+tuple<double, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const vector<vector<double> > &distancias, int n, int m, int k){
   vector<int> camino_nulo;
-  tuple<int, int, vector<int> > solucion = make_tuple(-1,-1,camino_nulo);
+  tuple<double, int, vector<int> > solucion = make_tuple(-1,-1,camino_nulo);
   if(tiene_solucion(estaciones,k)){
 	  vector<Estacion> visitados;
 	  BT_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,0,solucion);
@@ -12,7 +12,7 @@ tuple<int, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const vect
   return solucion;
 }
 
-void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, tuple<int,int,vector<int> > &soluciones){
+void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<double> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, tuple<double,int,vector<int> > &soluciones){
   if (es_solucion(estaciones)){
     int distancia = distancia_acumulada(visitados,distancias);
     vector<int> camino;
@@ -79,7 +79,7 @@ bool es_solucion(std::vector<Estacion> &estaciones){
   return true;
 }
 
-int distancia_acumulada(vector<Estacion> &visitados, const std::vector<std::vector<int> > &distancias){
+double distancia_acumulada(vector<Estacion> &visitados, const std::vector<std::vector<double> > &distancias){
   int distancia = 0;
   for (int i = 0; i < visitados.size() - 1; ++i) {
     distancia += distancias[visitados[i].id][visitados[i+1].id];
