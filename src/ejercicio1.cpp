@@ -5,7 +5,7 @@ using namespace std;
 tuple<int, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const vector<vector<int> > &distancias, int n, int m, int k){
   vector<int> camino_nulo;
   tuple<int, int, vector<int> > solucion = make_tuple(-1,-1,camino_nulo);
-  if(tiene_solucion(estaciones,k)){   //Poda: 3*nroPokeParadas >= potasTotales para todos los gym
+  if(tiene_solucion(estaciones,k)){
 	  vector<Estacion> visitados;
 	  BT_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,0,solucion);
   }
@@ -30,7 +30,7 @@ void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<int
         nueva_distancia = proxima_distancia + distancia_acumulada(visitados,distancias);
       }
       if ( (get<0>(soluciones) >= 0 && nueva_distancia < get<0>(soluciones)) || (get<0>(soluciones) < 0) ) {        //Poda: solucion posible no sea peor que solucion actual
-        if (puede_ganar_gimnasio(estaciones[i],potasActuales) || puede_recibir_potas(estaciones[i],potasActuales,k)) {
+        if (puede_ganar_gimnasio(estaciones[i],potasActuales) || puede_recibir_potas(estaciones[i],potasActuales,k)) {    //Poda: no va a la pokeparada si la mochila está llena
           visitados.push_back(estaciones[i]);
           potasActuales += estaciones[i].potas;
           estaciones.erase(estaciones.begin() + i);
@@ -59,14 +59,14 @@ bool tiene_solucion(vector<Estacion> &estaciones, int k){
   for (int i = 0; i  < estaciones.size(); i++) {
     if(estaciones[i].esGimnasio){
       int potas_gym = estaciones[i].potas;
-      if (k + potas_gym < 0) return false;
+      if (k + potas_gym < 0) return false; //Poda: Tamaño de la mochila >= potas del gimnasio
       potasNecesarias += potas_gym;
     }
     else{
       potasPosibles += 3;
     }
   }
-  return potasNecesarias <= potasPosibles;
+  return potasNecesarias <= potasPosibles; //Poda: sumatoria (posiones(gimnasio)) <= m*3 con m == cantidad de pokeparadas
 }
 
 
