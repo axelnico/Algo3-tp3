@@ -5,7 +5,7 @@ using namespace std;
 tuple<double, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const vector<vector<double> > &distancias, int n, int m, int k){
   vector<int> camino_nulo;
   tuple<double, int, vector<int> > solucion = make_tuple(-1,-1,camino_nulo);
-  if(tiene_solucion(estaciones,k)){
+  if(puede_ser_que_tenga_solucion(estaciones,k)){
 	  vector<Estacion> visitados;
 	  BT_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,0,solucion);
   }
@@ -53,7 +53,7 @@ bool puede_recibir_potas(Estacion &estacion,int potas,int tamano_mochila){
   return (!estacion.esGimnasio) && (potas < tamano_mochila);
 }
 
-bool tiene_solucion(vector<Estacion> &estaciones, int k){
+bool puede_ser_que_tenga_solucion(vector<Estacion> &estaciones, int k){
   int potasNecesarias = 0;
   int potasPosibles = 0;
   for (int i = 0; i  < estaciones.size(); i++) {
