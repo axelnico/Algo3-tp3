@@ -9,7 +9,7 @@
 
     % 1. Describir detalladamente el problema a resolver dando ejemplos del mismo y sus soluciones.
     \subsection{Descripción del problema y solución propuesta}
-        En este primer acercamiento, se pidió realizar un algoritmo exacto que resuelva el problema en cuetión. El mísmo debía contener podas y estrategias que permitan mejorar el tiempo de ejecución pero que aseguren devolver la solución correcta (en caso de haber).
+        En este primer acercamiento, se pidió realizar un algoritmo exacto que resuelva el problema en cuestión. El mísmo debía contener podas y estrategias que permitan mejorar el tiempo de ejecución pero que aseguren devolver la solución correcta (en caso de haber).
 
     % 2. Explicar de forma clara, sencilla, estructurada y concisa, las ideas desarrolladas para la resolución del problema. Utilizar pseudocódigo y lenguaje coloquial (no código fuente). Justificar por qué el procedimiento resuelve efectivamente el problema.
         Dado que nuestro problema es una instancia del TSP mencionado en la introducción, resolvimos encontrar la solución exacta utilizando la técnica de \textit{backtracking}. Esto es probar todas las soluciones posibles, descartando la mayor cantidad de soluciones no correctas a la vez mediante el uso de \textit{podas} y así obtener lo más rápido posible la solución correcta. Para este caso, lo que se hace es recorrer el grafo desde cada nodo probando todos los caminos posibles, es decir, partiendo de cada gimnasio o pokeparada, ir a todos los demas de todas las formas posibles sin pasar dos veces por el mismo lugar. Las podas utilizadas fueron las siguientes:

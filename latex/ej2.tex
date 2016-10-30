@@ -1,0 +1,82 @@
+\section{Ejercicio 2: Heurística constructiva golosa}
+
+  \begin{figure}[ht]
+    \begin{center}
+      \includegraphics[width=0.5\columnwidth]{imagenes/pacman.png}
+      \caption{Perdidos y con poca fuerza}
+    \end{center}
+  \end{figure}
+
+    % 1. Describir detalladamente el problema a resolver dando ejemplos del mismo y sus soluciones.
+    \subsection{Descripción del problema y solución propuesta}
+        En este punto, se pidió realizar un algoritmo basado en una heurística constructiva golosa que resuelva el problema en cuestión. El mísmo al tratarse de una heurística puede no dar la solución óptima, pero alguna solución devuelve en caso de que la misma exista.
+
+    % 2. Explicar de forma clara, sencilla, estructurada y concisa, las ideas desarrolladas para la resolución del problema. Utilizar pseudocódigo y lenguaje coloquial (no código fuente). Justificar por qué el procedimiento resuelve efectivamente el problema.
+        Se decidió utilizar como heurística golosa para resolver esta variante del TSP, la técnica del vecino más cercano. La misma consiste en lo siguiente: en cada momento, el algoritmo selecciona como próximo nodo a visitar el que se encuentre a menor distancia del actual. Como en este caso puede ocurrir que no se pueda ir al nodo más cercano debido a que no se poseen las suficientes pociones (para enfrentarlo en caso de que sea un gimnasio), el algoritmo selecciona al nodo más cercano que se pueda ir. Antes de realizar este recorrido primero se chequea que haya una solución posible como en el caso del primer ejercicio. De esta forma nos garantizamos que recorriendo el grafo de la manera propuesta siempre vamos a encontrar una solución aunque la misma no sea la óptima, ya que en cada paso siempre se podrá ir a algún nodo. La explicación de por qué siempre el algoritmo va a devolver una solución (no exacta) si es que hay alguna es la siguiente: al chequear si hay solución se garantiza que la cantidad de pociones que se pueden obtener de las pokeparadas es igual o mayor a la suma de las pociones necesarias para enfrentar a los gimnasios y que además no haya ningún gimnasio para el cual se necesiten mas pociones que las que se pueden llevar en la mochila. Entonces si se sabe que hay solución en cada iteración de la solución propuesta del vecino más cercano va a ocurrir lo siguiente: el más cercano al que se puede ir es un gimnasio porque se tienen las pociones necesarias o el más cercano que se puede ir es una pokeparada 
+        Basándonos en la técnica del vecino más cercano, las intancias en los cuales los gimnasios estén cerca uno de los otros y se tenga la cantidad suficiente de pociones para ir a ellos, van a ser resueltas de manera muy cercana a la óptima. Los casos en los cuales las pokeparadas estén muy cercas unas de otras, van a tener peores resultados con esta técnica ya que se van a recorrer nodos que en su mayoría son innecesarios, ya que se podría directamente pasar por los gimnasios.
+
+        \subsection{Detalles implementativos}
+            Las clases y estructuras utilizadas en el algoritmo son las mismas que las del primer ejericio. El algoritmo propuesto para la heurísitica golosa es el siguiente: 
+
+            \begin{codesnippet}
+            \begin{verbatim}
+solverEj2(vector<Estacion> estaciones, vector<vector<double> > distancias, cantidad_gimnasios,
+          cantidad_pokeparadas, mochila_size)
+  
+  vector<int> camino_nulo
+  solucion = (-1,-1,camino_nulo)
+  si existe solucion 
+      vector<Estacion> visitados
+      id = donde_voy(estaciones, 0, mochila_size)
+      index = indice_estacion_con_id(id, estaciones)
+      visitados.agregar(estaciones[index])
+      potasActuales = estaciones[index].potas
+      estaciones.borrar(estaciones.begin() + index)
+      greedy_capturar_gimnasios(estaciones,distancias,cantidad_gimnasios,cantidad_pokeparadas,
+                                mochila_size,visitados,potasActuales,id,solucion)
+  
+  devolver solucion
+
+
+greedy_capturar_gimnasios(vector<Estacion> estaciones, vector< vector<double> > distancias, 
+                          cantidad_gimnasios, cantidad_pokeparadas, mochila_size, 
+                          vector<Estacion> visitados, potasActuales, id_estacion_actual, 
+                          tuple<double,int,vector<int> > soluciones)
+
+  mientras no encontre solucion 
+    ordenar(estaciones, distancias, id_estacion_actual)
+    id = donde_voy(estaciones, potasActuales, k)
+    index = indice_estacion_con_id(id, estaciones)
+    visitados.agregar(estaciones[index])
+    potasActuales += estaciones[index].potas
+    estaciones.borrar(estaciones.begin() + index)
+    id_estacion_actual = id
+
+  distancia = distancia_acumulada(visitados,distancias)
+  vector<int> camino
+
+  for (u = 0 hasta visitados.size() - 1)
+    camino.agregar(visitados[u].id)
+
+  soluciones = (distancia, visitados.size(), camino)
+
+
+ordenar(vector<Estacion> estaciones, vector< vector<double> > distancias, id_estacion_actual)
+
+  vector<int> ids_vistos
+  ids_vistos.agregar(id_estacion_actual)
+  for (i = 0 hasta estaciones.size() - 1)
+    id_mas_cercano = id_mas_cercano_que_no_viste(distancias[id_estacion_actual], 
+                                                 ids_vistos, estaciones)
+    ids_vistos.agregar(id_mas_cercano)
+    swap(id_mas_cercano, i, estaciones)
+  
+
+            \end{verbatim}
+            \end{codesnippet}
+
+
+
+
+
+            El algoritmo lo primero que realiza es comprobar si existe una solución para el problema pedido. La función es exactamente la misma que en el primer ejercicio. En caso de que no exista solución simplemente no se llama al algoritmo que realiza la heurística greedy y la función termina. De esta forma nos garantizamos que en el greedy no sea necesario verificar si va a ser posible terminar, ya que siempre es llamado si hay una solución factible para el problema. En el caso de que exista una solución se debe elegir una estacion inicial para arrancar. Para ello lo que se hace es obtener el id de una estacion. El mismo es obtenido llamando a una función \textit{donde_voy}. Esta función recibe por parámetros un vector con las estaciones, la cantidad de posiones que se posee y el tamaño de la mochila, y recorre las estaciones y por cada una de ellas se fija si alcanzan las posiones para enfrentarse al gimnasio (en caso que la estacion sea un gimnasio) o si puede recibir las posiciones (en caso de ser una pokeparada). De haber alguna, que siempre tiene que haber ya que se garantizó que hay solución, devuelve el id de la estación correspondiente. Con ese id se recupera el índice de la estacion en el vector de estaciones llamando a la función \textit{indice_estacion_con_id} para luego agregar al vector de visitados la estacion correspondiente a este índice. De esta forma, tenemos el primer nodo (estación) visitado. Se definen las posiones 
