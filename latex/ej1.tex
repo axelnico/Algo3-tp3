@@ -11,59 +11,74 @@
     \subsection{Descripción del problema y solución propuesta}
         En este primer acercamiento, se pidió realizar un algoritmo exacto que resuelva el problema en cuetión. El mísmo debía contener podas y estrategias que permitan mejorar el tiempo de ejecución pero que aseguren devolver la solución correcta (en caso de haber).
 
+        Una solución existe cuando se pueden conquistar todos los gimnasios y además es exacta cuando se conquistan todos ellos recorriendo la menor distancia posible.
+
     % 2. Explicar de forma clara, sencilla, estructurada y concisa, las ideas desarrolladas para la resolución del problema. Utilizar pseudocódigo y lenguaje coloquial (no código fuente). Justificar por qué el procedimiento resuelve efectivamente el problema.
-        Dado que nuestro problema es una instancia del TSP mencionado en la introducción, resolvimos encontrar la solución exacta utilizando la técnica de \textit{backtracking}. Esto es probar todas las soluciones posibles, descartando la mayor cantidad de soluciones no correctas a la vez mediante el uso de \textit{podas} y así obtener lo más rápido posible la solución correcta. Para este caso, lo que se hace es recorrer el grafo desde cada nodo probando todos los caminos posibles, es decir, partiendo de cada gimnasio o pokeparada, ir a todos los demas de todas las formas posibles sin pasar dos veces por el mismo lugar. Las podas utilizadas fueron las siguientes:
+        Dado que nuestro problema es una instancia del TSP mencionado en la introducción, resolvimos encontrar la solución exacta utilizando la técnica de \textit{backtracking}. Esto es probar todas las soluciones posibles descartando la mayor cantidad que no sean correctas a la vez mediante el uso de \textit{podas}, para así obtener lo más rápido posible la solución correcta; Cada solución se obtiene de manera constructiva de manera tal que en cada iteración se agrega parte de una posible solución. En este caso, lo que se hace es recorrer el grafo desde cada nodo probando todos los caminos posibles, es decir, partiendo de cada gimnasio o pokeparada, ir a todos los demas de todas las formas posibles sin pasar dos veces por el mismo lugar. Las podas utilizadas fueron las siguientes:
             \begin{itemize}
                 \item{Verificar al principio que dado posiones($g$) el número de posiones para un gimnasio $g$, \newline $\sum_{g \in Gimnasios} posiones(g) \leq m*3$ con $m$ cantidad de pokeparadas}
                 \item{Verificar al principio que $k \geq$ max(posiones($g$)) para algún $g \in Gimnasios$ y $k$ el tamaño de la mochila}
                 \item{Chequear que en todo momento el recorrido que se está llevando a cabo tiene longitud menor o igual a la solución actual si es que ya se encontró una}
                 \item{No pasar por pokeparadas si la mochila está llena}
 
+        En cada iteración, se visita un nuevo punto (gimnasio o pokeparada), agregando la distancia correspondiente a la posible solución.
+
 
         \subsection{Detalles implementativos}
-            Para poder manejar correctamente el grafo, se creó la clase ListaAdy con namespace Grafos, la cual modela un grafo representado con listas de adyacencias. Las únicas operaciones que tiene la clase son el constructor, que recibe la cantidad de nodos totales, agregarArista, que recibe dos enteros $u,v$ y agrega $v$ a la lista de adyacencias de $u$, y BFS que recibe el número de nodo origen $s$, el número de origen de destino $t$, y la cantidad $f$ de filas y $c$ de columnas.
-            La forma en que se almacenan las listas de adyacencias es con un vector de vectores de enteros, tipo que se provee de la librería estándar de C++.
+            Para modelar las pokeparadas y gimnasios, implementamos la clase \textit{Estacion}, la cual consiste en un booleano para decidir si es gimasio o pokeparada, un entero que indica la cantidad de posiones y un id único para cada estación (el cual se da segun el número de linea de la entrada). Para determinar el valor de posiones, en el caso de las pokeparadas es simplemente 3 ya que es la cantidad que entrega cada pokeparada, mientras que en el caso de los gimnasios es 0 menos el número que se pasa en el input. Esto es porque en el momento de decidir si hay que agregar o quitar posiones a la cantidad de posiones que se tienen en la mochila es realizar siempre la suma $posionesActuales + posionesEstacion$ evitando la consulta de si la estación es una pokeparada o un gimnasio.
 
-            Normalmente, BFS solo necesitaría el nodo de origen y de destino, y almacenaría todos las posibles distancias de caminos que hay entre ambos nodos. Sin embargo, agregamos estos dos valores para que el algoritmo termine la primera vez que encuentre el nodo destino. Esto es por cómo funciona BFS: Al recorrer todos los nodos según su distancia al origen, siempre se analizan los nodos que solo están a distancia 1 más que el nodo vecino "padre" (o sea, el nodo que tenía como vecino al que se está analizando y por el cual se agregó a la cola de revisión). Ergo, si existe un camino entre $s$ y $t$, BFS encontrará el más corto antes que cualquier otro y por eso es que podemos terminar su ejecución cuando eso pase. En peor caso, no existirá un camino entre $s$ y $t$, y BFS recorrerá todos los nodos.
+            Para trabajar las distancias entre cada punto, construímos una matriz formada con vectores de vectores, en los que cada índice es el ID del primer nodo con el ID del segundo y para cada posicion $(i,v)$ se encuentra la distancia entre esos dos nodos, la cual se calcula mediante pitágoras.
 
-            El algoritmo que resuelve el problema puede separarse en dos partes: Una se encarga de leer el mapa de entrada y construir el grafo dirigido tridimensional y la otra, es el BFS que busca verdaderamente la solución.
-            En la primera parte recorremos el mapa que se encuentra guardado en una matriz de \textbf{char} $P+1$ veces, para así poder construir los $p+1$ niveles del grafo y poder conectar cada nodo con sus respectivos vecinos, y para poder verificar que el mapa pasado sea válido y buscar los nodos marcados con la $o$ y la $x$.
-            La segunda parte se recorre el grafo una sola vez dado el funcionamiento de \textit{BFS}, pero como tiene $FC(P+1)$ nodos, entonces esa será la cantidad de nodos que pasarán por la cola de revisión como máximo. La función BFS está implementada de la siguiente manera:
-
+            La función principal de Backtracking recibe como parámetros un vector de Estaciones, que consiste en todas las estaciones aún no visitadas ($estaciones$), la matriz de distancias ($distancias$), el tamaño de la mochila ($k$), un vector de Estaciones visitadas ($visitados$), la cantidad de posiones actuales ($potasActuales$) y una tuplas de $double$, $int$ y vector de $int$ que representa la solución actual ($solucion$). La misma realiza la lógica descripta en el siguiente pseudocódigo:
 
             \begin{codesnippet}
             \begin{verbatim}
-BFS(enteros : s, t, f, c)
-  res = -1
-  cola = cola vacía
-  distancias[nodosTotales]
-  para i entre 0 y nodosTotales-1
-    distancias[i] = -1
-  fin para
-
-  cola.encolar(s)
-  distancias[s] = 0
-  mientras (cola no esté vacía)
-    tope = cola.tope
-    cola.desencolar //al ser una cola, desencola el tope de la misma
-    si (tope % (f*c)) == t
-      devolver distancias[tope]
-    fin si
-
-    para i entre 0 y largo(vecinos(tope))
-      si distancias[vecinos(tope)[i]] < 0
-        distancias[vecinos(tope)[i]] = distancias[tope] + 1
-        cola.encolar(vecinos(tope)[i])
+BT_capturar_gimnasios(vector<Estacion> estaciones, vector< vector<double> > distancias,
+entero k, vector<Estacion> visitados, entero potasActuales,
+tupla<double,int,vector<int> > soluciones):
+  si es solucion(estaciones):
+    distancia = distancia_acumulada(visitados,distancias)
+    vector<int> camino
+    para i = 0 hasta tamaño(visitados):
+      agregar id(visitados[i]) a camino
+    fin para
+    soluciones = tupla(distancia, tamaño(visitados), camino)
+  si no:
+    para i = 0 hasta tamaño(estaciones):
+      nueva_distancia = 0;
+      si tamaño(visitados) > 0:
+        id_ultimo_visitado = id(ultimo(visitados))
+        proxima_distancia = distancias[id_ultimo_visitado][id(estaciones[i])]
+        nueva_distancia = proxima_distancia + distancia_acumulada(visitados,distancias)
+      fin si
+      si (soluciones[0] >= 0 y nueva_distancia < soluciones[0] ó soluciones[0] < 0):
+        si (puede_ganar_gimnasio(estaciones[i],potasActuales) ó
+            puede_recibir_potas(estaciones[i],potasActuales,k)):
+          agregar estaciones[i] a visitados
+          si (esGimnasio(estaciones[i]) ó potasActuales + 3 <= k)
+            potasActuales = potasActuales + estaciones[i].potas
+          si no
+            k
+          fin si
+          borrar elemento con índice i de estaciones
+          BT_capturar_gimnasios(estaciones,distancias,k,visitados,potasActuales,soluciones)
+          ultimaEstacion = ultimo(visitados)
+          eliminar el último de visitados
+          insertar ultimaEstacion en posición i de estaciones
+        fin si
       fin si
     fin para
-  fin mientras
-
-  devolver res
+  fin si
+  devolver soluciones
+fin BT_capturar_gimnasios
             \end{verbatim}
             \end{codesnippet}
 
-            El único cambio que tiene esta implementación de BFS respecto de la original, es que chequea si el resultado se encuentra antes de terminar, lo cual puede hacerse por lo antes dicho. Como complemento, podemos decir que en el código puede observarse que $distancias[tope]$ siempre existe y es mayor a $0$ porque antes de agregar un nodo a la cola, se carga en $distancias$ su valor correspondiente. Además, la razón por la cual se chequea el resto de dividir $tope$ por $f*c$ es que t es el número del nodo con la $x$ en el nivel 0, mientras que al ser un grafo tridimensional donde cada nivel representa la cantidad de paredes rotas desde el origen, $t$ va a estar en todos los niveles con una diferencia de $f*c*nivelActual$. Ergo, al dividir tope por $f*c$, el resto debería ser el número de nodo que se va a analizar como si fuera uno del nivel 0.
+            En cada iteración de la función, se chequea si el estado actual de los parametros es una solución al problema. Para esto, se revisa todo el vector de estaciones en búsqueda de algúna Estación que sea gimnasio. Si no hay, entonces efectivamente es una solución y se construye la tupla con lo que devuelve el algoritmo para luego imprimir el output correspondiente. Caso contrario, se recorre todo el vector de estaciones para chequear todos los posibles lugares a los que se puede ir desde la ubicación actual e ir a todos ellos.
 
+            Para decidir si podemos ir o no a una estación chequeamos la cantidad de posiones actuales junto con el tamaño de la mochila y las posiones de la estación a la que se desea ir. Si es un gimnasio, analizamos si $posionesActuales + posiones(gimnasio) > 0$. Dado que el gimnasio tiene la cantidad de posiones en negativo (como mencionamos anteriormente), si esta suma deciende de 0 entonces quiere decir que las posiones que tenemos en la mochila no son suficientes para conquistar ese gimnasio, por lo que no tendría sentido ir ya que esto solamente aumentaría la distancia recorrida (y esto último ocurre porque como todas las estaciones están conectadas,  $\forall v,w,r : distancia(v,w) \leq distancia(v,r) + distancia(r,w)$). Si es una pokeparada, observamos si $posionesActuales < k$ con $k$ tamaño de la mochila. La razón es que cada pokeparada otorga 3 posiones pero si la mochila está llena entonces se descartan las excedentes; y teniendo en cuenta lo dicho recientemente, si hay solución debería existir otra estación tal que se pueda visitar sin agregar innecesariamente distancia recorrida a la solución actual.
+
+            Antes de entrar en la función descripta, se realizan dos chequeos. Primero, que no exista un gimnasio cuya cantidad de posiones sea mayor al tamaño de la mochila, ya que si esto ocurriera, incluso pasando por todas las pokeparadas posibles nunca alcanzaríamos la cantidad necesaria para conquistar ese gimnasio. En segundo lugar, que la suma total de posiones necesarias para conquistar a cada gimnasio sea menor o igual a la cantidad de $pokeparadas*3$.
 
 
     % 3. Deducir una cota de complejidad temporal del algoritmo propuesto y justificar por qué el algoritmo cumple la cota dada. Utilizar el modelo uniforme.
