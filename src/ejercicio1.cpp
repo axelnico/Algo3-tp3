@@ -12,7 +12,7 @@ tuple<double, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const v
   return solucion;
 }
 
-void BT_capturar_gimnasios(vector<Estacion> estaciones, const vector< vector<double> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, tuple<double,int,vector<int> > &soluciones){
+void BT_capturar_gimnasios(vector<Estacion> &estaciones, const vector< vector<double> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, tuple<double,int,vector<int> > &soluciones){
   if (es_solucion(estaciones)){
     double distancia = distancia_acumulada(visitados,distancias);
     vector<int> camino;
