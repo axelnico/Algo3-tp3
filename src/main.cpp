@@ -10,6 +10,7 @@
 #include <chrono>
 #include "ejercicio1.h"
 #include "ejercicio2.h"
+#include "ejercicio3.h"
 
 
 using namespace std;
@@ -75,6 +76,18 @@ int main(int argc, char *argv[]) {
     vector<Estacion> estaciones = get<1>(input);
     std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
     imprimir_res(res);
+  // } else if (numeroDeEjercicio == 3) {
+  //   cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
+  //   int n,m,k;
+  //   cin >> n >> m >> k;
+  //   cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
+  //   cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
+  //   tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+  //   vector<vector<double> > distancias = get<0>(input);
+  //   vector<Estacion> estaciones = get<1>(input);
+  //   std::tuple<double, int, std::vector<int> > res = solverEj3(estaciones, distancias, n, m, k);
+  //   imprimir_res(res);
+
   }
 
 
