@@ -1,34 +1,112 @@
 #include "ejercicio3.h"
 
-tuple<double, int, vector<int> > solverEj3(vector<Estacion> &estaciones, vector<vector<double> > &distancias, int n, int m, int k){
-	vector<Estacion> estacionesAuxiliar;
-	for (Estacion estacion : estaciones)	{
-		Estacion estacionAux = estacion;
-		estacionesAuxiliar.push_back(estacionAux);
-	}
-	tuple<double, int, vector<int> >  primerEstado = solverEj2(estaciones, distancias, n, m, k);
+tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k){
 	
-	vector<int> recorridoInicial = get<2>(primerEstado);
+	vector<Estacion> estacionesAuxiliar = estaciones;
+	tuple<double, int, vector<int> > primerEstado = solverEj2(estaciones, distancias, n, m, k); //Primer candidato a solucion
+	imprimirEstado(primerEstado);
 
-	int distanciaInicial = get<0>(primerEstado);
-	busquedaLocal(estadoInicial, estacionesAuxiliar, distancias, false, distanciaInicial);
+	double distanciaInicial = get<0>(primerEstado); //Copio la distancia
+
+	if (distanciaInicial != -1) {
+		
+		vector<int> recorridoInicial = get<2>(primerEstado); //Copio el recorrido del candidato a solucion
+		int cantVertices = get<1>(primerEstado);
 	
+		primerEstado = busquedaLocal(recorridoInicial, estacionesAuxiliar, distancias, distanciaInicial, cantVertices);
+		 
+	}
+
+	imprimirEstado(primerEstado);
+
+	return primerEstado;
+}
+
+void imprimirEstado(tuple<double, int, vector<int> > primerEstado)
+{
+	cout<< endl;
+	cout << "Distancia: " << get<0>(primerEstado) << " CantVert:" << get<1>(primerEstado) << endl;
+	cout << " recorrido ";
+	for (int i = 0; i < get<1>(primerEstado); ++i){
+		cout << get<2>(primerEstado)[i] << " ";
+	}
+	cout << endl; 
+}
+
+// tuple<double, int, vector<int>> 
+tuple<double, int, vector<int> > busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones, vector<vector<double>> &distancias, double distancia, const int cantVertices){
+	vector<vector<int>> vecindario;
+
+	bool noHayMasSoluciones = false;
+	double distanciaMinima;
+	double distanciaAux;
+	int proximoEstado;
+
+	while (!noHayMasSoluciones) {
+
+		vecindario = dameVecindario(estaciones, recorrido);
+		proximoEstado = -1;
+
+    	if (vecindario.size() > 0) {
+			
+			distanciaMinima = distancia;
+			
+			//Busco algun vecino con distancia mas chica
+			for (uint i = 0; i < vecindario.size(); ++i) {
+				
+				distanciaAux = dameDistancia(vecindario[i], distancias);
+				if (distanciaAux < distanciaMinima) {
+					distanciaMinima = distanciaAux;
+					proximoEstado = i;
+				}
+			}
+    	}
+	
+		if (proximoEstado > -1) {
+			recorrido = vecindario[proximoEstado];
+			distancia = distanciaMinima;
+    	}
+    	else {
+    		noHayMasSoluciones = true;
+    	}
+	}
+
+	return make_tuple(distancia, cantVertices, recorrido);
 }
 
 
-// void busquedaLocal(vector<int> &estado, vector<Estacion> &estaciones, vector<vector<double>> &distancias, bool encontreSolucion, int distanciaInicial){
-// 	if (!encontreSolucion){
-// 		for (int i = 0; i < estado.size(); ++i)
-// 		{
-// 			/* code */
-// 		}
-// 	}
-// }
+double dameDistancia(const vector<int> recorrido, const vector<vector<double>> distancias){
+	double distancia = 0;
+	for (uint i = 0; i < recorrido.size() - 1; i++) {
+		distancia += distancias[recorrido[i]][recorrido[i + 1]];
+	}
+	return distancia;
+}
 
 
-// p1,2,p3,p4
+vector<vector<int>>  dameVecindario (const vector<Estacion> estaciones, const vector<int> recorrido){
+	vector<vector<int>> vecindario;
 
-// (p3,2,p1,p4),(p4, 2, p3, p1), (p1, 2, p4, p3)
+	for (uint i = 0; i < recorrido.size() - 1; ++i) {
+		if (!estaciones[recorrido[i]].esGimnasio) {
+			for (uint j = i+1; j < recorrido.size(); j++) {
+				if (!estaciones[recorrido[j]].esGimnasio) {
+					vector<int> estadoAux = recorrido;
+					swap(estadoAux, i, j);
+					vecindario.push_back(estadoAux);
+				}
+			}
+		}
+	}
+
+	return vecindario;
+}
 
 
-// (p4, 2, p1, p3), (P3, 2 , )
+
+
+void swap(vector<int> &estado, int i, int j){
+	int x = estado[j];
+	estado[j] = estado[i];
+	estado[i] = x;
+}
