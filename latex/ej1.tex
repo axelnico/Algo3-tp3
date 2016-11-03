@@ -107,70 +107,41 @@ fin BT_capturar_gimnasios
       Los experimentos que realizamos para observar los tiempos de ejecución del algoritmo en función del tamaño de entrada y de las podas implementadas se dividieron en (tres?) partes:
 
       \begin{itemize}
-        \item Casos generales para comparar el algoritmo con podas contra el mismo algoritmo sin las mismas
-        \item Casos particulares que nos resultó interesante analizar
+        \item Casos generales para analizar el comportamiento de las podas
+        \item Casos particulares para analizar el algoritmo con distintas configuraciones de valores que no están en la cota de complejidad
         \item Casos random generados a partir de la librería Random de la STL de C++
       \end{itemize}
 
-      \subsubsection{Comparacion podas}
-      Para esta comparación, generamos 4 instancias distintas en las cuales en una se deja fija la cantidad de gimnasios y se cambia la cantidad de pokeparadas; en la segunda se fijan las pokeparadas y se mueve la cantidad de gimnasios; en la tercera se aumentan ambas cantidades proporcionalmente y en la última, se varían también ambos valores pero de manera inversamente proporcional. Para que la comparación entre el algoritmo con y sin podas tenga sentido, cada una de estas instancias tuvo diferentes configuraciones de cantidad de posiones y tamaño de la mochila, que será explicado detalladamente en cada experimento.
+      Para todos los casos, el algoritmo se ejecutó 30 veces con cada instancia para intentar tener la mayor presición posible en cuanto a tiempo de ejecución.
+
+      \subsubsection{Analisis de las podas}
+      En esta instancia generamos entradas que aumentaban linealmente de 1 a 10 la cantidad de pokeparadas y gimnasios, variando el tamaño de la mochila y marcando a cada gimnasio con la cantidad de posiones necesarias igual al numero de linea en el input (para el gimnasio 3, se piden 3 posiones). Además, las ubicaciones de cada estación se setearon cada una a distancia 1 de la anterior y la siguiente: para la estación $i$ la ubicación es ($i$,$i$).
+
+      Algunos ejemplos para el input de este experimento son los siguientes:
 
  \begin{codesnippet}
             \begin{verbatim}
-o # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # #
-# # # # # # # # # x
-
-o # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . #
-. # . # . # . # . x
-
-o # # # # # # # # #
-. . . . . . . . . .
-# # # # # # # # # #
-. . . . . . . . . .
-# # # # # # # # # #
-. . . . . . . . . .
-# # # # # # # # # #
-. . . . . . . . . .
-# # # # # # # # # #
-. . . . . . . . . x
-
-o # . # . # . # . #
-# . # . # . # . # .
-. # . # . # . # . #
-# . # . # . # . # .
-. # . # . # . # . #
-# . # . # . # . # .
-. # . # . # . # . #
-# . # . # . # . # .
-. # . # . # . # . #
-# . # . # . # . # x
-
-o x . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
-. . . . . . . . . .
+8 8 36        9 9 45        10 10 55
+1 1 1         1 1 1         1 1 1
+2 2 2         2 2 2         2 2 2
+3 3 3         3 3 3         3 3 3
+4 4 4         4 4 4         4 4 4
+5 5 5         5 5 5         5 5 5
+6 6 6         6 6 6         6 6 6
+7 7 7         7 7 7         7 7 7
+8 8 8         8 8 8         8 8 8
+9 9           9 9 9         9 9 9
+10 10         10 10         10 10 10
+11 11         11 11         11 11
+12 12         12 12         12 12
+13 13         13 13         13 13
+14 14         14 14         14 14
+15 15         15 15         15 15
+16 16         16 16         16 16
+              17 17         17 17
+              18 18         18 18
+                            19 19
+                            20 20
 
 \end{verbatim}
             \end{codesnippet}
