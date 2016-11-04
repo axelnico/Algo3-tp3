@@ -1,6 +1,6 @@
 #include "ejercicio3.h"
 
-tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k){
+tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario){
 	
 	vector<Estacion> estacionesAuxiliar = estaciones;
 	tuple<double, int, vector<int> > primerEstado = solverEj2(estaciones, distancias, n, m, k); //Primer candidato a solucion
@@ -12,11 +12,11 @@ tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<v
 		
 		vector<int> recorridoInicial = get<2>(primerEstado); //Copio el recorrido del candidato a solucion
 		int cantVertices = get<1>(primerEstado);
-	
-		primerEstado = busquedaLocal(recorridoInicial, estacionesAuxiliar, distancias, distanciaInicial, cantVertices, k, true);
+		//True es paradas, False es Gym
+		primerEstado = busquedaLocal(recorridoInicial, estacionesAuxiliar, distancias, distanciaInicial, cantVertices, k, vecindario);
 	}
 
-	imprimirEstado(primerEstado);
+	//imprimirEstado(primerEstado);
 
 	return primerEstado;
 }
@@ -27,15 +27,15 @@ void imprimirEstado(tuple<double, int, vector<int> > primerEstado)
 	cout << "Distancia: " << get<0>(primerEstado) << " CantVert:" << get<1>(primerEstado) << endl;
 	cout << " recorrido ";
 	for (int i = 0; i < get<1>(primerEstado); ++i){
-		cout << get<2>(primerEstado)[i] << " ";
+		cout << get<2>(primerEstado)[i] + 1 << " ";
 	}
 	cout << endl; 
 }
 
 // tuple<double, int, vector<int>> 
 tuple<double, int, vector<int> > busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones, vector<vector<double>> &distancias, double distancia, const int cantVertices, const int k, const bool swapDePotas){
+	//swapDePOtas = True es paradas, False es Gym
 	vector<vector<int>> vecindario;
-
 	bool noHayMasSoluciones = false;
 	double distanciaMinima;
 	double distanciaAux;
