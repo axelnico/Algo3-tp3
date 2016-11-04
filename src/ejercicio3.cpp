@@ -13,8 +13,7 @@ tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<v
 		vector<int> recorridoInicial = get<2>(primerEstado); //Copio el recorrido del candidato a solucion
 		int cantVertices = get<1>(primerEstado);
 	
-		primerEstado = busquedaLocal(recorridoInicial, estacionesAuxiliar, distancias, distanciaInicial, cantVertices);
-		 
+		primerEstado = busquedaLocal(recorridoInicial, estacionesAuxiliar, distancias, distanciaInicial, cantVertices, k, true);
 	}
 
 	imprimirEstado(primerEstado);
@@ -34,7 +33,7 @@ void imprimirEstado(tuple<double, int, vector<int> > primerEstado)
 }
 
 // tuple<double, int, vector<int>> 
-tuple<double, int, vector<int> > busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones, vector<vector<double>> &distancias, double distancia, const int cantVertices){
+tuple<double, int, vector<int> > busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones, vector<vector<double>> &distancias, double distancia, const int cantVertices, const int k, const bool swapDePotas){
 	vector<vector<int>> vecindario;
 
 	bool noHayMasSoluciones = false;
@@ -43,8 +42,11 @@ tuple<double, int, vector<int> > busquedaLocal(vector<int> recorrido, const vect
 	int proximoEstado;
 
 	while (!noHayMasSoluciones) {
+		if (swapDePotas)
+			vecindario = dameVecindario(estaciones, recorrido);
+		else
+			vecindario = dameVecindario2(estaciones, recorrido, distancias, k);
 
-		vecindario = dameVecindario(estaciones, recorrido);
 		proximoEstado = -1;
 
     	if (vecindario.size() > 0) {
@@ -84,7 +86,7 @@ double dameDistancia(const vector<int> recorrido, const vector<vector<double>> d
 }
 
 
-vector<vector<int>>  dameVecindario (const vector<Estacion> estaciones, const vector<int> recorrido){
+vector<vector<int>> dameVecindario(const vector<Estacion> estaciones, const vector<int> recorrido){
 	vector<vector<int>> vecindario;
 
 	for (uint i = 0; i < recorrido.size() - 1; ++i) {
@@ -102,11 +104,47 @@ vector<vector<int>>  dameVecindario (const vector<Estacion> estaciones, const ve
 	return vecindario;
 }
 
+vector<vector<int>> dameVecindario2(const vector<Estacion> estaciones, const vector<int> recorrido, const vector<vector<double>> distancias, const int k) {
+	vector<vector<int>> vecindario;
 
+	for (uint i = 0; i < recorrido.size() - 1; ++i) {
+		if (estaciones[recorrido[i]].esGimnasio) {
+			for (uint j = i+1; j < recorrido.size(); j++) {
+				if (estaciones[recorrido[j]].esGimnasio) {
+					vector<int> estadoAux = recorrido;
+					swap(estadoAux, i, j);
+					
+					if (recorridoValido(estaciones, estadoAux, distancias, k)) {
+						vecindario.push_back(estadoAux);
+					}
+				}
+			}
+		}
+	}
 
+	return vecindario;
+}
 
-void swap(vector<int> &estado, int i, int j){
+bool recorridoValido(const vector<Estacion> estaciones, const vector<int> recorrido, const vector<vector<double>> distancias, const int k) {
+	int pociones = 0;
+
+	for (int r : recorrido) {
+		if (!estaciones[r].esGimnasio) {
+			pociones = min(pociones + 3, k);
+		}
+		else {
+			if ((-estaciones[r].potas) > pociones)
+				return false;
+
+			pociones -= estaciones[r].potas;
+		}
+	}
+	return true;
+}
+
+void swap(vector<int> &estado, int i, int j) {
 	int x = estado[j];
 	estado[j] = estado[i];
 	estado[i] = x;
 }
+
