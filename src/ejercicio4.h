@@ -1,5 +1,3 @@
-#include "ejercicio2.h"
-
 using namespace std;
 
 

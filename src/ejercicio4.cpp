@@ -1,8 +1,23 @@
-#include "ejercicio3.h"
+#include "ejercicio4.h"
 
-tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario){
+/*
+costo, nodo id
+
+*/
+
+tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario){
 	
 	vector<Estacion> estacionesAuxiliar = estaciones;
+
+	while (!estacionesAuxiliar.empty()) {
+		
+		
+
+		
+	}
+	
+
+
 	tuple<double, int, vector<int> > primerEstado = solverEj2(estaciones, distancias, n, m, k); //Primer candidato a solucion
 	imprimirEstado(primerEstado);
 

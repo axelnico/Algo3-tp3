@@ -127,6 +127,9 @@ int main(int argc, char *argv[]) {
     std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
     imprimir_res(res);
   } else if (numeroDeEjercicio == 3) {
+    char vecindario;
+    cout << "Ingrese 'a' para vecindario de swapear paradas, o 'b' para swapear gym's " << endl;
+    cin >> vecindario;
     cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
     int n,m,k;
     cin >> n >> m >> k;
@@ -135,7 +138,13 @@ int main(int argc, char *argv[]) {
     tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
     vector<vector<double> > distancias = get<0>(input);
     vector<Estacion> estaciones = get<1>(input);
-    std::tuple<double, int, std::vector<int> > res = solverEj3(estaciones, distancias, n, m, k);
+    std::tuple<double, int, std::vector<int> > res;
+    if (vecindario == 'a'){
+      res = solverEj3(estaciones, distancias, n, m, k, true);  
+    } else {
+      res = solverEj3(estaciones, distancias, n, m, k, false);  
+    }
+    
     imprimir_res(res);
 
   }
