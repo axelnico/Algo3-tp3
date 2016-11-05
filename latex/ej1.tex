@@ -1,11 +1,11 @@
 \section{Ejercicio 1: Solución exacta}
 
-  \begin{figure}[ht]
-    \begin{center}
-      \includegraphics[width=0.5\columnwidth]{imagenes/pacman.png}
-      \caption{Perdidos y con poca fuerza}
-    \end{center}
-  \end{figure}
+  % \begin{figure}[ht]
+  %   \begin{center}
+  %     \includegraphics[width=0.5\columnwidth]{imagenes/pacman.png}
+  %     \caption{Perdidos y con poca fuerza}
+  %   \end{center}
+  % \end{figure}
 
     % 1. Describir detalladamente el problema a resolver dando ejemplos del mismo y sus soluciones.
     \subsection{Descripción del problema y solución propuesta}
@@ -14,31 +14,32 @@
         Una solución existe cuando se pueden conquistar todos los gimnasios y además es exacta cuando se conquistan todos ellos recorriendo la menor distancia posible.
 
     % 2. Explicar de forma clara, sencilla, estructurada y concisa, las ideas desarrolladas para la resolución del problema. Utilizar pseudocódigo y lenguaje coloquial (no código fuente). Justificar por qué el procedimiento resuelve efectivamente el problema.
-        Dado que nuestro problema es una instancia del TSP mencionado en la introducción, resolvimos encontrar la solución exacta utilizando la técnica de \textit{backtracking}. Esto es probar todas las soluciones posibles descartando la mayor cantidad que no sean correctas a la vez mediante el uso de \textit{podas}, para así obtener lo más rápido posible la solución correcta; Cada solución se obtiene de manera constructiva de manera tal que en cada iteración se agrega parte de una posible solución. En este caso, lo que se hace es recorrer el grafo desde cada nodo probando todos los caminos posibles, es decir, partiendo de cada gimnasio o pokeparada, ir a todos los demas de todas las formas posibles sin pasar dos veces por el mismo lugar. Las podas utilizadas fueron las siguientes:
+        Dado que nuestro problema es una instancia del TSP mencionado en la introducción, resolvimos encontrar la solución exacta utilizando la técnica de \textit{backtracking}. Esto es probar todas las soluciones posibles descartando la mayor cantidad que no sean correctas a la vez mediante el uso de \textit{podas}, para así obtener lo más rápido posible la solución correcta; Cada solución se  construye de manera tal que en cada iteración se agrega parte de una posible solución. En este caso, lo que se hace es recorrer el grafo desde cada nodo probando todos los caminos posibles, es decir, partiendo de cada gimnasio o pokeparada, conquistar todos los gimnasios de todas las formas posibles sin pasar dos veces por el mismo lugar. Las podas utilizadas fueron las siguientes:
             \begin{itemize}
                 \item{Verificar al principio que dado posiones($g$) el número de posiones para un gimnasio $g$, \newline $\sum_{g \in Gimnasios} posiones(g) \leq m*3$ con $m$ cantidad de pokeparadas}
-                \item{Verificar al principio que $k \geq$ max(posiones($g$)) para algún $g \in Gimnasios$ y $k$ el tamaño de la mochila}
-                \item{Chequear que en todo momento el recorrido que se está llevando a cabo tiene longitud menor o igual a la solución actual si es que ya se encontró una}
+                \item{Verificar al principio que $\forall g \in Gimnasios$ ($k \geq$ posiones($g$)) con $k$ el tamaño de la mochila}
+                \item{Chequear que en todo momento el recorrido que se está llevando a cabo tiene distancia menor o igual a la solución actual si es que ya se encontró una}
                 \item{No pasar por pokeparadas si la mochila está llena}
+            \end{itemize}
 
         En cada iteración, se visita un nuevo punto (gimnasio o pokeparada), agregando la distancia correspondiente a la posible solución.
 
 
         \subsection{Detalles implementativos}
-            Para modelar las pokeparadas y gimnasios, implementamos la clase \textit{Estacion}, la cual consiste en un booleano para decidir si es gimasio o pokeparada, un entero que indica la cantidad de posiones y un id único para cada estación (el cual se da segun el número de linea de la entrada). Para determinar el valor de posiones, en el caso de las pokeparadas es simplemente 3 ya que es la cantidad que entrega cada pokeparada, mientras que en el caso de los gimnasios es 0 menos el número que se pasa en el input. Esto es porque en el momento de decidir si hay que agregar o quitar posiones a la cantidad de posiones que se tienen en la mochila es realizar siempre la suma $posionesActuales + posionesEstacion$ evitando la consulta de si la estación es una pokeparada o un gimnasio.
+            Para modelar las pokeparadas y gimnasios, implementamos la clase \textit{Estacion}, la cual consiste en: un booleano para decidir si es gimasio o pokeparada, un entero que indica la cantidad de posiones y un id único para cada estación (el cual se da segun el número de linea de la entrada). Para determinar el valor de posiones, en el caso de las pokeparadas es simplemente 3 ya que es la cantidad que entrega cada una, mientras que en el caso de los gimnasios es 0 menos el número que se pasa en el input. Esto es justamente porque los gimnasios consumen posiones de la mochila.
 
             Para trabajar las distancias entre cada punto, construímos una matriz formada con vectores de vectores, en los que cada índice es el ID del primer nodo con el ID del segundo y para cada posicion $(i,v)$ se encuentra la distancia entre esos dos nodos, la cual se calcula mediante pitágoras.
 
-            La función principal de Backtracking recibe como parámetros un vector de Estaciones, que consiste en todas las estaciones aún no visitadas ($estaciones$), la matriz de distancias ($distancias$), el tamaño de la mochila ($k$), un vector de Estaciones visitadas ($visitados$), la cantidad de posiones actuales ($potasActuales$) y una tuplas de $double$, $int$ y vector de $int$ que representa la solución actual ($solucion$). La misma realiza la lógica descripta en el siguiente pseudocódigo:
+            La función principal de Backtracking recibe como parámetros un vector de Estaciones, que consiste en todas las estaciones aún no visitadas ($estaciones$), la matriz de distancias ($distancias$), el tamaño de la mochila ($k$), un vector de Estaciones visitadas ($visitados$), la cantidad de posiones actuales ($potasActuales$) y una tupla de $double$, $int$ y vector de $int$ que representa la solución actual ($solucion$). La misma realiza la lógica descripta en el siguiente pseudocódigo:
 
             \begin{codesnippet}
             \begin{verbatim}
-BT_capturar_gimnasios(vector<Estacion> estaciones, vector< vector<double> > distancias,
-entero k, vector<Estacion> visitados, entero potasActuales,
-tupla<double,int,vector<int> > soluciones):
+BT_capturar_gimnasios(lista<Estacion> estaciones, lista< lista<double> > distancias,
+entero k, lista<Estacion> visitados, entero potasActuales,
+tupla<double,entero,lista<IDs> > soluciones):
   si es solucion(estaciones):
     distancia = distancia_acumulada(visitados,distancias)
-    vector<int> camino
+    lista<IDs> camino                                   //(un ID es un numero entero)
     para i = 0 hasta tamaño(visitados):
       agregar id(visitados[i]) a camino
     fin para
@@ -58,7 +59,7 @@ tupla<double,int,vector<int> > soluciones):
           si (esGimnasio(estaciones[i]) ó potasActuales + 3 <= k)
             potasActuales = potasActuales + estaciones[i].potas
           si no
-            k
+            potasActuales = k
           fin si
           borrar elemento con índice i de estaciones
           BT_capturar_gimnasios(estaciones,distancias,k,visitados,potasActuales,soluciones)
@@ -76,39 +77,43 @@ fin BT_capturar_gimnasios
 
             En cada iteración de la función, se chequea si el estado actual de los parametros es una solución al problema. Para esto, se revisa todo el vector de estaciones en búsqueda de algúna Estación que sea gimnasio. Si no hay, entonces efectivamente es una solución y se construye la tupla con lo que devuelve el algoritmo para luego imprimir el output correspondiente. Caso contrario, se recorre todo el vector de estaciones para chequear todos los posibles lugares a los que se puede ir desde la ubicación actual e ir a todos ellos.
 
-            Para decidir si podemos ir o no a una estación chequeamos la cantidad de posiones actuales junto con el tamaño de la mochila y las posiones de la estación a la que se desea ir. Si es un gimnasio, analizamos si $posionesActuales + posiones(gimnasio) > 0$. Dado que el gimnasio tiene la cantidad de posiones en negativo (como mencionamos anteriormente), si esta suma deciende de 0 entonces quiere decir que las posiones que tenemos en la mochila no son suficientes para conquistar ese gimnasio, por lo que no tendría sentido ir ya que esto solamente aumentaría la distancia recorrida (y esto último ocurre porque como todas las estaciones están conectadas,  $\forall v,w,r : distancia(v,w) \leq distancia(v,r) + distancia(r,w)$). Si es una pokeparada, observamos si $posionesActuales < k$ con $k$ tamaño de la mochila. La razón es que cada pokeparada otorga 3 posiones pero si la mochila está llena entonces se descartan las excedentes; y teniendo en cuenta lo dicho recientemente, si hay solución debería existir otra estación tal que se pueda visitar sin agregar innecesariamente distancia recorrida a la solución actual.
+            Para decidir si podemos ir o no a una estación chequeamos la cantidad de posiones actuales junto con el tamaño de la mochila y las posiones de la estación a la que se desea ir. Si es un gimnasio, analizamos si $posionesActuales + posiones(gimnasio) > 0$. Dado que el gimnasio tiene la cantidad de posiones en negativo (como mencionamos anteriormente), si esta suma deciende de 0 entonces quiere decir que las posiones que tenemos en la mochila no son suficientes para conquistar ese gimnasio, por lo que no tendría sentido ir ya que esto solamente aumentaría la distancia recorrida (y esto último ocurre porque como todas las estaciones están conectadas,  $\forall v,w,r : distancia(v,w) \leq distancia(v,r) + distancia(r,w)$). Si es una pokeparada, observamos si $posionesActuales = k$ con $k$ tamaño de la mochila. La razón es que cada pokeparada otorga 3 posiones pero si la mochila se llena entonces se descartan las excedentes, mas si la mochila esta totalmente llena, se descartan todas las posiones de esa pokeparada; y teniendo en cuenta lo dicho recientemente, si hay solución debería existir otra estación tal que se pueda visitar sin agregar innecesariamente distancia recorrida a la solución actual.
 
-            Antes de entrar en la función descripta, se realizan dos chequeos. Primero, que no exista un gimnasio cuya cantidad de posiones sea mayor al tamaño de la mochila, ya que si esto ocurriera, incluso pasando por todas las pokeparadas posibles nunca alcanzaríamos la cantidad necesaria para conquistar ese gimnasio. Un ejemplo puede ser 2 pokeparadas, 1 gimnasio que necesita 10 posiones y tamaño de mochila 9. En segundo lugar, que la suma total de posiones necesarias para conquistar a cada gimnasio sea menor o igual a la cantidad de $pokeparadas*3$. Esto se hace para descartar los casos en los que incluso teniendo el tamaño de mochila suficiente para guardar todas las posiones de todas las pokeparadas, las mismas no alcancen para conquistar todos los gimnasios. Un caso ejemplo sería 1 pokeparada, 2 gimnasios que necesitan 3 posiones y tamaño de mochila 3.
+            Antes de entrar en la función descripta, se realizan dos chequeos (las podas). Primero, que no exista un gimnasio cuya cantidad de posiones sea mayor al tamaño de la mochila, ya que si esto ocurriera, incluso pasando por todas las pokeparadas posibles nunca alcanzaríamos la cantidad necesaria para conquistar ese gimnasio. Un ejemplo puede ser 2 pokeparadas, 1 gimnasio que necesita 10 posiones y tamaño de mochila 9. En segundo lugar, que la suma total de posiones necesarias para conquistar a cada gimnasio sea menor o igual a la cantidad de $pokeparadas*3$. Esto se hace para descartar los casos en los que incluso teniendo el tamaño de mochila suficiente para guardar todas las posiones de todas las pokeparadas, las mismas no alcancen para conquistar todos los gimnasios. Un caso ejemplo sería 1 pokeparada, 2 gimnasios que necesitan 3 posiones y tamaño de mochila 3.
 
 
     % 3. Deducir una cota de complejidad temporal del algoritmo propuesto y justificar por qué el algoritmo cumple la cota dada. Utilizar el modelo uniforme.
     \subsection{Complejidad teórica}
 
-      Para analizar la complejidad teórica del algoritmo, separaremos en partes el mismo:
-
       La primeras dos podas, que son los chequeos que se realizan antes de llamar a la función principal, consisten en recorrer el vector de Estaciones sumando y restando valores de posiones, por lo que es $O(n+m)$ temporal y $O(1)$ espacial ya que solo crean 2 variables enteras.
 
-      El algoritmo principal lo primero que hace es chequear si el estado actual de los parámentros, como se dijo anteriormente, corresponden a una solución del problema. Este análisis toma $O(n+m)$ temporal y $O(1)$ espacial ya que solo es recorrer el vector de Estaciones para chequear si existen gimnasios no visitados. Si es solución, se obtiene la distancia acumulada, que toma $O(n+m)$ ya que es solamente recorrer el vector de visitados (y por lo tanto $O(1)$ espacial) y luego se recorre nuevamente el vector de visitados para obtener el camino que se realizó, costando $O(n+m)$ temporal y $O(1)$ espacial.
+      El algoritmo principal lo primero que hace es chequear si el estado actual de los parámentros, como se dijo anteriormente, corresponden a una solución del problema. Este análisis toma $O(n+m)$ temporal y $O(1)$ espacial ya que solo es recorrer el vector de Estaciones para chequear si existen gimnasios no visitados. Si es solución, se obtiene la distancia acumulada, que toma $O(n+m)$ ya que es solamente recorrer el vector de visitados (y por lo tanto $O(1)$ espacial) y luego se recorre nuevamente el mismo vector para obtener el camino que se realizó, costando $O(n+m)$ temporal y $O(1)$ espacial.
       Si no es solución se recorren todas las estaciones del vector estaciones (que tomará $O(n+m)$) realizando los siguientes pasos para cada una: Si la cantidad de Estaciones visitadas es mayor a 0 (cosa que no ocurrirá solamente en la primera iteración) se obtiene la distancia acumulada más la proxima distancia a sumar, que como dijimos en el párrafo anterior cuesta $O(n+m)$. Luego, si esa distancia es menor que la distancia de la solución encontrada hasta ahora (si la hubiera) y puede ir a conquistar el gimnasio (si el la próxima posición lo es) o la cantidad de posiones es menor al tamaño de la mochila (y la próxima posición es una pokeparada), se agrega al vector de visitados la próxima estación ($O(1)$ amortizado), se actualiza el valor de posionesActuales ($O(1)$), se elimina la estación del vector estaciones ($O(n+m)$), se llama a la función recursiva (luego explicado) y por último se vuelve al estado original los vectores de visitados y estaciones ($O(n+m)$ temporal y $O(1)$ espacial cada uno).
-      El llamado a la función recursiva hace que para cada Estación del vector de estaciones se recorran todas las demás en búsqueda de una solución, por lo que en total tomaría $O(n+m)$ temporal y como todos los vectores se pasan siempre por referencia, solo tomaría $O(1)$ espacial (sin contar el overhead en el $stack$ de llamadas recursivas). Pero como en cada iteración se realiza todo lo mencionado, en total costará
+      El llamado a la función recursiva hace que para cada Estación del vector de estaciones se recorran todas las demás en búsqueda de una solución, por lo que una iteración tomaría $O(n+m)$ temporal y como todos los vectores se pasan siempre por referencia, solo tomaría $O(1)$ espacial (sin contar el overhead en el $stack$ de llamadas recursivas). Luego, como en cada iteración se realiza todo lo mencionado, en total costará
       \[
-        O(\prod_{i=0}^{n+m} i)*O((n+m))
+        O(\prod_{i=0}^{n+m} i)*O(n+m)
       \]
       \[
         \in O((n+m)! * (n+m))
       \]
-      Por lo que el algoritmo tiene complejidad temporal $O((n+m)! * (n+m))$ y espacial $O(1)$.
+
+      Por lo que el algoritmo tiene complejidad temporal $O((n+m)! * (n+m))$ y espacial $O((n+m)^2)$ por la matriz de distancia que se construye antes de llamar a la función principal.
 
     % 4. Dar un código fuente claro que implemente la solución propuesta. Se deben incluir las partes relevantes del código como apéndice del informe impreso entregado.
 
     % 5. Realizar una experimentación computacional para medir la performance del programa implementado. Usar un conjunto de casos de test en función de los parámetros de entrada, con instancias aleatorias e instancias particulares (de peor/mejor caso en tiempo de ejecución, por ejemplo). Presentar en forma gráfica una comparación entre los tiempos medidos y la complejidad teórica calculada y extraer conclusiones.
     \subsection{Experimentación}
 
-    
+      Los experimentos que realizamos para observar los tiempos de ejecución del algoritmo en función del tamaño de entrada y de las podas implementadas se dividieron en (tres?) partes:
 
-	Para poder mostrar que la cota propuesta en la complejidad temporal funciona para el algoritmo que resuelve este problema, realizamos experimentos con diferentes matrices y diferentes cantidades de paredes que se pueden destruir.
+      \begin{itemize}
+        \item Casos generales para comparar el algoritmo con podas contra el mismo algoritmo sin las mismas
+        \item Casos particulares que nos resultó interesante analizar
+        \item Casos random generados a partir de la librería Random de la STL de C++
+      \end{itemize}
 
-  Primero se realizó un experimento con 5 matrices de tamaño 10x10. Una matriz estaba compuesta por todas paredes excepto el origen y el destino, otra tenia la mitad de paredes horizontales respecto del total de nodos, otra la mitad de paredes verticales, otra la mitad de paredes diagonales y la última no contenía ninguna pared y el origen y el destino estaban uno al lado del otro. Se optó por realizarlo de esta forma ya que se pueden probar casos límite, que son cuando se tienen que romper todas paredes, mientras que en el lado opuesto no hay que romper ninguna y el destino está a un sólo nodo de distancia del origen. Por como esta implementado el algoritmo se esperó que en los casos en donde hay que romper mucha más cantidad de paredes tarden más en ejecutarse que los que no hay que romper ninguna y además está más cerca el nodo destino del origen. Los esquemas de las matrices que se utilizaron para realizar esta parte del experimento son los siguientes:
+      \subsubsection{Comparacion podas}
+      Para esta comparación, generamos 4 instancias distintas en las cuales en una se deja fija la cantidad de gimnasios y se cambia la cantidad de pokeparadas; en la segunda se fijan las pokeparadas y se mueve la cantidad de gimnasios; en la tercera se aumentan ambas cantidades proporcionalmente y en la última, se varían también ambos valores pero de manera inversamente proporcional. Para que la comparación entre el algoritmo con y sin podas tenga sentido, cada una de estas instancias tuvo diferentes configuraciones de cantidad de posiones y tamaño de la mochila, que será explicado detalladamente en cada experimento.
 
  \begin{codesnippet}
             \begin{verbatim}
