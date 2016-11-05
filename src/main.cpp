@@ -8,6 +8,7 @@
 #include <list>
 #include <string>
 #include <chrono>
+#include <random>
 #include "ejercicio1.h"
 #include "ejercicio2.h"
 #include "ejercicio3.h"
@@ -35,6 +36,7 @@ void imprimir_res(tuple<double,int,vector<int > > res);
 int main(int argc, char *argv[]) {
 	int numeroDeEjercicio = 0;
   bool experimentos = false;
+  bool random = false;
   int instancias;
   if (argc == 2) {
     numeroDeEjercicio = atoi(argv[1]);
@@ -45,11 +47,19 @@ int main(int argc, char *argv[]) {
     if (exp == "-exp") {
       experimentos = true;
     }
-    if (argc == 4) instancias = atoi(argv[3]);
+    if (argc == 4) {
+      if (exp == "-expRandom") {
+        experimentos = true;
+        random = true;
+      }
+      instancias = atoi(argv[3]);
+    }
   }
   else {
     cout << "Modo de uso: \n tp3 númeroDeEjercicio \n Opcional luego del número de ejercicio: " << endl;
     cout << "   -exp para experimentos" << endl;
+    cout << "   -exp n para experimentos de n instancias" << endl;
+    cout << "   -expRandom n para generar n instancias random" << endl;
     return -1;
   }
 
@@ -67,7 +77,7 @@ int main(int argc, char *argv[]) {
       std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
       imprimir_res(res);
     }
-    else {
+    else if(experimentos && !random) {
       for (int inputs = 0; inputs < instancias; ++inputs) {
         int n,m,k;
         cin >> n >> m >> k;
@@ -78,6 +88,28 @@ int main(int argc, char *argv[]) {
           start_timer();
           std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
           cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+        }
+      }
+    }
+    else {
+      random_device rd;
+      mt19937 gen(rd());
+      uniform_int_distribution<> gyms(1,8);
+      uniform_int_distribution<> pokeparadas(1,8);
+      uniform_int_distribution<> tamMochila(0,48);
+      uniform_int_distribution<> cantPosiones(0,24);
+      uniform_int_distribution<> x(0,100);
+      uniform_int_distribution<> y(0,100);
+      for (int i = 0; i < instancias; ++i) {
+        int n = gyms(gen);
+        int m = pokeparadas(gen);
+        int k = tamMochila(gen);
+        cout << n << " " << m << " " << k << endl;
+        for (int i = 0; i < n; ++i) {
+          cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
+        }
+        for (int i = 0; i < m; ++i) {
+          cout << x(gen) << " " << y(gen) << endl;
         }
       }
     }
