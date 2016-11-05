@@ -26,41 +26,47 @@ solverEj2(vector<Estacion> estaciones, vector<vector<double> > distancias, canti
   
   vector<int> camino_nulo
   solucion = (-1,-1,camino_nulo)
-  si existe solucion 
+  si puedo ir a algun nodo inicial
       vector<Estacion> visitados
       id = donde_voy(estaciones, 0, mochila_size)
       index = indice_estacion_con_id(id, estaciones)
       visitados.agregar(estaciones[index])
-      potasActuales = estaciones[index].potas
+      potasActuales = (si es gimnasio o mochila_size >3)
+                         estaciones[index].potas
+                      si no 
+                         mochila_size 
       estaciones.borrar(estaciones.begin() + index)
       greedy_capturar_gimnasios(estaciones,distancias,cantidad_gimnasios,cantidad_pokeparadas,
                                 mochila_size,visitados,potasActuales,id,solucion)
   
   devolver solucion
 
-
 greedy_capturar_gimnasios(vector<Estacion> estaciones, vector< vector<double> > distancias, 
                           cantidad_gimnasios, cantidad_pokeparadas, mochila_size, 
                           vector<Estacion> visitados, potasActuales, id_estacion_actual, 
                           tuple<double,int,vector<int> > soluciones)
-
-  mientras no encontre solucion 
+  i = 0
+  mientras i < (n+m) y no es_solucion(estaciones)
     ordenar(estaciones, distancias, id_estacion_actual)
     id = donde_voy(estaciones, potasActuales, k)
-    index = indice_estacion_con_id(id, estaciones)
-    visitados.agregar(estaciones[index])
-    potasActuales += estaciones[index].potas
-    estaciones.borrar(estaciones.begin() + index)
-    id_estacion_actual = id
+    si id es igual a -1
+       i = n + m
+    si no
+       index = indice_estacion_con_id(id, estaciones)
+       visitados.agregar(estaciones[index])
+       potasActuales += estaciones[index].potas
+       estaciones.borrar(estaciones.begin() + index)
+       id_estacion_actual = id
+       i = i + 1
+  fin mientras
+  si es_solucion(estaciones)
+      distancia = distancia_acumulada(visitados,distancias)
+      vector<int> camino
 
-  distancia = distancia_acumulada(visitados,distancias)
-  vector<int> camino
+      for (u = 0 hasta visitados.size() - 1)
+        camino.agregar(visitados[u].id)
 
-  for (u = 0 hasta visitados.size() - 1)
-    camino.agregar(visitados[u].id)
-
-  soluciones = (distancia, visitados.size(), camino)
-
+      soluciones = (distancia, visitados.size(), camino)
 
 ordenar(vector<Estacion> estaciones, vector< vector<double> > distancias, id_estacion_actual)
 
@@ -71,8 +77,6 @@ ordenar(vector<Estacion> estaciones, vector< vector<double> > distancias, id_est
                                                  ids_vistos, estaciones)
     ids_vistos.agregar(id_mas_cercano)
     swap(id_mas_cercano, i, estaciones)
-  
-
             \end{verbatim}
             \end{codesnippet}
 
@@ -80,4 +84,5 @@ ordenar(vector<Estacion> estaciones, vector< vector<double> > distancias, id_est
 
 
 
-            El algoritmo lo primero que realiza es comprobar si existe una solución para el problema pedido. La función es exactamente la misma que en el primer ejercicio. En caso de que no exista solución simplemente no se llama al algoritmo que realiza la heurística greedy y la función termina. De esta forma nos garantizamos que en el greedy no sea necesario verificar si va a ser posible terminar, ya que siempre es llamado si hay una solución factible para el problema. En el caso de que exista una solución se debe elegir una estacion inicial para arrancar. Para ello lo que se hace es obtener el id de una estacion. El mismo es obtenido llamando a una función \textit{donde_voy}. Esta función recibe por parámetros un vector con las estaciones, la cantidad de posiones que se posee y el tamaño de la mochila, y recorre las estaciones y por cada una de ellas se fija si alcanzan las posiones para enfrentarse al gimnasio (en caso que la estacion sea un gimnasio) o si puede recibir las posiciones (en caso de ser una pokeparada). De haber alguna, que siempre tiene que haber ya que se garantizó que hay solución, devuelve el id de la estación correspondiente. Con ese id se recupera el índice de la estacion en el vector de estaciones llamando a la función \textit{indice_estacion_con_id} para luego agregar al vector de visitados la estacion correspondiente a este índice. De esta forma, tenemos el primer nodo (estación) visitado. Se definen las posiones 
+            El algoritmo lo primero que realiza es obtener el id de una estacion inicial. El mismo es obtenido llamando a una función \textit{donde voy}. Esta función recibe por parámetros un vector con las estaciones, la cantidad de pociones que se posee y el tamaño de la mochila, y recorre las estaciones y por cada una de ellas se fija si alcanzan las pociones para enfrentarse al gimnasio (en caso que la estacion sea un gimnasio) o si puede recibir las pociones (en caso de ser una pokeparada y no tener la mochila llena). De haber alguna, devuelve el id de la primera estacion que encuentra. En caso contrario la función devuelve -1, indicando que no hay ninguna estación a la cual se puede ir. Si la función devuelve -1 no se puede tomar ninguna estación inicial por lo que simplemente se devuelve lo solicitado en el enunciado (-1). En caso contrario se utiliza el id y se recupera el índice de la estacion en el vector de estaciones llamando a la función \textit{indice estacion con id} para luego agregar al vector de visitados la estacion correspondiente a este índice. De esta forma, tenemos el primer nodo (estación) visitado. Se definen las pociones actuales como las pociones de esta estacion (en el caso de que sea un gimnasio o que el tamaño de la mochila sea mayor a 3) o como el tamaño de la mochila (en caso contrario). Se borra del vector de estaciones la estación visitada, para indicar que la misma ya fue visitada. Finalmente se llama a la función \textit{greedy capturar gimnasios} la cual realiza un procedimiento similar al anteriormente mencionado hasta que termine de recorrer todos los gimnasios (en caso de que pueda). La función \textit{greedy capturar gimnasios} recibe el vector de estaciones, un vector de vector de distancias (que contiene todas las distancias desde todas las estaciones a todas las demás, el mismo que se utilizó en el primer ejercicio), la cantidad de gimnasios (n), la cantidad de pokeparadas (m), el tamaño de la mochila (k), el vector de estaciones visitadas, las pociones actuales que se posee, el id de la estacion actual y una tupla que contiene la distancia total, la cantidad de estaciones que hay que recorrer, y un vector con los ids en orden de las estaciones que hay que recorrer.
+            En la función hay un ciclo que se ejecuta n + m veces (la cantidad de estaciones total), mientras no se haya encontrado una solución. Para saber si se encontró una solución o no, se recorren todas las estaciones para verificar que no haya ningún gimnasio sin visitar. En el cuerpo del ciclo se realiza el ordenamiento de las estaciones, la parte fundamental de la heurística greedy. El mismo consiste en una función \textit{ordenar} que recibe por parámetro el vector de estaciones, el vector de vector de distancias, y el id de la estación actual en la cual se está analizando. Lo que hace la función es recorrer el vector de distancias de la estación actual y ordena el vector de estaciones de acuerdo a este vector de distancias. De esta manera en cada iteración el vector de estaciones queda ordenado por distancia relativa a la estación actual que se está analizando. Luego del ordenamiento se llama nuevamente a la función que devuelve el id de la siguiente estación que hay que visitar. Como ahora el vector de estaciones está ordenado y se recorre de adelante para atrás, esta función va a devolver el id de la estación más cercana a la que se puede ir. Si devuelve -1, se actualiza el índice del ciclo con el valor n + m para que termine ya que no se puede avanzar. Si no se recupera el índice de la estación con ese id, se agrega la estación nueva al vector de visitados y se actualizan las pociones actuales, de acuerdo al tipo de estación que se visitó. Se borra la estación del vector de estaciones para que no sea considerada nuevamente y se actualizan el id de la estación actual con el nuevo id y se incrementa el índice del ciclo. Luego del ciclo, se verifica que sea una solución lo que se haya encontrado y en caso de serlo se suma las distancias de todos los nodos visitados y se actualiza la tupla de solucion con la distancia total, la cantidad de estaciones visitadas y el camino realizado, para que al retornar de la función la tupla solución contenga la solución al problema. 
