@@ -95,3 +95,18 @@ ordenar(vector<Estacion> estaciones, vector< vector<double> > distancias, id_est
       Después de ordenar, la función greedy llama a la función donde voy ($O(n+m)$). Se realiza una comparación con el id devuelto de esta función en $O(1)$ y si es distinto de -1 se llama a la función que devuelve el índice de la estación ($O(n+m)$). Las otras operaciones del ciclo se realizan en tiempo cosntante ($O(1)$). 
       Después del ciclo se pregunta si se encontró o no solución chequeando el vector de estaciones ($O(n+m)$ en el peor caso). La distancia acumulada se calcula iterando todos las estaciones vistas ($O(n+m)$ en el peor caso) y se arma el camino ($O(n+m)$ en el peor caso). En definitiva el ciclo es el que domina la complejidad de la función ya que por lo dicho realiza $O(n+m)*O(n+m)*O(n+m)*O(n+m) = O(n+m)^4$ operaciones.
       Por lo tanto la función solverEj2 tiene una complejidad temporal teórica de $O(n+m)^4$. 
+
+      \subsection{Comportamiento del algoritmo}
+      El algoritmo al tratarse de una heurística no devuelve una solución exacta en todos los casos. A continuación se procede a realizar un análisis del comportamiento del algoritmo para distintos tipos de instancias. El peor caso es que el algoritmo no devuelva ninguna solución aunque la misma exista. Esto puede suceder en instancias en las cuales las pokeparadas están muy próximas entre sí por lo que al algoritmo al basarse en el vecino mas cercano las va a recorrer a todas (siempre y cuando el tamaño de la mochila sea lo suficientemente grande como para recuperar pociones en todas las pokeparadas) antes que los gimnasios. De esta forma puede suceder que haya pociones que se desperdicien porque cada pokeparada devuelve 3 pociones y si en la mochila caben sólo 1 o 2 pociones se van a descartar 2 o 1 pocion respectivamente. De esta forma puede suceder que debido a ese descarte no alcancen para vencer a un gimnasio. La siguiente instancia es un ejemplo que cumple con esas características: 
+
+      \begin{codesnippet}
+            \begin{verbatim}
+2 3 7
+1 1 2
+2 2 6
+7 7
+8 8
+9 9
+
+\end{verbatim}
+            \end{codesnippet}
