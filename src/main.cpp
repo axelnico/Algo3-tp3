@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     cout << "Modo de uso: \n tp3 númeroDeEjercicio \n Opcional luego del número de ejercicio: " << endl;
     cout << "   -exp para experimentos" << endl;
     cout << "   -exp n para experimentos de n instancias" << endl;
-    cout << "   -expRandom n para generar n instancias random" << endl;
+    cout << "   -exp -expRandom n para generar n instancias random" << endl;
     return -1;
   }
 
