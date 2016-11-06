@@ -24,4 +24,16 @@ output esperado: 3 1 2
 
 CASOS ESPECIALES QUE ANDAN
 
-Con 0 posiones.
+Con 0 pociones.
+
+
+
+-------------------------------
+CASOS QUE NUNCA HAY QUE PROBAR
+
+
+Con un millon y medio de poke paradas y dosciento mil ochociento millones y medio de gimnasios con una mochila de 10^39392349023 de capacidad.
+
+--------------------------------
+
+NO HAY QUE (RE)PROBAR

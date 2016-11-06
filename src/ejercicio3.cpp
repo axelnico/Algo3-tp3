@@ -121,7 +121,6 @@ vector<vector<int>> dameVecindario2(const vector<Estacion> estaciones, const vec
 			}
 		}
 	}
-
 	return vecindario;
 }
 
