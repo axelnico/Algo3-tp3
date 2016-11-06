@@ -3,6 +3,7 @@
 tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp) {
 	vector<int> posiblesProximo;
 	int proximo;
+	vector<int> camino_nulo;
 
 	vector<int> recorrido;
 	vector<Estacion> estacionesAuxiliar = estaciones;
@@ -19,9 +20,8 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 			}
 		}
 
-		if (posiblesProximo.empty()) {
-			//perdí
-		}
+		if (posiblesProximo.empty())
+			 return make_tuple(-1, -1, camino_nulo);
 
 		//Ordeno esos nodos por costo ascendente
 		if (ultimoID > -1)
@@ -37,14 +37,14 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 
 		if (ultimoID > -1)
 			distancia += distancias[ultimoID][proximo];
+			
 		ultimoID = proximo;
 
 		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo - 1);
 
 		//Si no me quedan gimnasios por conquistar, gané
-		if (sonTodosPotas(estacionesAuxiliar)) {
+		if (sonTodosPotas(estacionesAuxiliar))
 			break;
-		}
 	}
 
 	return make_tuple(distancia, recorrido.size(), recorrido);
