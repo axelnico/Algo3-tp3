@@ -1,22 +1,51 @@
 #include "ejercicio4.h"
 
 /*
-costo, nodo id
-
+lista de vertices a las que me puedo mover: costo, nodo id
+ordeno vertices segun el costo
+me quedo con las primeras k
+elijo un elemento de la lista al azar y lo meto en el recorrido
+repito
 */
 
-tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario){
-	
+tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k) {
+	vector<int> posiblesProximo;
+	int proximo;
+
+	vector<int> recorrido;
+	int grasp;
 	vector<Estacion> estacionesAuxiliar = estaciones;
+	bool gane = false;
 
-	while (!estacionesAuxiliar.empty()) {
-		
-		
+	while (!estacionesAuxiliar.empty() && !gane) {
 
-		
+		posiblesProximo.clear();
+		for (Estacion estacion : estacionesAuxiliar) {
+			if (puedoMeter(recorrido, estacion)) {
+				posiblesProximo.push_back(estacion.id);
+			}
+		}
+
+		if (posiblesProximo.empty()) {
+			//perdí
+		}
+
+		ordenarPorCosto(&posiblesProximo, distancias);
+
+		posiblesProximo.resize(grasp);
+
+		proximo = random(posiblesProximo);
+
+		recorrido.push_back(proximo);
+
+		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo - 1);
+
+		if (sonTodosPotas(estacionesAuxiliar)) {
+			gane = true;
+		}
 	}
 	
-
+	//
 
 	tuple<double, int, vector<int> > primerEstado = solverEj2(estaciones, distancias, n, m, k); //Primer candidato a solucion
 	imprimirEstado(primerEstado);

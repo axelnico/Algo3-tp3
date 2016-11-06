@@ -1,0 +1,103 @@
+\section{Ejercicio 3: Búsqueda Local}
+    % 1. Describir detalladamente el problema a resolver dando ejemplos del mismo y sus soluciones.
+    \subsection{Descripción del problema y solución propuesta}
+    Una vez obtenida una heurística greedy para resolver la variante de TSP explicada anteriormente, utilizamos una \textbf{Búsqueda Local} para analizar una mayor cantidad de soluciones posibles. Es decir, dado una solución inicial S, la cual se obtiene de aplicar algún algoritmo heurístico a una instancia pasada como input, se busca obtener los vecinos de S, para formar un "vecindario" de soluciones, para luego, realizar una búsqueda local sobre el vecino cuya solución mejore a S. Sea V este vecindario, $\forall S^{*}\in V, S^{*} = h(S)$. Siendo h, una función que obtiene un vecino a partir de S, es decir, una modificación de S, que altera la solución, para buscar a partir de S, una solución parecida, que pueda mejorar el resultado. Por otro lado, se cuenta con una función f, la cual valora cada una de las soluciones, en nuestro caso, sean S y $S^{'}$, diremos que una solución S es mejor que $S^{'}$ si $f(S) < f(S^{'})$. Luego para cada $S^{*}\in V$, se evalúa f($S^{*}$). Dado V el conjunto del Vecindario y S la solución original. Si $f(S)<f(S^{*}) \forall S^{*}\in V$, se devuelve la solución S, caso contrario se aplica nuevamente la búsqueda local sobre el $S^{*}$ cuyo valor de evaluar en f, de menor al resto del vecindario y S.
+
+    \subsection{Vecindad 1}
+
+    \par Esto aplicado a nuestro problema. La solución inicial S, se obtiene de aplicar la heurística del vecino más cercano (explicada en la sección anterior) a los parámetros pasados por input. Una vez obtenida esta solución, contamos con la función \textbf{h} la cual generará la primer vecindad. Luego dada la solución S (la cual en nuestro caso, S consiste en una tupla con distancia, recorrido y cantidad de estaciones), la función $h$, en nuestro caso denominada \emph{dameVecindario} se encarga de intercambiar únicamente las \emph{pokeparadas} dentro del recorrido de S. Por cada intercambio generado, se guarda este nuevo recorrido en un vector.
+
+    \begin{codesnippet}
+    \begin{verbatim}
+vector<vector<int>> dameVecindario(const vector<Estacion> estaciones, const vector<int> recorrido)
+    vector<vector<int>> vecindario;
+    Para i = 0...recorrido.size() - 1
+        Si la estacion pasada en el recorrido[i] no es gimnasio
+            Para j = i+1 ... recorrido.size()
+                Si la estacion pasada en el recorrido[j] no es gimnasio
+                    Creo un vector estadoAux <-- recorrido
+                    Hago swap entre i y j en estadoAux
+                    vecindario.push_back(estadoAux);
+                Fin si
+            Fin
+        Fin Si
+    Fin
+    Devolver vecindario
+ 
+    \end{verbatim}
+    \end{codesnippet}
+
+    Una vez obtenido el vecindario, nuestra función f que evalúa cada solución, en nuestro caso, una solución es mejor que otra, si logra ganar todos los Gimnasios, en la menor distancia posible, siempre manteniendo el invariante de no pasar por la misma estación más de una vez. Luego llamamos a nuestra función f como "dameDistancia". Esta calcula la distancia de cada solución obtenida y guardada en el vector vecindario, luego la compara con S. Dado el caso donde la distancia de algun recorrido nuevo, por ejemplo $S^{'}$ en el vecindario sea menor que la distancia que recorrió S, se repite el ciclo de búsqueda local sobre $S^{'}$. Caso contrario, se devuelve la solución S con su recorrido, su distancia y la cantidad de estaciones por donde pasó.
+
+
+    % 2. Explicar de forma clara, sencilla, estructurada y concisa, las ideas desarrolladas para la resolución del problema. Utilizar pseudocódigo y lenguaje coloquial (no código fuente). Justificar por qué el procedimiento resuelve efectivamente el problema.
+    \subsection{Solución propuesta}
+    
+    \par Como solución decidimos modelar el problema en un grafo y usar el \emph{Algoritmo de Dijkstra} para obtener el camino mínimo de manera tal que no supere la complejidad pedida.
+
+    \par Las estaciones y los recorridos serán modelados en un grafo en el cual los vértices representarán a las estaciones, las aristas representarán a las vías, y el peso de cada arista representará al tiempo que se tarda en llegar de una estación a la otra.
+    \par Este grafo será implementado con una lista de adyacencia. Es decir, una lista de N posiciones, siendo N la cantidad de estaciones. Cada posición i tendrá una lista con las estaciones vecinas alcanzables desde la estación i. Cada estación vecina j será una tupla de dos valores: el número de la estación j y el tiempo que se tarda en llegar desde la estación i a la estación j.
+    
+     \\~\\
+     
+    \begin{algorithmic}
+    \State \Comment {O(m)}
+    \Function{Grafo ListAdy}{Int estaciones, Int vias, Lista(estacion1, estacion2, distancia) recorridos}
+        \State $listAdy \gets estaciones * \{\}$ \Comment {O(1)}
+        \For{$rec \in recorridos$} \Comment {O(m)}
+            \State $listAdy_{rec.estacion1}.agregar((rec.estacion2, rec.tiempo))$ \Comment {O(1)}
+        \EndFor
+        \State \Return {$listAdy$}
+    \EndFunction
+    \end{algorithmic}
+     
+     \\~\\
+    
+    \par Luego se implementará el algoritmo de Dijkstra sobre esta lista de adyacencia. Es decir, siendo N la cantidad de estaciones, el algoritmo resolverá de manera eficiente como llegar de la estación 1 a la N de la forma más rápida.
+    \par El algoritmo de Dijkstra recorre los nodos en el orden de distancia al origen. El siguiente nodo a visitar lo elige como el más cercano al origen que no haya sido visitado anteriormente. Y al visitar un nodo actualiza la distancia de sus vecinos y sus respectivos precedentes.
+    
+     \\~\\
+    
+    \begin{algorithmic}
+    \State \Comment {O((n+m) * $\log n$)}
+    \Function{Dijkstra}{Grafo listAdy, Int cantEstaciones}
+        \State $time\gets cantEstaciones * \infty$ \Comment {O(n)}
+        \State $antecesores\gets cantEstaciones * \infty$ \Comment {O(n)}
+        \State $noVisitados\gets ColaDePrioridad((tiempo, estacion))$ \Comment {O($\log n$)}
+        \State $time_{0}\gets 0$ \Comment {O(1)}
+        \State $noVisitados.encolar((0,0))$ \Comment {O($\log n$)}
+        \While {$noVisitados$ tenga elementos} \Comment {O((n+m) * $\log n$)}
+            \State $estacion\gets noVisitados.extraerMin()$ \Comment {O($\log n$)}
+            \For{$vecino \in listAdy[estacion]$} \Comment {O(m * $\log n$)}
+                \If {$time_{vecino} > time_{estacion} + tiempo_{vecino, estacion}$} \Comment {O(1)}
+                    \State $nuevoTiempo\gets noVisitados.actualizarPrioridad()$ \Comment {O($\log n$)}
+                    \State $time_{vecino}\gets nuevoTiempo$ \Comment {O(1)}
+                    \State $antecesores_{vecino}\gets estacion$ \Comment {O(1)}
+                \EndIf
+            \EndFor
+        \EndWhile
+        \State \Return {$time_{cantEstaciones}, obtenerSalida(antecesores)$} \Comment {O(n)}
+    \EndFunction
+    \end{algorithmic}
+    
+     \\~\\
+    
+    \par  Para este caso en particular, el algoritmo usará un árbol binario para almacenar los nodos no visitados. De esta manera, se podrá extraer el nodo más cercano al origen y actualizar la prioridad de un nodo cuando se encuentre una distancia menor en complejidad logarítmica.
+    \par Para que la función devuelva lo pedido, se obtiene el tiempo mínimo que se tarda en llegar de la estación inicial a la estación final con el valor de la última posición de la lista \emph{time}. Y por otro lado, a partir de la lista \emph{antecesores} se obtiene el recorrido más rápido, con sus estaciones.
+
+    \par El problema planteado se puede visualizar como un contexto en el cual se tiene un grafo con varios vértices (estaciones), con distintas aristas (vías), cada una con su peso (tiempo en llegar de una estación a la otra). Y a partir de este grafo, se desea obtener el camino mínimo desde el primer nodo hasta el último.
+    \par Según los algoritmos vistos en la cátedra, la mejor solución para este tipo de problemas es aplicar a ese grafo el \emph{Algoritmo de Dijkstra}, el cual resuelve eficientemente el camino con menos peso para llegar de cierto nodo inicial a cierto nodo final.
+    \par Dado este análisis del problema, se llega la conclusión de que el procedimiento desarrollado es una solución eficiente que lo resuelve.
+   
+    \subsection{Complejidad teórica}
+        Dada la explicación anterior, el algoritmo tiene complejidad temporal de $O((N+M) * \log N)$ donde $N$ es la cantidad de estaciones y $M$ es la cantidad de vías.
+        Esto se da debido a que se usa el algoritmo de Dijkstra con una lista de prioridad implementada con un árbol binario.
+        Notar que $O((N+M) * \log N)$ puede ser peor $O(n^{2})$. Conviene usar min heap o un árbol cuando el grafo es esparso, es decir, cuando M << N^{2}.
+    
+
+    % 4. Dar un código fuente claro que implemente la solución propuesta. Se deben incluir las partes relevantes del código como apéndice del informe impreso entregado.
+
+    % 5. Realizar una experimentación computacional para medir la performance del programa implementado. Usar un conjunto de casos de test en función de los parámetros de entrada, con instancias aleatorias e instancias particulares (de peor/mejor caso en tiempo de ejecución, por ejemplo). Presentar en forma gráfica una comparación entre los tiempos medidos y la complejidad teórica calculada y extraer conclusiones.
+    \subsection{Experimentación}
+
+        Al igual que con los otros dos ejercicios, se realizaron pruebas experimentales para verificar que el tiempo de ejecución del algoritmo cumpliera con la cota asintótica de $O((N+M) * \log N)$, teóricamente demostrada para el peor caso...
