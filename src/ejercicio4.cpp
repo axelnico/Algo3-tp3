@@ -28,7 +28,8 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 			ordenarPorCosto(posiblesProximo, distancias[ultimoID]);
 
 		//Me quedo con los grasp nodos mas baratos
-		posiblesProximo.resize(grasp);
+		if (grasp < posiblesProximo.size())
+			posiblesProximo.resize(grasp);
 
 		//Elijo al azar uno de esos nodos y lo agrego a mi recorrido
 		proximo = posiblesProximo[random(grasp)];
@@ -100,4 +101,8 @@ int random(int limit) {
 	mt19937 gen(rd());
 	uniform_int_distribution<> tam(0, limit - 1);
 	return tam(gen);
+}
+
+bool pairCompare(const pair<int, double>& firstElem, const pair<int, double>& secondElem) {
+  return firstElem.second < secondElem.second;
 }
