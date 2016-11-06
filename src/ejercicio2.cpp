@@ -58,7 +58,7 @@ void ordenar(vector<Estacion> &estaciones, vector< vector<double> > distancias, 
 }
 
 int id_mas_cercano_que_no_viste(vector<double> &distancias, vector<int> &vistos, vector<Estacion> &estaciones){
-  int actual = id_del_max(distancias);
+  int actual = 0;
   for (int j = 0; j < distancias.size(); ++j) {
     if ((distancias[j] <= distancias[actual]) && !esta(vistos, j) && (indice_estacion_con_id(j, estaciones) > -1) ) {
       actual = j;

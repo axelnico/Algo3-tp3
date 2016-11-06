@@ -2,7 +2,7 @@
 CC=g++
 
 # flags de compilación
-CXXFLAGS=-g -Wall -std=c++11 -O2 
+CXXFLAGS=-g -Wall -std=c++11 -O3 
 
 # flags de linkeo
 LDFLAGS=
@@ -12,7 +12,7 @@ INCDIR= .
 
 # Agregar acá los archivos .cpp a compilar [COMPLETAR]
 
-SOURCES=main.cpp ejercicio1.cpp ejercicio2.cpp ejercicio3.cpp Estacion.cpp
+SOURCES=main.cpp ejercicio1.cpp ejercicio2.cpp ejercicio3.cpp ejercicio4.cpp Estacion.cpp
 
 
 # Objetos que serán generados (no tocar)

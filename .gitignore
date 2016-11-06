@@ -35,3 +35,6 @@ informe.pdf
 *.fls
 *.aux
 *.toc
+
+# Resultados de experimentos
+*.data

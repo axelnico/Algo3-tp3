@@ -1,13 +1,22 @@
+#include <vector>
+#include <tuple>
+#include <iostream>
+#include <algorithm> //Sort esta en O(n*Log n) y reverse en O(n)
+#include "Estacion.h"
+
 using namespace std;
 
 
 
 //tuple<double, int, vector<int> > 
-tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario);
-tuple<double, int, vector<int> > busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones, vector<vector<double>> &distancias, double distancia, const int cantVertices, const int k, const bool swapDePotas);
-void swap(vector<int> &estado, int i, int j);
-vector<vector<int>> dameVecindario (const vector<Estacion> estaciones, const vector<int> estado);
-double dameDistancia(const vector<int> recorrido, const vector<vector<double>> distancias);
-void imprimirEstado(tuple<double, int, vector<int> > primerEstado);
-vector<vector<int>> dameVecindario2(const vector<Estacion> estaciones, const vector<int> recorrido, const vector<vector<double>> distancias, const int k);
-bool recorridoValido(const vector<Estacion> estaciones, const vector<int> recorrido, const vector<vector<double>> distancias, const int k);
+tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp);
+bool puedoMeter(const vector<Estacion>& estaciones, const vector<int>& recorrido, const Estacion& nuevaEstacion, const int k);
+void ordenarPorCosto(vector<int>& lista, const vector<double> & distancias);
+bool puedoMeter(const vector<Estacion>& estaciones, const vector<int>& recorrido, const Estacion& nuevaEstacion, const int k);
+void ordenarPorCosto(vector<int>& lista, const vector<double>& distancias);
+bool sonTodosPotas(const vector<Estacion> & estaciones);
+int random(int limit);
+
+bool pairCompare(const std::pair<int, double>& firstElem, const std::pair<int, double>& secondElem) {
+  return firstElem.second < secondElem.second;
+}
