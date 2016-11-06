@@ -32,9 +32,9 @@ void BT_capturar_gimnasios(vector<Estacion> &estaciones, const vector< vector<do
       if ( (get<0>(soluciones) >= 0 && nueva_distancia < get<0>(soluciones)) || (get<0>(soluciones) < 0) ) {        //Poda: solucion posible no sea peor que solucion actual
         if (puede_ganar_gimnasio(estaciones[i],potasActuales) || puede_recibir_potas(estaciones[i],potasActuales,k)) {    //Poda: no va a la pokeparada si la mochila está llena
           visitados.push_back(estaciones[i]);
-          potasActuales = (estaciones[i].esGimnasio || potasActuales + 3 <= k) ? potasActuales + estaciones[i].potas : k;
+          int nuevoPotasActuales = (estaciones[i].esGimnasio || potasActuales + 3 <= k) ? potasActuales + estaciones[i].potas : k;
           estaciones.erase(estaciones.begin() + i);
-          BT_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,potasActuales,soluciones);
+          BT_capturar_gimnasios(estaciones,distancias,n,m,k,visitados,nuevoPotasActuales,soluciones);
           Estacion ultimaEstacion(visitados.back());
           visitados.pop_back();
           estaciones.insert(estaciones.begin() + i, ultimaEstacion);
