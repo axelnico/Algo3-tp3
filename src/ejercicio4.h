@@ -17,6 +17,4 @@ void ordenarPorCosto(vector<int>& lista, const vector<double>& distancias);
 bool sonTodosPotas(const vector<Estacion> & estaciones);
 int random(int limit);
 
-bool pairCompare(const std::pair<int, double>& firstElem, const std::pair<int, double>& secondElem) {
-  return firstElem.second < secondElem.second;
-}
+bool pairCompare(const pair<int, double>& firstElem, const pair<int, double>& secondElem);
