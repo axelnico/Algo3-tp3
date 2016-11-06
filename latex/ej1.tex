@@ -46,7 +46,7 @@ tupla<double,entero,lista<IDs> > soluciones):
     soluciones = tupla(distancia, tamaño(visitados), camino)
   si no:
     para i = 0 hasta tamaño(estaciones):
-      nueva_distancia = 0;
+      nueva_distancia = 0
       si tamaño(visitados) > 0:
         id_ultimo_visitado = id(ultimo(visitados))
         proxima_distancia = distancias[id_ultimo_visitado][id(estaciones[i])]
