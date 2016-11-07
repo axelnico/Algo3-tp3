@@ -60,7 +60,7 @@ bool puede_ser_que_tenga_solucion(vector<Estacion> &estaciones, int k){
     if(estaciones[i].esGimnasio){
       int potas_gym = estaciones[i].potas;
       if (k + potas_gym < 0) return false; //Poda: Tamaño de la mochila >= potas del gimnasio
-      potasNecesarias += potas_gym;
+      potasNecesarias = potasNecesarias - potas_gym; //potas_gym es <0
     }
     else{
       potasPosibles += 3;
