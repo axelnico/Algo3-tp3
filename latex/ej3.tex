@@ -1,68 +1,68 @@
 \section{Ejercicio 3: Búsqueda Local}
     % 1. Describir detalladamente el problema a resolver dando ejemplos del mismo y sus soluciones.
-	\subsection{Descripción del problema y solución propuesta}
+    \subsection{Descripción del problema y solución propuesta}
 
-	\par Una vez obtenida una heurística greedy para resolver nuestra variante de TSP, utilizamos una \textbf{Búsqueda Local} para analizar una mayor cantidad de soluciones posibles. Es decir, dada una solución inicial S (obtenida de aplicar a una instancia de entrada, el algoritmo heurístico implementado en el Ejercicio 2) se obtienen los vecinos de S, es decir, un "vecindario" de soluciones. Y de este vecindario, es obtiene el vecino cuya solución mejore a S. Luego se realiza una búsqueda local sobre este vecino. 
-	\par Sea V este vecindario, $\forall S^{*}\in V, S^{*} = h(S)$. h es una función que obtiene un vecino a partir de S, perteneciente a V. En otras palabras, h altera la solución S para encontrar una solución parecida que pueda mejorar el resultado. Por otro lado, se cuenta con una función f que da valor a cada una de las soluciones. En nuestro caso, sean S y $S^{'}$, diremos que una solución S es mejor que $S^{'}$ si $f(S) < f(S^{'})$. Luego para cada $S^{*}\in V$, se evalúa f($S^{*}$). 
-	\par Dado V el conjunto de vecinos del Vecindario y S la solución original, si $f(S) < f(S^{*}) \forall S^{*}\in V$, se devuelve la solución S. En caso contrario, se aplica nuevamente la búsqueda local sobre $S^{*}$ cuyo valor en f sea el menor, y se repite el procedimiento hasta que no haya un $S^{*}$ que cumpla $f(S^{*}) < f(S)$. Una vez que esto ocurre, se devuelve el último $S^{*}$. De esta manera, a partir de una solución se estará explorando sus vecinos, y la búsqueda local se detendrá al hallar una mínimo local.
+    \par Una vez obtenida una heurística greedy para resolver nuestra variante de TSP, utilizamos una \textbf{Búsqueda Local} para analizar una mayor cantidad de soluciones posibles. Es decir, dada una solución inicial S (obtenida de aplicar a una instancia de entrada, el algoritmo heurístico implementado en el Ejercicio 2) se obtienen los vecinos de S, es decir, un "vecindario" de soluciones. Y de este vecindario, es obtiene el vecino cuya solución mejore a S. Luego se realiza una búsqueda local sobre este vecino. 
+    \par Sea V este vecindario, $\forall S^{*}\in V, S^{*} = h(S)$. h es una función que obtiene un vecino a partir de S, perteneciente a V. En otras palabras, h altera la solución S para encontrar una solución parecida que pueda mejorar el resultado. Por otro lado, se cuenta con una función f que da valor a cada una de las soluciones. En nuestro caso, sean S y $S^{'}$, diremos que una solución S es mejor que $S^{'}$ si $f(S) < f(S^{'})$. Luego para cada $S^{*}\in V$, se evalúa f($S^{*}$). 
+    \par Dado V el conjunto de vecinos del Vecindario y S la solución original, si $f(S) < f(S^{*}) \forall S^{*}\in V$, se devuelve la solución S. En caso contrario, se aplica nuevamente la búsqueda local sobre $S^{*}$ cuyo valor en f sea el menor, y se repite el procedimiento hasta que no haya un $S^{*}$ que cumpla $f(S^{*}) < f(S)$. Una vez que esto ocurre, se devuelve el último $S^{*}$. De esta manera, a partir de una solución se estará explorando sus vecinos, y la búsqueda local se detendrá al hallar una mínimo local.
 
     \subsubsection{Vecindad 1}
 
     \par Se realiza una búsqueda local aplicado a nuestro problema de la siguiente manera. La solución inicial S, se obtiene de aplicar la heurística del vecino más cercano (explicada en el Ejercicio 2) a los parámetros pasados por input. Una vez obtenida esta solución, contamos con la función \textbf{h} la cual generará la primer vecindad. Luego, dada la solución S (la cual en nuestro caso, S consiste en una tupla con distancia, recorrido y cantidad de estaciones), 
-	En este caso, la función $h$ se denomina \emph{dameVecindario}, y se encarga de intercambiar únicamente las \emph{pokeparadas} dentro del recorrido de S. Por cada intercambio generado, se guarda este nuevo recorrido en un vector.
+    En este caso, la función $h$ se denomina \emph{dameVecindario}, y se encarga de intercambiar únicamente las \emph{pokeparadas} dentro del recorrido de S. Por cada intercambio generado, se guarda este nuevo recorrido en un vector.
 
     \begin{codesnippet}
-	\begin{verbatim}
-	vector<vector<int>> dameVecindario(lista<Estacion> estaciones, lista<int> recorrido)
-		vector<vector<int>> vecindario;
-		Para i = 0...recorrido.size() - 1
-			Si la estacion pasada en el recorrido[i] no es gimnasio
-				Para j = i+1 ... recorrido.size()
-					Si la estacion pasada en el recorrido[j] no es gimnasio
-						Creo un vector estadoAux <-- recorrido
-						Hago swap entre i y j en estadoAux
-						vecindario.push_back(estadoAux);
-					Fin si
-				Fin
-			Fin Si
-		Fin
-		Devolver vecindario
+    \begin{verbatim}
+    vector<vector<int>> dameVecindario(lista<Estacion> estaciones, lista<int> recorrido)
+        vector<vector<int>> vecindario;
+        Para i = 0...recorrido.size() - 1
+            Si la estacion pasada en el recorrido[i] no es gimnasio
+                Para j = i+1 ... recorrido.size()
+                    Si la estacion pasada en el recorrido[j] no es gimnasio
+                        Creo un vector estadoAux <-- recorrido
+                        Hago swap entre i y j en estadoAux
+                        vecindario.push_back(estadoAux);
+                    Fin si
+                Fin
+            Fin Si
+        Fin
+    Devolver vecindario
     \end{verbatim}
     \end{codesnippet}
 
     En nuestro caso, una solución es mejor que otra si una logra conquistar todos los Gimnasios recorriendo menor distancia que la otra, manteniendo siempre el invariante de no pasar por la misma estación más de una vez. 
-	Una vez obtenido el vecindario, la función f evalúa cada solución. En nuestro caso f se llama "dameDistancia" y se encarga de calcular la distancia de cada solución obtenida, guardándola en el vector vecindario. Luego compara cada una con S. 
-	\par Si la distancia de algún recorrido nuevo, por ejemplo $S^{'}$, en el vecindario es menor que la distancia que recorrió S, se repite el ciclo de búsqueda local sobre $S^{'}$. Caso contrario, se devuelve la solución S con su recorrido, su distancia y la cantidad de estaciones por donde pasó.
+    Una vez obtenido el vecindario, la función f evalúa cada solución. En nuestro caso f se llama "dameDistancia" y se encarga de calcular la distancia de cada solución obtenida, guardándola en el vector vecindario. Luego compara cada una con S. 
+    \par Si la distancia de algún recorrido nuevo, por ejemplo $S^{'}$, en el vecindario es menor que la distancia que recorrió S, se repite el ciclo de búsqueda local sobre $S^{'}$. Caso contrario, se devuelve la solución S con su recorrido, su distancia y la cantidad de estaciones por donde pasó.
 
    \subsubsection{Vecindad 2}
 
     \par A diferencia de la Vecindad 1, la función h se llama "dameVecindario2" y se encarga de intercambiar únicamente los \emph{gimnasios} dentro del recorrido S, siempre que cada intercambio de gimnasios en el recorrido no cause que alguno de los gimnasios no pueda ser conquistado.
 
     \begin{codesnippet}
-	\begin{verbatim}
-	vector<vector<int>> dameVecindario2(lista<Estacion> estaciones, lista<int> recorrido, matriz<double, double> distancias, int k)
-		vector<vector<int>> vecindario;
-		Para i = 0...recorrido.size() - 1
-			Si la estación pasada en el recorrido[i] es gimnasio
-				Para j = i+1 ... recorrido.size()
-					Si la estación pasada en el recorrido[j] es gimnasio
-						Creo un vector estadoAux <-- recorrido
-						Hago swap entre i y j en estadoAux
-						Si el recorrido sigue siendo válido (se conquistan todos los gimnasios)
-							vecindario.push_back(estadoAux);
-						Fin si
-					Fin si
-				Fin
-			Fin Si
-		Fin
-		Devolver vecindario
+    \begin{verbatim}
+    vector<vector<int>> dameVecindario2(lista<Estacion> estaciones, lista<int> recorrido, matriz<double, double> distancias, int k)
+        vector<vector<int>> vecindario;
+        Para i = 0...recorrido.size() - 1
+            Si la estación pasada en el recorrido[i] es gimnasio
+                Para j = i+1 ... recorrido.size()
+                    Si la estación pasada en el recorrido[j] es gimnasio
+                        Creo un vector estadoAux <-- recorrido
+                        Hago swap entre i y j en estadoAux
+                        Si el recorrido sigue siendo válido (se conquistan todos los gimnasios)
+                            vecindario.push_back(estadoAux);
+                        Fin si
+                    Fin si
+                Fin
+            Fin Si
+        Fin
+        Devolver vecindario
     \end{verbatim}
     \end{codesnippet}
-
-   
+    
+    \par El resto del procedimiento es equivalente al explicado para la Vecindad 1, es decir, para la búsqueda local anterior.
    
     \subsection{Complejidad teórica}
-        Para la complejidad teórica, debemos mostrar por cada iteración de la búsqueda local cual será la cota asintótica. Para empezar, hablaremos de la  \textbf{vecindad 1}, la cual como fue explicado anteriormente, se encarga de crear las posibles combinaciones de intercambiar la posición de las pokeparadas en el recorrido. Para calcular la complejidad en cada iteración de la búsqueda local , sean N los nodos gimnasio y M los nodos pokeparadas, se deben tener en cuenta:
+        Para la complejidad teórica, debemos mostrar por cada iteración de la búsqueda local cual será la cota asintótica. Para empezar, hablaremos de la \textbf{Vecindad 1}. Como fue explicado anteriormente, se encarga de crear las posibles combinaciones de intercambiar la posición de las pokeparadas en el recorrido. Para calcular la complejidad en cada iteración de la búsqueda local, sean N los nodos gimnasio y M los nodos pokeparadas, se deben tener en cuenta:
 
         \begin{itemize}
             \item Para ingresar a la búsqueda local, se copia el vector recorrido, de la solución inicial S, esto cuesta \ord(N+M).

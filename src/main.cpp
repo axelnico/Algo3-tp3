@@ -34,6 +34,8 @@ double distTrigonometrica(tuple<int, int, int> a, tuple<int, int, int> b);
 
 void imprimir_res(tuple<double,int,vector<int > > res);
 
+tuple<vector<vector<double> >, vector<Estacion> > dataentry(int & n, int & m, int & k);
+
 int main(int argc, char *argv[]) {
 	int numeroDeEjercicio = 0;
   bool experimentos = false;
@@ -117,57 +119,75 @@ int main(int argc, char *argv[]) {
   }
   else if (numeroDeEjercicio == 2) {
     if (!experimentos) {
-    cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
-    int n,m,k;
-    cin >> n >> m >> k;
-    cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
-    cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
+      cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
+      int n,m,k;
+      cin >> n >> m >> k;
+      cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
+      cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
 
-    tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
-    vector<vector<double> > distancias = get<0>(input);
-    vector<Estacion> estaciones = get<1>(input);
-    std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
-    imprimir_res(res);
-  }
-  else
-  {
-    for (int inputs = 0; inputs < instancias; ++inputs) {
-        int n,m,k;
-        cin >> n >> m >> k;
-        tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
-        vector<vector<double> > distancias = get<0>(input);
-        vector<Estacion> estaciones = get<1>(input);
-        for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
-          start_timer();
-          std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
-          cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
-        }
+      tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+      vector<vector<double> > distancias = get<0>(input);
+      vector<Estacion> estaciones = get<1>(input);
+      std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
+      imprimir_res(res);
+    }
+    else {
+      for (int inputs = 0; inputs < instancias; ++inputs) {
+          int n,m,k;
+          cin >> n >> m >> k;
+          tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+          vector<vector<double> > distancias = get<0>(input);
+          vector<Estacion> estaciones = get<1>(input);
+          for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+            start_timer();
+            std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
+            cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+          }
       }
-  }
-  } else if (numeroDeEjercicio == 3) {
+    }
+  } 
+  else if (numeroDeEjercicio == 3) {
     char vecindario;
+    int n,m,k;
+
     cout << "Ingrese 'a' para vecindario de swapear paradas, o 'b' para swapear gym's " << endl;
     cin >> vecindario;
-    cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
-    int n,m,k;
-    cin >> n >> m >> k;
-    cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
-    cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
-    tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+
+    tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
     vector<vector<double> > distancias = get<0>(input);
     vector<Estacion> estaciones = get<1>(input);
-    std::tuple<double, int, std::vector<int> > res;
-    if (vecindario == 'a'){
-      res = solverEj3(estaciones, distancias, n, m, k, true);  
-    } else {
-      res = solverEj3(estaciones, distancias, n, m, k, false);  
-    }
-    
-    imprimir_res(res);
 
+    tuple<double, int, vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');  
+    imprimir_res(res);
+  }
+  else if (numeroDeEjercicio == 4) {
+    int n,m,k;
+    int grasp = 0;
+
+    tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
+
+    while (1 > grasp || grasp > n) {
+      cout << "Elija un k menor o igual a " << n << " para limitar el tamaño de RCL " << endl;
+      cin >> grasp;
+    }
+
+    vector<vector<double> > distancias = get<0>(input);
+    vector<Estacion> estaciones = get<1>(input);
+    tuple<double, int, vector<int> > res = solverEj4(estaciones, distancias, n, m, k, grasp);  
+
+    imprimir_res(res);
   }
 
   return 0;
+}
+
+tuple<vector<vector<double> >, vector<Estacion> > dataentry(int & n, int & m, int & k)
+{
+  cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
+  cin >> n >> m >> k;
+  cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
+  cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
+  return cargar_input(n,m);
 }
 
 tuple<vector<vector<double> >, vector<Estacion> > cargar_input(int n, int m){
