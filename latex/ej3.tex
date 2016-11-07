@@ -13,20 +13,20 @@
 
     \begin{codesnippet}
 	\begin{verbatim}
-	vector<vector<int>> dameVecindario(lista<Estacion> estaciones, lista<int> recorrido)
-		vector<vector<int>> vecindario;
-		Para i = 0...recorrido.size() - 1
-			Si la estacion pasada en el recorrido[i] no es gimnasio
-				Para j = i+1 ... recorrido.size()
-					Si la estacion pasada en el recorrido[j] no es gimnasio
-						Creo un vector estadoAux <-- recorrido
-						Hago swap entre i y j en estadoAux
-						vecindario.push_back(estadoAux);
-					Fin si
-				Fin
-			Fin Si
-		Fin
-		Devolver vecindario
+    vector<vector<int>> dameVecindario(lista<Estacion> estaciones, lista<int> recorrido)
+        vector<vector<int>> vecindario;
+        Para i = 0...recorrido.size() - 1
+            Si la estacion pasada en el recorrido[i] no es gimnasio
+                Para j = i+1 ... recorrido.size()
+                    Si la estacion pasada en el recorrido[j] no es gimnasio
+                        Creo un vector estadoAux <-- recorrido
+                        Hago swap entre i y j en estadoAux
+                        vecindario.push_back(estadoAux);
+                    Fin si
+                Fin
+            Fin Si
+        Fin
+    Devolver vecindario
     \end{verbatim}
     \end{codesnippet}
 
