@@ -23,7 +23,7 @@ void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<doub
   int potas = potasActuales;
   while(i< (n+m) && !es_solucion(estaciones)) {
     ordenar(estaciones, distancias, id_estacion_actual);
-    int id = donde_voy(estaciones, potasActuales, k);
+    int id = donde_voy(estaciones, potas, k);
     if(id == -1){
       i = n + m;
     }
@@ -31,7 +31,7 @@ void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<doub
     {
       int index = indice_estacion_con_id(id, estaciones);
       visitados.push_back(estaciones[index]);
-      potas = (estaciones[index].esGimnasio || potasActuales+3 <= k) ? potas + estaciones[index].potas : k;
+      potas = (estaciones[index].esGimnasio || potas+3 <= k) ? potas + estaciones[index].potas : k;
       estaciones.erase(estaciones.begin() + index);
       id_estacion_actual = id;
       i++;
