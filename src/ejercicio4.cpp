@@ -40,11 +40,19 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 			
 		ultimoID = proximo;
 
-		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo - 1);
+		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo);
+		
+		//cout << "estado estaciones:" << endl;
+		for (Estacion estacion1 : estacionesAuxiliar) {
+			//cout << "la estacion nro " << estacion1.id << " es un " << (estacion1.esGimnasio ? "gimnasio" : "pokeparada") << endl;
+		}
+		//cout << endl;
 
 		//Si no me quedan gimnasios por conquistar, gané
-		if (sonTodosPotas(estacionesAuxiliar))
+		if (sonTodosPotas(estacionesAuxiliar)) {
+			//cout << "son todas potas" << endl;
 			break;
+		}
 	}
 
 	return make_tuple(distancia, recorrido.size(), recorrido);
@@ -89,6 +97,7 @@ void ordenarPorCosto(vector<int>& lista, const vector<double>& distancias)
 bool sonTodosPotas(const vector<Estacion> & estaciones) {
 	for (Estacion estacion : estaciones)
 	{
+		//cout << "sonTodosPotas: la estacion nro " << estacion.id << " es un " << (estacion.esGimnasio ? "gimnasio" : "pokeparada") << endl;
 		if (estacion.esGimnasio) {
 			return false;
 		}
