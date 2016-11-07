@@ -40,7 +40,7 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 			
 		ultimoID = proximo;
 
-		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo - 1);
+		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo);
 
 		//Si no me quedan gimnasios por conquistar, gané
 		if (sonTodosPotas(estacionesAuxiliar))
