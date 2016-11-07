@@ -68,7 +68,7 @@ AAAA
         \begin{itemize}
             \item Para ingresar a la búsqueda local, se copia el vector recorrido, de la solución inicial S, esto cuesta \ord(N+M).
             \item Luego se entra al ciclo principal de búsqueda local que en el peor de los casos tendrá M! iteraciones. Esto se debe a que, dado que en cada iteración se permutan ciertas pokeparadas, en el peor de los casos, siempre encuentra una solución mejor. Va a tomar \ord(M!) iteraciones recorrer todas las permutaciones posibles.
-            \item Dentro del ciclo principal, se busca el vecindario de una solución. Para esto se llama a la función \emph{dameVecindario} con el vector recorrido.
+            \item Dentro del ciclo principal, se busca el vecindario de una solución. Para esto se llama a la función \emph{dameVecindario} con el vector \emph{recorrido}.
             La misma función, recorre el vector hasta la posición i. Hasta que el i-ésimo elemento sea pokeparada. Luego recorre el vector restante, desde i+1 hasta recorrido.size()-1. Es decir, la complejidad del ciclo es de 
             \[
             \ord(\sum_{i=0}^{recorrido.size()-1} i)
@@ -91,12 +91,38 @@ AAAA
             \ord(((N+M))*(N+M-1)/2)*(N+M)) = \ord((N+M)^{3})
             \]
 
-            \item Una vez obtenido el vecindario se calcula la distancia. Para esto se recorre el vector de vecindarios y por cada vecino se itera sobre su recorrido calculando la distancia. d
-
+            \item Una vez obtenido el vecindario se recorre el vector \emph{vecindario} y por cada vecino se itera sobre su recorrido calculando la distancia. Dado que las iteraciones dentro de \emph{dameVecindario}, empieza en la i-ésima pokeparada, y por cada elemento a partir del i+1, que también sea pokeparada, se genera un intercambio de elemento dentro del vector, entonces la cantidad de vecinos distintos serán,
+            \[
+             $\sum_{i=0}^{M-1} i = M(M-1)/2$
+            \] 
+            Luego la cantidad de vecinos diferentes, es decir el tamaño total del vector vecindario es de $M(M-1)/2$. Calcular la distancia, implica por cada vecino, recorrer todo el vector \emph{recorrido}, esto es \ord(N+M). Esto lo realiza para los M(M-1)/2 vecinos. Es decir
+            \[
+                \ord((M(M-1)/2)*(N + M)) = \ord(M^{2}*(N+M))
+            \]
+            \item Finalmente, dada la solución, se genera una tupla en \ord(1) y se devuelve esta solución.
 
         \end{itemize}
 
-    
+        Es decir, la complejidad quedaría
+        \[
+            \ord(N+M) + \ord(M!)*(\ord((N+M)^{3}) + \ord(M^{2}*(N+M)) =
+        \]
+        \[
+            \ord(M!)*(\ord((N+M)^{3}) + \ord(M^{2}*(N+M)) =
+        \]
+        \[
+            \ord(M!*((N+M)^{3} + M^{2}*(N+M))) =
+        \]
+
+        \[
+            \ord(M!*((N+M)^{3}))
+        \]
+        Pues $\ord(M^{2}*(N+M)) = \ord((N+M)^{3})$
+
+        Finalmente, la complejidad total es de
+        \[
+            \ord(M!*((N+M)^{3}))
+        \] 
 
     % 4. Dar un código fuente claro que implemente la solución propuesta. Se deben incluir las partes relevantes del código como apéndice del informe impreso entregado.
 
