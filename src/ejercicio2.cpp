@@ -19,7 +19,8 @@ tuple<double, int, vector<int> > solverEj2(vector<Estacion> &estaciones, vector<
 }
 
 void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<double> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, int id_estacion_actual, tuple<double,int,vector<int> > &soluciones){
-  int i = 0;
+  int i = 0; 
+  int potas = potasActuales;
   while(i< (n+m) && !es_solucion(estaciones)) {
     ordenar(estaciones, distancias, id_estacion_actual);
     int id = donde_voy(estaciones, potasActuales, k);
@@ -30,7 +31,7 @@ void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<doub
     {
       int index = indice_estacion_con_id(id, estaciones);
       visitados.push_back(estaciones[index]);
-      potasActuales = (estaciones[index].esGimnasio || potasActuales+3 <= k) ? potasActuales + estaciones[index].potas : k;
+      potas = (estaciones[index].esGimnasio || potasActuales+3 <= k) ? potas + estaciones[index].potas : k;
       estaciones.erase(estaciones.begin() + index);
       id_estacion_actual = id;
       i++;

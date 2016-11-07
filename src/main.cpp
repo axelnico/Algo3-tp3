@@ -116,6 +116,7 @@ int main(int argc, char *argv[]) {
     }
   }
   else if (numeroDeEjercicio == 2) {
+    if (!experimentos) {
     cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
     int n,m,k;
     cin >> n >> m >> k;
@@ -127,6 +128,25 @@ int main(int argc, char *argv[]) {
     vector<Estacion> estaciones = get<1>(input);
     std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
     imprimir_res(res);
+    cout << "ME MORI" << endl;
+  }
+  else
+  {
+    cout << "asdasdasd" << endl;
+    for (int inputs = 0; inputs < instancias; ++inputs) {
+        int n,m,k;
+        cin >> n >> m >> k;
+        cout << n << " - " << m << " - " << k << endl;
+        tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+        vector<vector<double> > distancias = get<0>(input);
+        vector<Estacion> estaciones = get<1>(input);
+        for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+          start_timer();
+          std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
+          //cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+        }
+      }
+  }
   } else if (numeroDeEjercicio == 3) {
     char vecindario;
     cout << "Ingrese 'a' para vecindario de swapear paradas, o 'b' para swapear gym's " << endl;
@@ -150,7 +170,7 @@ int main(int argc, char *argv[]) {
 
   }
 
-
+   cout << "asdasdsad" << endl;
 
   return 0;
 }
