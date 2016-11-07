@@ -10,12 +10,12 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 	int ultimoID = -1;
 	double distancia = 0;
 
-	while (!estacionesAuxiliar.empty()) {
+	while (!estacionesAuxiliar.empty()) { //O(n) siendo n la cantidad de estaciones
 
 		//Obtengo todos los posibles próximos nodos a recorrer
 		posiblesProximo.clear(); 
-		for (Estacion estacion : estacionesAuxiliar) {
-			if (puedoMeter(estaciones, recorrido, estacion, k)) {
+		for (Estacion estacion : estacionesAuxiliar) { //O(n) pero no se multiplica por el n del while. Se suma porque va disminuyendo el n
+			if (puedoMeter(estaciones, recorrido, estacion, k)) { //O(n)
 				posiblesProximo.push_back(estacion.id);
 			}
 		}
@@ -25,7 +25,7 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 
 		//Ordeno esos nodos por costo ascendente
 		if (ultimoID > -1)
-			ordenarPorCosto(posiblesProximo, distancias[ultimoID]);
+			ordenarPorCosto(posiblesProximo, distancias[ultimoID]); //O(n log n)
 
 		//Me quedo con los grasp nodos mas baratos
 		if (grasp < posiblesProximo.size())
@@ -43,7 +43,7 @@ tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<v
 		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo);
 
 		//Si no me quedan gimnasios por conquistar, gané
-		if (sonTodosPotas(estacionesAuxiliar))
+		if (sonTodosPotas(estacionesAuxiliar)) //O(n) pero no se multiplica por el n del while. Se suma porque va disminuyendo el n
 			break;
 	}
 
@@ -56,7 +56,7 @@ bool puedoMeter(const vector<Estacion>& estaciones, const vector<int>& recorrido
 
 	int pociones = 0;
 
-	for (int r : recorrido) {
+	for (int r : recorrido) { //O(n)
 		if (!estaciones[r].esGimnasio) {
 			pociones = min(pociones + 3, k);
 		}
