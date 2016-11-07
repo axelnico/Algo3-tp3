@@ -153,7 +153,7 @@ int main(int argc, char *argv[]) {
   else if (numeroDeEjercicio == 3) {
     char vecindario;
     int n,m,k;
-    
+
     cout << "Ingrese 'a' para vecindario de swapear paradas, o 'b' para swapear gym's " << endl;
     cin >> vecindario;
 
@@ -161,17 +161,24 @@ int main(int argc, char *argv[]) {
     vector<vector<double> > distancias = get<0>(input);
     vector<Estacion> estaciones = get<1>(input);
 
-    tuple<double, int, std::vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');  
+    tuple<double, int, vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');  
     imprimir_res(res);
   }
   else if (numeroDeEjercicio == 4) {
     int n,m,k;
+    int grasp = 0;
 
     tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
 
+    while (1 > grasp || grasp > n) {
+      cout << "Elija un k menor o igual a " << n << " para limitar el tamaño de RCL " << endl;
+      cin >> grasp;
+    }
+
     vector<vector<double> > distancias = get<0>(input);
     vector<Estacion> estaciones = get<1>(input);
-    tuple<double, int, std::vector<int> > res = solverEj4(estaciones, distancias, n, m, k, true);  
+    tuple<double, int, vector<int> > res = solverEj4(estaciones, distancias, n, m, k, grasp);  
+
     imprimir_res(res);
   }
 
