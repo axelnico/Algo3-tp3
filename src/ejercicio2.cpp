@@ -20,10 +20,9 @@ tuple<double, int, vector<int> > solverEj2(vector<Estacion> &estaciones, vector<
 
 void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<double> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, int id_estacion_actual, tuple<double,int,vector<int> > &soluciones){
   int i = 0; 
-  int potas = potasActuales;
   while(i< (n+m) && !es_solucion(estaciones)) {
     ordenar(estaciones, distancias, id_estacion_actual);
-    int id = donde_voy(estaciones, potas, k);
+    int id = donde_voy(estaciones, potasActuales, k);
     if(id == -1){
       i = n + m;
     }
@@ -31,7 +30,7 @@ void greedy_capturar_gimnasios(vector<Estacion> &estaciones, vector< vector<doub
     {
       int index = indice_estacion_con_id(id, estaciones);
       visitados.push_back(estaciones[index]);
-      potas = (estaciones[index].esGimnasio || potas+3 <= k) ? potas + estaciones[index].potas : k;
+      potasActuales = (estaciones[index].esGimnasio || potasActuales+3 <= k) ? potasActuales + estaciones[index].potas : k;
       estaciones.erase(estaciones.begin() + index);
       id_estacion_actual = id;
       i++;
@@ -54,7 +53,8 @@ void ordenar(vector<Estacion> &estaciones, vector< vector<double> > distancias, 
   for (int i = 0; i < estaciones.size(); ++i) {
     int id_mas_cercano = id_mas_cercano_que_no_viste(distancias[id_estacion_actual], ids_vistos, estaciones);
     ids_vistos.push_back(id_mas_cercano);
-    swap(id_mas_cercano, i, estaciones);
+    int indice_id_mas_cercano = indice_estacion_con_id(id_mas_cercano, estaciones);
+    if (indice_id_mas_cercano > -1) swap(indice_id_mas_cercano, i, estaciones);
   }
 }
 
@@ -68,11 +68,10 @@ int id_mas_cercano_que_no_viste(vector<double> &distancias, vector<int> &vistos,
   return actual;
 }
 
-void swap(int id_mas_cercano, int i, vector<Estacion> &estaciones){
+void swap(int indice_id_mas_cercano, int i, vector<Estacion> &estaciones){
   Estacion tmp(estaciones[i]);
-  int i_estacion_que_quiero = indice_estacion_con_id(id_mas_cercano, estaciones);
-  estaciones[i] = estaciones[i_estacion_que_quiero];
-  estaciones[i_estacion_que_quiero] = tmp;
+  estaciones[i] = estaciones[indice_id_mas_cercano];
+  estaciones[indice_id_mas_cercano] = tmp;
 }
 
 int indice_estacion_con_id(int id, vector<Estacion> &estaciones) {
