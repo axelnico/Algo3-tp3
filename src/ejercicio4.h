@@ -3,11 +3,15 @@
 #include <iostream>
 #include <algorithm> //Sort esta en O(n*Log n) y reverse en O(n)
 #include "Estacion.h"
+#include "ejercicio3.h"
 
 using namespace std;
 
+typedef tuple<double, int, vector<int> > solucion;
 
-tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp);
+
+solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp, pair<int, bool> criterio, bool vecindarioBusqLocal);
+solucion greedyRandomized(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp);
 bool puedoMeter(const vector<Estacion>& estaciones, const vector<int>& recorrido, const Estacion& nuevaEstacion, const int k);
 void ordenarPorCosto(vector<int>& lista, const vector<double> & distancias);
 bool puedoMeter(const vector<Estacion>& estaciones, const vector<int>& recorrido, const Estacion& nuevaEstacion, const int k);

@@ -1,10 +1,15 @@
 #include "ejercicio3.h"
 
-tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario){
+solucion solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario){
 	
 	vector<Estacion> estacionesAuxiliar = estaciones;
-	tuple<double, int, vector<int> > primerEstado = solverEj2(estaciones, distancias, n, m, k); //Primer candidato a solucion
-	imprimirEstado(primerEstado);
+	tuple<double, int, vector<int> > primerEstado = solverEj2(estacionesAuxiliar, distancias, n, m, k); //Primer candidato a solucion
+	
+	return solucionEj3(primerEstado, estaciones, distancias, k, vecindario);
+}
+
+solucion solucionEj3(solucion& primerEstado, vector<Estacion> estaciones, vector<vector<double> > &distancias, int k, bool vecindario) {
+	//imprimirEstado(primerEstado);
 
 	double distanciaInicial = get<0>(primerEstado); //Copio la distancia
 
@@ -13,7 +18,7 @@ tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<v
 		vector<int> recorridoInicial = get<2>(primerEstado); //Copio el recorrido del candidato a solucion
 		int cantVertices = get<1>(primerEstado);
 		//True es paradas, False es Gym
-		primerEstado = busquedaLocal(recorridoInicial, estacionesAuxiliar, distancias, distanciaInicial, cantVertices, k, vecindario);
+		primerEstado = busquedaLocal(recorridoInicial, estaciones, distancias, distanciaInicial, cantVertices, k, vecindario);
 	}
 
 	//imprimirEstado(primerEstado);
@@ -32,8 +37,7 @@ void imprimirEstado(tuple<double, int, vector<int> > primerEstado)
 	cout << endl; 
 }
 
-// tuple<double, int, vector<int>> 
-tuple<double, int, vector<int> > busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones, vector<vector<double>> &distancias, double distancia, const int cantVertices, const int k, const bool swapDePotas){
+solucion busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones, vector<vector<double>> &distancias, double distancia, const int cantVertices, const int k, const bool swapDePotas){
 	//swapDePOtas = True es paradas, False es Gym
 	vector<vector<int>> vecindario;
 	bool noHayMasSoluciones = false;

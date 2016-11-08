@@ -1,6 +1,31 @@
 #include "ejercicio4.h"
 
-tuple<double, int, vector<int> > solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp) {
+solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp, pair<int, bool> criterio, bool vecindarioBusqLocal);
+	solucion s1;
+	solucion s2;
+	solucion best;
+	int i = 0;
+
+	while (i < criterio.first)
+	{
+		s1 = greedyRandomized(estaciones, distancias, n, m, k, grasp);
+		s2 = solucionEj3(s1, estaciones, distancias, k, vecindarioBusqLocal);
+
+		if (i == 0 || get<0>(s2) < get<0>(best)) {
+			best = s2;
+		}
+		else if (criterio.second) {
+			i++;
+		}
+
+		if (!criterio.second)
+			i++;
+	}
+	
+	return best;
+}
+
+solucion greedyRandomized(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp) {
 	vector<int> posiblesProximo;
 	int proximo;
 	vector<int> camino_nulo;
