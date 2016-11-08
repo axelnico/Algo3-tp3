@@ -3,9 +3,9 @@
 solucion solverEj3(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, bool vecindario){
 	
 	vector<Estacion> estacionesAuxiliar = estaciones;
-	tuple<double, int, vector<int> > primerEstado = solverEj2(estacionesAuxiliar, distancias, n, m, k); //Primer candidato a solucion
+	tuple<double, int, vector<int> > primerEstado = solverEj2(estaciones, distancias, n, m, k); //Primer candidato a solucion
 	
-	return solucionEj3(primerEstado, estaciones, distancias, k, vecindario);
+	return solucionEj3(primerEstado, estacionesAuxiliar, distancias, k, vecindario);
 }
 
 solucion solucionEj3(solucion& primerEstado, vector<Estacion> estaciones, vector<vector<double> > &distancias, int k, bool vecindario) {
