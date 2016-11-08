@@ -89,7 +89,7 @@ fin BT_capturar_gimnasios
 
       El algoritmo principal lo primero que hace es chequear si el estado actual de los parámentros, como se dijo anteriormente, corresponden a una solución del problema. Este análisis toma $O(n+m)$ temporal y $O(1)$ espacial ya que solo es recorrer el vector de Estaciones para chequear si existen gimnasios no visitados. Si es solución, se obtiene la distancia acumulada, que toma $O(n+m)$ ya que es solamente recorrer el vector de visitados (y por lo tanto $O(1)$ espacial) y luego se recorre nuevamente el mismo vector para obtener el camino que se realizó, costando $O(n+m)$ temporal y $O(1)$ espacial.
       Si no es solución se recorren todas las estaciones del vector estaciones (que tomará $O(n+m)$) realizando los siguientes pasos para cada una: Si la cantidad de Estaciones visitadas es mayor a 0 (cosa que no ocurrirá solamente en la primera iteración) se obtiene la distancia acumulada más la proxima distancia a sumar, que como dijimos en el párrafo anterior cuesta $O(n+m)$. Luego, si esa distancia es menor que la distancia de la solución encontrada hasta ahora (si la hubiera) y puede ir a conquistar el gimnasio (si el la próxima posición lo es) o la cantidad de pociones es menor al tamaño de la mochila (y la próxima posición es una pokeparada), se agrega al vector de visitados la próxima estación ($O(1)$ amortizado), se actualiza el valor de pociones ($O(1)$), se elimina la estación del vector estaciones ($O(n+m)$), se llama a la función recursiva (luego explicado) y por último se vuelve al estado original los vectores de visitados y estaciones ($O(n+m)$ temporal y $O(1)$ espacial cada uno).
-      El llamado a la función recursiva hace que para cada Estación del vector de estaciones se recorran todas las demás en búsqueda de una solución, por lo que una iteración tomaría $O(n+m)$ temporal y como todos los vectores se pasan siempre por referencia, solo tomaría $O(1)$ espacial (sin contar el overhead en el $stack$ de llamadas recursivas). Luego, como en cada iteración se realiza todo lo mencionado, en total costará
+      El llamado a la función recursiva hace que para cada Estación del vector de estaciones se recorran todas las demás en búsqueda de una solución, por lo que una iteración tomaría $O(n+m)$ temporal y como todos los vectores se pasan siempre por referencia, solo tomaría $O(1)$ espacial (sin contar el overhead en el $stack$ de llamadas recursivas). Luego, como en cada iteración se realiza todo lo mencionado y en total son ($n+m$) iteraciones, en total costará
       \[
         O(\prod_{i=0}^{n+m} i)*O(n+m)
       \]
@@ -115,14 +115,14 @@ fin BT_capturar_gimnasios
 
       Para todos los casos, el algoritmo se ejecutó 30 veces con cada instancia para intentar tener la mayor presición posible en cuanto a tiempo de ejecución.
 
-      \subsubsection{Analisis de las podas}
-      En esta instancia generamos entradas que aumentaban linealmente de 1 a 10 la cantidad de pokeparadas y gimnasios, variando el tamaño de la mochila y marcando a cada gimnasio con la cantidad de pociones necesarias igual al numero de linea en el input (para el gimnasio 3, se piden 3 pociones). Además, las ubicaciones de cada estación se setearon cada una a distancia 1 de la anterior y la siguiente: para la estación $i$ la ubicación es ($i$,$i$).
+      \subsubsection{Experimento 1}
+      En esta instancia generamos entradas que aumentaban linealmente de 1 a 10 la cantidad de pokeparadas y gimnasios, variando el tamaño de la mochila y marcando a cada gimnasio con la cantidad de pociones necesarias igual al numero de linea en el input (para el gimnasio $k$, se piden $k$ pociones). Además, las ubicaciones de cada estación se setearon cada una a distancia 1 de la anterior y de forma que para la estación $i$ la ubicación es ($i$,$i$).
 
       Algunos ejemplos para el input de este experimento son los siguientes:
 
 
- \begin{codesnippet}
-            \begin{verbatim}
+      \begin{codesnippet}
+\begin{verbatim}
 8 8 36        9 9 45        10 10 55
 1 1 1         1 1 1         1 1 1
 2 2 2         2 2 2         2 2 2
@@ -146,9 +146,12 @@ fin BT_capturar_gimnasios
                             20 20
 
 \end{verbatim}
-            \end{codesnippet}
+      \end{codesnippet}
 
-  
+      Las primeras 10 entradas se seteó para que el tamaño de la mochila sea $n*m$, es decir que para cada entrada, si la cantidad de gimnasios es $n$ y la de pokeparadas $m$, entonces el tamaño de la mochila es $n*m$ (eg, 3 gimnasios y 3 pokeparadas, la mochila tiene tamaño 9). Para las siguientes 10 entradas el tamaño de la mochila es $\sum_{g \in gimnasios} pociones(g)$. En las últimas 10, el tamaño se seteó como $n+m$. 
+      Para este experimento, esperabamos que para las primeras 20 instancias el algoritmo tome más tiempo que para las últimas 10, ya que si el tamaño de la mochila ($k$) $\geq 3*m$ entonces se pueden guardar todas las pociones de todas las pokeparadas antes de ir a algun gimnasio, mientras que en caso contrario, habrá muchos caminos en los que primero se pasen por pokeparadas sin ir a gimnasios que no se podrían realizar porque siguiendo la poda de que si la mochila está llena no vamos a una pokeparada, la misma se llenaría mucho más rápido y esto impediría que sigamos por esos caminos.
+      Los resultados de tiempo en funcion de la cantidad de estaciones según el tamaño de la mochila puede verse en el siguiente gráfico, el cual tiene además una función que sigue la cota de complejidad que es solo para dar una idea de cómo es la misma.
+
   \begin{figure}[H]
       \begin{center}
         \includegraphics[width=0.7\columnwidth]{imagenes/exp1_ej1.jpeg}
@@ -156,18 +159,14 @@ fin BT_capturar_gimnasios
       \end{center}
   \end{figure}
 
-  % Para cada matriz puede observarse que a medida que crece la cantidad de paredes que se pueden derribar, también crece el tiempo que toma cada ejecución del programa, que era el comportamiento que se esperaba. Si bien el algoritmo de BFS corta la ejecución en cuanto encuentra el destino (en caso de poder encontrarse), no se observa una mejoría cuando se utiliza una cantidad mayor de paredes que se pueden destruir a la cantidad de nodos, debido a que en la construcción del grafo se toman en cuenta todos los niveles (cantidad de paredes), por lo que esa parte del algoritmo ya toma $O(FCP)$. Por esta razón es que el tiempo de ejecución no se mantiene constante una vez que se toma una cantidad de paredes mayor al total de nodos. El algortimo como se puede observar también tarda menos en ejecutar cuando en la matriz no hay ninguna pared y el origen y el destino están uno al lado del otro, como se esperaba. Este es el mejor caso. Los casos en los cuales había una cantidad de paredes igual a la mitad de nodos y éstas estaban en posiciones horizontales y verticales fueron aún peor que en el caso que son todas paredes. Esto puede explicarse debido a que el algoritmo de BFS inspecciona algunos vecinos que en el caso de que son todas paredes no puede ya que no tiene ningún camino que pueda pasar sin romper paredes.
-  % Podemos notar como la cota de complejidad cumple, aunque no de manera exacta, su función para estos experimentos.
+      Al graficar los resultados, nos llevamos la sorpresa de que se veía solamente una linea a pesar de estar graficando 3. Cuando comenzamos a analizar el grafico llegamos a la conclusión de que no era un problema del gráfico sino que en realidad las 3 líneas estan encimadas, cosa que se puede notas al ver los puntos en los que se marca cada valor. Cuando fuimos a revisar los datos de resultados, encontramos que efectivamente el tiempo de las últimas 10 instancias fue muy similar al de las otras 20; tanto, que ni siquiera para instancias de 20 nodos (donde la ejecución demora aproximadamente 22 minutos) pudimos notar una diferencia importante. Particularmente, el tiempo no difería en más de un $4\%$
 
+      Esto nos llevó a pensar que las podas implementadas, si bien son de mucha utilidad en los casos que se puede reconocer rápidamente si una instancia tiene (o no) solución, no lo son tanto para los que no se puede. Particularmente la poda de no pasar por una pokeparada si la mochila está llena no es del todo útil como vimos en al menos casos con hasta 20 estaciones.
 
-  % Luego se realizó otro tipo de experimento en el cual se utilizaron otras cinco matrices pero con tamaño y paredes dispuestas de manera aleatoria. Estas matrices fueron generadas usando la librería random de la STL con distribución uniforme. Este experimento se corrió bajo las mismas circunstancias que el otro experimento. Se corrieron 100 casos para cada una de las matrices, considerando que se pueden romper desde 0 a 99 paredes. Además también cada uno de los casos se repitió 100 veces y se tomó el promedio. Los resultados que se obtuvieron son los siguientes:
+      Lo otro que observamos en este gráfico fue que los tiempos de ejecucion se comportan similar a la funcion de la cota de copmlejidad en cuanto a crecimiento.
 
-  \begin{figure}[H]
-      \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp2_ej1.jpeg}
-        \caption{}
-      \end{center}
-  \end{figure}
+    \subsubsection{Experimento 2}
+
 
   % Se observa también como el tiempo de ejecución aumenta a medida de que se pueden romper más paredes para cada una de las matrices. Por lo general, los casos en los cuales la matriz tiene menos filas y columnas presentan un tiempo de ejecución menor pero pueden observarse que igualmente también depende de la cantidad de paredes que haya en la matriz. Para estos casos, la cota propuesta acota mejor de manera superior a todos los casos.
 
