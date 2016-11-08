@@ -4,7 +4,7 @@ tuple<double, int, vector<int> > solverEj3(vector<Estacion> estaciones, vector<v
 	
 	vector<Estacion> estacionesAuxiliar = estaciones;
 	tuple<double, int, vector<int> > primerEstado = solverEj2(estaciones, distancias, n, m, k); //Primer candidato a solucion
-	imprimirEstado(primerEstado);
+	//imprimirEstado(primerEstado);
 
 	double distanciaInicial = get<0>(primerEstado); //Copio la distancia
 

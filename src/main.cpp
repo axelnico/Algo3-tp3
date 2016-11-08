@@ -25,7 +25,7 @@ void start_timer() {
 
 double stop_timer() {
 	chrono::time_point<chrono::high_resolution_clock> end_time = chrono::high_resolution_clock::now();
-	return double(chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count());
+    return double(chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count());
 }
 
 tuple<vector<vector<double> >, vector<Estacion> > cargar_input(int n, int m);
@@ -36,158 +36,204 @@ void imprimir_res(tuple<double,int,vector<int > > res);
 
 tuple<vector<vector<double> >, vector<Estacion> > dataentry(int & n, int & m, int & k);
 
+tuple<vector<vector<double> >, vector<Estacion> > dataentry2(int & n, int & m, int & k);
+
 int main(int argc, char *argv[]) {
-	int numeroDeEjercicio = 0;
-  bool experimentos = false;
-  bool random = false;
-  int instancias;
-  if (argc == 2) {
-    numeroDeEjercicio = atoi(argv[1]);
-  }
-  else if (argc == 3 || argc == 4) {
-    numeroDeEjercicio = atoi(argv[1]);
-    string exp = argv[2];
-    if (exp == "-exp") {
-      experimentos = true;
+    int numeroDeEjercicio = 0;
+    bool experimentos = false;
+    bool random = false;
+    int instancias;
+    char vecindarioExp;
+    if (argc == 2) {
+      numeroDeEjercicio = atoi(argv[1]);
     }
-    if (argc == 4) {
-      if (exp == "-expRandom") {
-        experimentos = true;
-        random = true;
-      }
-      instancias = atoi(argv[3]);
-    }
-  }
-  else {
-    cout << "Modo de uso: \n tp3 númeroDeEjercicio \n Opcional luego del número de ejercicio: " << endl;
-    cout << "   -exp para experimentos" << endl;
-    cout << "   -exp n para experimentos de n instancias" << endl;
-    cout << "   -exp -expRandom n para generar n instancias random" << endl;
-    return -1;
-  }
+    else if (argc == 3 || argc == 4 || argc == 5) {
+        numeroDeEjercicio = atoi(argv[1]);
+        string exp = argv[2];
+        if (exp == "-exp") {
+            experimentos = true;
+        }
+        if (argc == 4) {
+            if (exp == "-expRandom") {
+                experimentos = true;
+                random = true;
+            }
+            instancias = atoi(argv[3]);
+            cout << instancias << endl;
+        }
 
-  if (numeroDeEjercicio == 1) {
-    if (!experimentos) {
-      cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
-      int n,m,k;
-      cin >> n >> m >> k;
-      cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
-      cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
-
-      tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
-      vector<vector<double> > distancias = get<0>(input);
-      vector<Estacion> estaciones = get<1>(input);
-      std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
-      imprimir_res(res);
+        if (argc == 5){
+            if (exp == "-expRandom") {
+                experimentos = true;
+                random = true;
+            }
+            instancias = atoi(argv[3]);
+            vecindarioExp = argv[4][0];
+        }
     }
-    else if(experimentos && !random) {
-      for (int inputs = 0; inputs < instancias; ++inputs) {
+    else {
+        cout << "Modo de uso: \n tp3 númeroDeEjercicio \n Opcional luego del número de ejercicio: " << endl;
+        cout << "   -exp para experimentos" << endl;
+        cout << "   -exp n para experimentos de n instancias" << endl;
+        cout << "   -exp n a/b para experimentos de n instancias con el vecindario a o b" << endl;
+        cout << "   -exp -expRandom n para generar n instancias random" << endl;
+        return -1;
+    }
+
+    if (numeroDeEjercicio == 1) {
+        if (!experimentos) {
+            cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
+            int n,m,k;
+            cin >> n >> m >> k;
+            cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
+            cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
+            tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+            vector<vector<double> > distancias = get<0>(input);
+            vector<Estacion> estaciones = get<1>(input);
+            std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
+            imprimir_res(res);
+        }
+        else if(experimentos && !random) {
+            for (int inputs = 0; inputs < instancias; ++inputs) {
+                int n,m,k;
+                cin >> n >> m >> k;
+                tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+                vector<vector<double> > distancias = get<0>(input);
+                vector<Estacion> estaciones = get<1>(input);
+                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                    start_timer();
+                    std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+                }
+            }
+        }
+        else {
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<> gyms(1,8);
+            uniform_int_distribution<> pokeparadas(1,8);
+            uniform_int_distribution<> tamMochila(0,48);
+            uniform_int_distribution<> cantPosiones(0,24);
+            uniform_int_distribution<> x(0,100);
+            uniform_int_distribution<> y(0,100);
+            for (int i = 0; i < instancias; ++i) {
+                int n = gyms(gen);
+                int m = pokeparadas(gen);
+                int k = tamMochila(gen);
+                cout << n << " " << m << " " << k << endl;
+                for (int i = 0; i < n; ++i) {
+                    cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
+                }
+                for (int i = 0; i < m; ++i) {
+                    cout << x(gen) << " " << y(gen) << endl;
+                }
+            }
+        }
+    }
+    else if (numeroDeEjercicio == 2) {
+        if (!experimentos) {
+            cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
+            int n,m,k;
+            cin >> n >> m >> k;
+            cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
+            cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
+            tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+            vector<vector<double> > distancias = get<0>(input);
+            vector<Estacion> estaciones = get<1>(input);
+            std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
+            imprimir_res(res);
+        }
+        else {
+            for (int inputs = 0; inputs < instancias; ++inputs) {
+                int n,m,k;
+                cin >> n >> m >> k;
+                tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+                vector<vector<double> > distancias = get<0>(input);
+                vector<Estacion> estaciones = get<1>(input);
+                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                    start_timer();
+                    std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+                }
+            }
+        }
+    }
+    else if (numeroDeEjercicio == 3) {
+        if(!experimentos){
+            char vecindario;
+            int n,m,k;
+            cout << "Ingrese 'a' para vecindario de swapear paradas, o 'b' para swapear gym's " << endl;
+            cin >> vecindario;
+            tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
+            vector<vector<double> > distancias = get<0>(input);
+            vector<Estacion> estaciones = get<1>(input);
+            tuple<double, int, vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');
+            imprimir_res(res);
+        }
+        else if (experimentos && !random){
+            int n,m,k;
+            for (int inputs = 0; inputs < instancias; ++inputs) {
+                tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
+                vector<vector<double> > distancias = get<0>(input);
+                vector<Estacion> estaciones = get<1>(input);
+                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                    start_timer();
+                    std::tuple<double, int, std::vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindarioExp == 'a');
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+                }                
+            }
+        } else
+            {
+                random_device rd;
+                mt19937 gen(rd());
+                uniform_int_distribution<> gyms(1,8);
+                uniform_int_distribution<> pokeparadas(1,8);
+                uniform_int_distribution<> tamMochila(0,48);
+                uniform_int_distribution<> cantPosiones(0,24);
+                uniform_int_distribution<> x(0,100);
+                uniform_int_distribution<> y(0,100);
+                for (int i = 0; i < instancias; ++i) {
+                    int n = gyms(gen);
+                    int m = pokeparadas(gen);
+                    int k = tamMochila(gen);
+                    cout << n << " " << m << " " << k << endl;
+                    for (int i = 0; i < n; ++i) {
+                        cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
+                    }
+                    for (int i = 0; i < m; ++i) {
+                        cout << x(gen) << " " << y(gen) << endl;
+                    }
+                }
+        }
+    }
+    else if (numeroDeEjercicio == 4) {
         int n,m,k;
-        cin >> n >> m >> k;
-        tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+        int grasp = 0;
+        tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
+        while (1 > grasp || grasp > n+m) {
+            cout << "Elija un k menor o igual a " << n+m << " para limitar el tamaño de RCL " << endl;
+            cin >> grasp;
+        }
         vector<vector<double> > distancias = get<0>(input);
         vector<Estacion> estaciones = get<1>(input);
-        for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
-          start_timer();
-          std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
-          cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
-        }
-      }
+        tuple<double, int, vector<int> > res = solverEj4(estaciones, distancias, n, m, k, grasp);
+        imprimir_res(res);
     }
-    else {
-      random_device rd;
-      mt19937 gen(rd());
-      uniform_int_distribution<> gyms(1,8);
-      uniform_int_distribution<> pokeparadas(1,8);
-      uniform_int_distribution<> tamMochila(0,48);
-      uniform_int_distribution<> cantPosiones(0,24);
-      uniform_int_distribution<> x(0,100);
-      uniform_int_distribution<> y(0,100);
-      for (int i = 0; i < instancias; ++i) {
-        int n = gyms(gen);
-        int m = pokeparadas(gen);
-        int k = tamMochila(gen);
-        cout << n << " " << m << " " << k << endl;
-        for (int i = 0; i < n; ++i) {
-          cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
-        }
-        for (int i = 0; i < m; ++i) {
-          cout << x(gen) << " " << y(gen) << endl;
-        }
-      }
-    }
-  }
-  else if (numeroDeEjercicio == 2) {
-    if (!experimentos) {
-      cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
-      int n,m,k;
-      cin >> n >> m >> k;
-      cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
-      cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
-
-      tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
-      vector<vector<double> > distancias = get<0>(input);
-      vector<Estacion> estaciones = get<1>(input);
-      std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
-      imprimir_res(res);
-    }
-    else {
-      for (int inputs = 0; inputs < instancias; ++inputs) {
-          int n,m,k;
-          cin >> n >> m >> k;
-          tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
-          vector<vector<double> > distancias = get<0>(input);
-          vector<Estacion> estaciones = get<1>(input);
-          for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
-            start_timer();
-            std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
-            cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
-          }
-      }
-    }
-  }
-  else if (numeroDeEjercicio == 3) {
-    char vecindario;
-    int n,m,k;
-
-    cout << "Ingrese 'a' para vecindario de swapear paradas, o 'b' para swapear gym's " << endl;
-    cin >> vecindario;
-
-    tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
-    vector<vector<double> > distancias = get<0>(input);
-    vector<Estacion> estaciones = get<1>(input);
-
-    tuple<double, int, vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');
-    imprimir_res(res);
-  }
-  else if (numeroDeEjercicio == 4) {
-    int n,m,k;
-    int grasp = 0;
-
-    tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
-
-    while (1 > grasp || grasp > n+m) {
-      cout << "Elija un k menor o igual a " << n+m << " para limitar el tamaño de RCL " << endl;
-      cin >> grasp;
-    }
-
-    vector<vector<double> > distancias = get<0>(input);
-    vector<Estacion> estaciones = get<1>(input);
-    tuple<double, int, vector<int> > res = solverEj4(estaciones, distancias, n, m, k, grasp);
-
-    imprimir_res(res);
-  }
 
   return 0;
 }
 
-tuple<vector<vector<double> >, vector<Estacion> > dataentry(int & n, int & m, int & k)
-{
-  cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
-  cin >> n >> m >> k;
-  cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
-  cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
-  return cargar_input(n,m);
+tuple<vector<vector<double> >, vector<Estacion> > dataentry(int & n, int & m, int & k){
+    cout << "ingrese la cantidad de gimnasios, paradas y el tamaño de la mochila" << endl;
+    cin >> n >> m >> k;
+    cout << "ingrese en las siguientes " << n << " lineas xg, yg, pg, ubicacion y cantidad de posiones necesarias de los gym" << endl;
+    cout << "luego, en las siguientes " << m << " lineas xp, yp ubicacion de las paradas" << endl;
+    return cargar_input(n,m);
+}
+
+tuple<vector<vector<double> >, vector<Estacion> > dataentry2(int & n, int & m, int & k){
+    cin >> n >> m >> k;
+    return cargar_input(n,m);
 }
 
 tuple<vector<vector<double> >, vector<Estacion> > cargar_input(int n, int m){
