@@ -7,7 +7,7 @@ import sys
 # Antes de usar esto, tirar en consola "./tp1 1 -exp > resEj1.txt". CUIDADO CON PISAR EL ARCHIVO ANTERIOR
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
-arr = np.loadtxt("salida_exp1_ej1.data", delimiter=',')
+arr = np.loadtxt("salida_exp3_ej1.data", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P
@@ -57,7 +57,7 @@ fig = plt.figure()
 fig.patch.set_facecolor('white')
 ax1 = fig.add_subplot(111)
 pylab.plot(nm, promedio1NP,'ro', label= 'random')
-pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
+# pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
 
 
 ax1.set_title("Tiempo segun tamaño de la mochila")

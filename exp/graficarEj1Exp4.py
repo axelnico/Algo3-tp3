@@ -7,7 +7,7 @@ import sys
 # Antes de usar esto, tirar en consola "./tp1 1 -exp > resEj1.txt". CUIDADO CON PISAR EL ARCHIVO ANTERIOR
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
-arr = np.loadtxt("salida_exp2_ej1.data", delimiter=',')
+arr = np.loadtxt("salida_exp4_ej1.data", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P
@@ -31,29 +31,30 @@ def factorial(list):
     return res
 
 k = 0
-promedioTiempoPocasPotas = []
+promedioTiempo4Gym = []
 nMasm = []
-while k < 240:
+while k < len(tiempo)/2:
   subList = tiempo[k:k+30]
-  promedioTiempoPocasPotas.append(promedio(subList))
-  nMasm.append(m[k] + n[k])
-  k += 30
-
-promedioTiempoSumTresPotas = []
-while k < 480:
-  subList = tiempo[k:k+30]
-  promedioTiempoSumTresPotas.append(promedio(subList))
+  promedioTiempo4Gym.append(promedio(subList))
+  nMasm.append(m[k])
   k += 30
 
 
-promedio1NP = np.array(promedioTiempoPocasPotas)
-promedio2NP = np.array(promedioTiempoSumTresPotas)
+promedioTiempo5Gym = []
+while k < len(tiempo):
+  subList = tiempo[k:k+30]
+  promedioTiempo5Gym.append(promedio(subList))
+  k += 30
+
+
+promedio1NP = np.array(promedioTiempo4Gym)
+promedio2NP = np.array(promedioTiempo5Gym)
 nm = np.array(nMasm)
 
 
 cota = 'factorial(x)*x'
-grafCota = graph(cota, range(1,13))
-deAUno = range(1,13)
+grafCota = graph(cota, range(1,12))
+deAUno = range(1,12)
 deAUno = np.array(deAUno)
 
 # medianaX  = mediana(x)
@@ -63,13 +64,13 @@ deAUno = np.array(deAUno)
 fig = plt.figure()
 fig.patch.set_facecolor('white')
 ax1 = fig.add_subplot(111)
-pylab.plot(nm, promedio1NP,color='red', marker='o', label= 'Entre 1 y 3')
-pylab.plot(nm, promedio2NP,color='green', marker='<', label= 'Todos 3')
-pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
+pylab.plot(nm, promedio1NP,color='red', marker='o', label= '4 GYM')
+pylab.plot(nm, promedio2NP,color='blue', marker='D', label= '5 GYM')
+# pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
 
 
-ax1.set_title("Tiempo segun pociones necesarias por GYM")
-ax1.set_xlabel('Cantidad de gimnasios + pokeparadas')
+ax1.set_title("Tiempo segun cantidad de gimnasios")
+ax1.set_xlabel('Cantidad de pokeparadas')
 # ax1.set_xscale('linear')
 ax1.set_ylabel('Tiempo de procesamiento en ns')
 # ax1.set_yscale('linear')

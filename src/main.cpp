@@ -61,7 +61,6 @@ int main(int argc, char *argv[]) {
                 random = true;
             }
             instancias = atoi(argv[3]);
-            cout << instancias << endl;
         }
 
         if (argc == 5){
