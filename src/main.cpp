@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) {
                 tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
-                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                for (int repeticiones = 0; repeticiones < 1000; ++repeticiones) {
                     start_timer();
                     solucion res = solverEj3(estaciones, distancias, n, m, k, vecindarioExp == 'a');
                     cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
