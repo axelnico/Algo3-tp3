@@ -151,9 +151,10 @@ int main(int argc, char *argv[]) {
                 tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
-                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                for (int repeticiones = 0; repeticiones < 150; ++repeticiones) {
+                    vector<Estacion> copiaEstaciones = estaciones;
                     start_timer();
-                    std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
+                    std::tuple<double, int, std::vector<int> > res = solverEj2(copiaEstaciones, distancias, n, m, k);
                     cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
                 }
             }
