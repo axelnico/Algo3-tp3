@@ -110,7 +110,6 @@ fin BT_capturar_gimnasios
         \item El comportamiento de las podas
         \item Configuraciones de valores que no están en la cota de complejidad
         \item Configuraciones de valores que sí están en la cota de complejidad, dejando fijos los demás
-        \item Casos random generados a partir de la librería Random de la STL de C++ utilizando distribución uniforme
       \end{itemize}
 
       Para todos los casos, el algoritmo se ejecutó 30 veces con cada instancia para intentar tener la mayor presición posible en cuanto a tiempo de ejecución.
@@ -149,8 +148,9 @@ fin BT_capturar_gimnasios
       \end{codesnippet}
 
       Las primeras 10 entradas se seteó para que el tamaño de la mochila sea $n*m$, es decir que para cada entrada, si la cantidad de gimnasios es $n$ y la de pokeparadas $m$, entonces el tamaño de la mochila es $n*m$ (eg, 3 gimnasios y 3 pokeparadas, la mochila tiene tamaño 9). Para las siguientes 10 entradas el tamaño de la mochila es $\sum_{g \in gimnasios} pociones(g)$. En las últimas 10, el tamaño se seteó como $n+m$. 
-      Para este experimento, esperabamos que para las primeras 20 instancias el algoritmo tome más tiempo que para las últimas 10, ya que si el tamaño de la mochila ($k$) $\geq 3*m$ entonces se pueden guardar todas las pociones de todas las pokeparadas antes de ir a algun gimnasio, mientras que en caso contrario, habrá muchos caminos en los que primero se pasen por pokeparadas sin ir a gimnasios que no se podrían realizar porque siguiendo la poda de que si la mochila está llena no vamos a una pokeparada, la misma se llenaría mucho más rápido y esto impediría que sigamos por esos caminos.
-      Los resultados de tiempo en funcion de la cantidad de estaciones según el tamaño de la mochila puede verse en el siguiente gráfico, el cual tiene además una función que sigue la cota de complejidad que es solo para dar una idea de cómo es la misma.
+      Para este experimento, esperabamos que para las primeras 20 instancias el algoritmo tome más tiempo que para las últimas 10, ya que si el tamaño de la mochila $k \geq 3*m$ entonces se pueden guardar todas las pociones de todas las pokeparadas antes de ir a algun gimnasio, mientras que en caso contrario, habrá muchos caminos en los que primero se pasen por pokeparadas sin ir a gimnasios que no se podrían realizar porque siguiendo la poda de que si la mochila está llena no vamos a una pokeparada, la misma se llenaría mucho más rápido y esto impediría que sigamos por esos caminos.
+      Aprovechamos este mismo exprimento para correrlo sin y con la poda de chequeo que el total de pociones de todos los gimnasios debe ser mayor o igual a $3*m$ para mostrar la diferencia de comportamiento.
+      Los resultados de tiempo en funcion de la cantidad de estaciones según el tamaño de la mochila para el algoritmo sin la poda puede verse en el siguiente gráfico, el cual tiene además una función que sigue la cota de complejidad que es solo para dar una idea de cómo es la misma.
 
   \begin{figure}[H]
       \begin{center}
@@ -159,20 +159,52 @@ fin BT_capturar_gimnasios
       \end{center}
   \end{figure}
 
-      Al graficar los resultados, nos llevamos la sorpresa de que se veía solamente una linea a pesar de estar graficando 3. Cuando comenzamos a analizar el grafico llegamos a la conclusión de que no era un problema del gráfico sino que en realidad las 3 líneas estan encimadas, cosa que se puede notas al ver los puntos en los que se marca cada valor. Cuando fuimos a revisar los datos de resultados, encontramos que efectivamente el tiempo de las últimas 10 instancias fue muy similar al de las otras 20; tanto, que ni siquiera para instancias de 20 nodos (donde la ejecución demora aproximadamente 22 minutos) pudimos notar una diferencia importante. Particularmente, el tiempo no difería en más de un $4\%$
+      Mientras que los resultados con la poda son los siguientes:
 
-      Esto nos llevó a pensar que las podas implementadas, si bien son de mucha utilidad en los casos que se puede reconocer rápidamente si una instancia tiene (o no) solución, no lo son tanto para los que no se puede. Particularmente la poda de no pasar por una pokeparada si la mochila está llena no es del todo útil como vimos en al menos casos con hasta 20 estaciones.
+  \begin{figure}[H]
+      \begin{center}
+        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_2_ej1.jpeg}
+        \caption{}
+      \end{center}
+  \end{figure}
 
-      Lo otro que observamos en este gráfico fue que los tiempos de ejecucion se comportan similar a la funcion de la cota de copmlejidad en cuanto a crecimiento.
+      En cuanto al primer gráfico, nos llevamos la sopresa de que las podas que cortan las posibles soluciones que sean peores que la solución actual y que aseguran no ir a una pokeparada si la mochila está llena no fueron muy útiles, pues notamos que los resultados en tiempo son muy similares en cada caso. Tanto, que en el gráfico las líneas de cada instancia están solapadas, pudiendo notarlo en los puntos marcados, que están los marcadores correspondientes a cada línea uno encima del otro.
+
+      Respecto al segundo gráfico, notamos que a partir de las 12 estaciones (6 pokeparadas y 6 gimnasios) las podas funcionaron adecuadamente, ya que para esas instancias la cantidad de gimnasios no alcanzaba para cubrir todos los gimnasios (había entre 21 pociones necesarias con 6 pokeparadas hasta 110 pociones necesarias con 10 pokeparadas). Tambien observamos que los tiempos para cada tamaño de mochila no variaba mucho de los otros, por lo que decidimos hacer otro experimento en el que se observe el tiempo de ejecución cuando lo que varía es la cantidad de pociones necesarias para cada gimnasio.
+
+      De ambos resultados obtuvimos la información necesaria para notar que para las instancias que tienen solución, el tiempo de ejecución respecto del tamaño de la entrada crece con una forma similar a la cota de complejidad. También concluímos que las podas implementadas sirven son de mucha utilidad en instancias no necesariamente grandes (con 12 estaciones recortó mucho el tiempo de ejecución).
 
     \subsubsection{Experimento 2}
 
 
-  % Se observa también como el tiempo de ejecución aumenta a medida de que se pueden romper más paredes para cada una de las matrices. Por lo general, los casos en los cuales la matriz tiene menos filas y columnas presentan un tiempo de ejecución menor pero pueden observarse que igualmente también depende de la cantidad de paredes que haya en la matriz. Para estos casos, la cota propuesta acota mejor de manera superior a todos los casos.
+      Para este experimento, como mencionamos antes, construimos 16 instancias en las que aumentamos linealmente entre 1 y 8 la cantidad de pokeparadas y gimnasios (ambas al mismo tiempo), fijamos en forma relativa a la cantidad de pokeparadas el tamaño de la mochila y colocamos a cada gimnasio un valor entre 1 y 3 pociones para las primeras 8 instancias y fijamos en 3 cada una en las 8 siguientes.
+      Para este experimento esperabamos que las segundas 8 instancias tomen más tiempo que las primeras, ya que en las primeras 8 hay soluciones en las que no se pasan por todas las pokeparadas, teniendo más chances de encontrar una solución mejor y que se utilice la poda que saca los casos en los que se está contruyendo una solución peor a la mejor encontrada hasta el momento. Esto ocurre porque en dos instancias con misma cantidad de pokeparadas y gimnasios, en el segundo caso es necesario pasar por todas las pokeparadas, ya que en cada gimnasio se gastan las 3 pociones que se recolectaron en alguna pokeparada, mientras que en el primer caso hay algunos gimnasios que permiten mantener algunas pociones en lugar de gastarlas todas, permitiendo ahorrar pociones en algún gimnasio para usarlas en otro.
+
+      Los resultados obtenidos de este experimento se plasmaron en el siguiente gráfico, el cual tiene una línea que representa (a modo de referencia) la cota de complejidad:
 
   \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp3_ej1.jpeg}
+        \includegraphics[width=0.7\columnwidth]{imagenes/exp2_ej1.jpeg}
         \caption{}
       \end{center}
   \end{figure}
+
+      Observamos que, como esperabamos, a igual tamaño de entrada, las instancias que necesitan menor cantidad de pociones por gimnasio toman menos tiempo que las instancias que necesitan 3 o más posiones por gimnasio. Esto muestra que nuestra hipótesis funciona para los resultados de este experimento, por lo que concluímos que la poda de eliminar ramas en las que se construye una solución peor que la mejor hallada hasta el momento también resulta de utilidad cuando hay mayor cantidad de soluciones posibles. 
+
+      Tomando los datos de los experimentos 1 y 2, pudimos notar que a pesar de que hay ciertos valores que no aparecen en la cota de complejidad, los mismos pueden cambiar el tiempo de ejecución del algoritmo, sin embargo estos cambios ocurren en gran parte gracias a las podas que sí dependen de estos valores, por lo que teóricamente la cota de complejidad esta bien planteada pero en la práctica la número de operaciones (y por lo tanto, el tiempo de ejecución) puede ser mucho menor.
+
+    \subsubsection{Experimento 3}
+
+      En este último experimento quisimos observar el tiempo de ejecución del algoritmo cuando varía la cantidad de pokeparadas. Para eso, creamos 20 instancias en las que se fija la cantidad de gimnasios (en 4 para las primeras 10 y 5 para las últimas), se setea un tamaño de mochila relativo a la cantidad de pokeparadas ($3*m$) y aumentamos linealmente la cantidad de pokeparadas entre 1 y 10.
+      Habiendo realizado el análisis de los experimentos anteriores y teniendo en cuenta el marco teórico de este ejercicio, propusimos como hipótesis que el tiempo de ejecución aumentaría de acuerdo a la cantidad de estaciones totales, es decir, para las primeras 10 instancias el tiempo de ejecución será menor que para las últimas 10 y además para cada instancia dentro de esas 10, la siguiente tomaría más tiempo que la anterior, ya que se agrega una pokeparada cada vez.
+      El gráfico con los resultados es el siguiente:
+
+\begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=0.7\columnwidth]{imagenes/exp4_ej1.jpeg}
+      \caption{}
+    \end{center}
+\end{figure}
+
+      Confirmando nuestra hipótesis, el tiempo de ejecución aumentó en cada instancia y los casos con 5 gimnasios tomaron más tiempo que los de 4. 
+      Lo que sí nos llamó la atención fue que las líneas de los graficos no tienen una forma muy similar a la de la cota de complejidad, pero por lo dicho anteriormente, esto puede deberse a que gracias a las podas los tiempos de ejecución pueden ser mucho menores que lo que la teoría puede asegurar.
