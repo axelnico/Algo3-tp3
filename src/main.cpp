@@ -28,6 +28,8 @@ double stop_timer() {
     return double(chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count());
 }
 
+typedef tuple<double, int, vector<int> > solucion;
+
 tuple<vector<vector<double> >, vector<Estacion> > cargar_input(int n, int m);
 
 double distTrigonometrica(tuple<int, int, int> a, tuple<int, int, int> b);
@@ -167,7 +169,7 @@ int main(int argc, char *argv[]) {
             tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
             vector<vector<double> > distancias = get<0>(input);
             vector<Estacion> estaciones = get<1>(input);
-            tuple<double, int, vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');
+            solucion res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');
             imprimir_res(res);
         }
         else if (experimentos && !random){
@@ -178,7 +180,7 @@ int main(int argc, char *argv[]) {
                 vector<Estacion> estaciones = get<1>(input);
                 for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                     start_timer();
-                    std::tuple<double, int, std::vector<int> > res = solverEj3(estaciones, distancias, n, m, k, vecindarioExp == 'a');
+                    solucion res = solverEj3(estaciones, distancias, n, m, k, vecindarioExp == 'a');
                     cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
                 }                
             }
@@ -209,14 +211,29 @@ int main(int argc, char *argv[]) {
     else if (numeroDeEjercicio == 4) {
         int n,m,k;
         int grasp = 0;
+        bool criterio = false;
+        int limite = 0;
+        int iCriterio = 0;
+        int iBusqLocal = 0;
+        bool busqLocal = false;
+
         tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
         while (1 > grasp || grasp > n+m) {
-            cout << "Elija un k menor o igual a " << n+m << " para limitar el tamaño de RCL " << endl;
+            cout << "Elija un valor menor o igual a " << n+m << " para limitar el tamaño de RCL " << endl;
             cin >> grasp;
         }
+        cout << "Elija el criterio de parada (1 o 2) y su límite" << endl;
+        cin >> iCriterio >> limite;
+        criterio = iCriterio == 2;
+
+        cout << "Elija si la búsqueda local será por pokeparadas o por gimnasios (1 o 2) " << endl;
+        cin >> iBusqLocal;
+        busqLocal = iBusqLocal == 2;
+
         vector<vector<double> > distancias = get<0>(input);
         vector<Estacion> estaciones = get<1>(input);
-        tuple<double, int, vector<int> > res = solverEj4(estaciones, distancias, n, m, k, grasp);
+        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, { limite, criterio }, busqLocal);
+
         imprimir_res(res);
     }
 

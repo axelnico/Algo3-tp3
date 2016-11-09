@@ -1,6 +1,6 @@
 #include "ejercicio4.h"
 
-solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp, pair<int, bool> criterio, bool vecindarioBusqLocal);
+solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp, pair<int, bool> criterio, bool vecindarioBusqLocal) {
 	solucion s1;
 	solucion s2;
 	solucion best;
@@ -9,7 +9,8 @@ solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distanc
 	while (i < criterio.first)
 	{
 		s1 = greedyRandomized(estaciones, distancias, n, m, k, grasp);
-		s2 = solucionEj3(s1, estaciones, distancias, k, vecindarioBusqLocal);
+		vector<Estacion> estacionesAux = estaciones; //copio porque solucionEj3 modifica estaciones
+		s2 = solucionEj3(s1, estacionesAux, distancias, k, vecindarioBusqLocal);
 
 		if (i == 0 || get<0>(s2) < get<0>(best)) {
 			best = s2;
@@ -25,7 +26,7 @@ solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distanc
 	return best;
 }
 
-solucion greedyRandomized(vector<Estacion> estaciones, vector<vector<double> > &distancias, int n, int m, int k, int grasp) {
+solucion greedyRandomized(const vector<Estacion> estaciones, const vector<vector<double> > &distancias, const int n, const int m, const int k, const int grasp) {
 	vector<int> posiblesProximo;
 	int proximo;
 	vector<int> camino_nulo;
@@ -57,7 +58,7 @@ solucion greedyRandomized(vector<Estacion> estaciones, vector<vector<double> > &
 			posiblesProximo.resize(grasp);
 
 		//Elijo al azar uno de esos nodos y lo agrego a mi recorrido
-		proximo = posiblesProximo[random(grasp)];
+		proximo = random(posiblesProximo);
 		recorrido.push_back(proximo);
 
 		if (ultimoID > -1)
@@ -121,11 +122,11 @@ bool sonTodosPotas(const vector<Estacion> & estaciones) {
 	return true;
 }
 
-int random(int limit) {
+int random(vector<int> list) {
 	random_device rd;
 	mt19937 gen(rd());
-	uniform_int_distribution<> tam(0, limit - 1);
-	return tam(gen);
+	uniform_int_distribution<> tam(0, list.size() - 1);
+	return list[tam(gen)];
 }
 
 bool pairCompare(const pair<int, double>& firstElem, const pair<int, double>& secondElem) {

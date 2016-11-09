@@ -11,6 +11,6 @@ solucion busquedaLocal(vector<int> recorrido, const vector<Estacion> estaciones,
 void swap(vector<int> &estado, int i, int j);
 vector<vector<int>> dameVecindario (const vector<Estacion> estaciones, const vector<int> estado);
 double dameDistancia(const vector<int> recorrido, const vector<vector<double>> distancias);
-void imprimirEstado(tuple<double, int, vector<int> > primerEstado);
+void imprimirEstado(solucion primerEstado);
 vector<vector<int>> dameVecindario2(const vector<Estacion> estaciones, const vector<int> recorrido, const vector<vector<double>> distancias, const int k);
 bool recorridoValido(const vector<Estacion> estaciones, const vector<int> recorrido, const vector<vector<double>> distancias, const int k);

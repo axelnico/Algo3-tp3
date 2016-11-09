@@ -26,7 +26,7 @@ solucion solucionEj3(solucion& primerEstado, vector<Estacion> estaciones, vector
 	return primerEstado;
 }
 
-void imprimirEstado(tuple<double, int, vector<int> > primerEstado)
+void imprimirEstado(solucion primerEstado)
 {
 	cout<< endl;
 	cout << "Distancia: " << get<0>(primerEstado) << " CantVert:" << get<1>(primerEstado) << endl;
