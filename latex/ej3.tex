@@ -2,14 +2,15 @@
     % 1. Describir detalladamente el problema a resolver dando ejemplos del mismo y sus soluciones.
     \subsection{Descripción del problema y solución propuesta}
 
-    \par Una vez obtenida una heurística greedy para resolver nuestra variante de TSP, utilizamos una \textbf{Búsqueda Local} para analizar una mayor cantidad de soluciones posibles. Es decir, dada una solución inicial S (obtenida de aplicar a una instancia de entrada, el algoritmo heurístico implementado en el Ejercicio 2) se obtienen los vecinos de S, es decir, un "vecindario" de soluciones. Y de este vecindario, es obtiene el vecino cuya solución mejore a S. Luego se realiza una búsqueda local sobre este vecino. 
+    \par Una vez obtenida una heurística greedy para resolver nuestra variante de TSP, utilizamos una \textbf{Búsqueda Local} para analizar una mayor cantidad de soluciones posibles. Es decir, dada una solución inicial S (obtenida de aplicar a una instancia de entrada, el algoritmo heurístico implementado en el Ejercicio 2) se obtienen los vecinos de S, es decir, un “vecindario“ de soluciones. Y de este vecindario, se obtiene el vecino cuya solución mejore a S. Luego se realiza una búsqueda local sobre este vecino. 
     \par Sea V este vecindario, $\forall S^{*}\in V, S^{*} = h(S)$. h es una función que obtiene un vecino a partir de S, perteneciente a V. En otras palabras, h altera la solución S para encontrar una solución parecida que pueda mejorar el resultado. Por otro lado, se cuenta con una función f que da valor a cada una de las soluciones. En nuestro caso, sean S y $S^{'}$, diremos que una solución S es mejor que $S^{'}$ si $f(S) < f(S^{'})$. Luego para cada $S^{*}\in V$, se evalúa f($S^{*}$). 
-    \par Dado V el conjunto de vecinos del Vecindario y S la solución original, si $f(S) < f(S^{*}) \forall S^{*}\in V$, se devuelve la solución S. En caso contrario, se aplica nuevamente la búsqueda local sobre $S^{*}$ cuyo valor en f sea el menor, y se repite el procedimiento hasta que no haya un $S^{*}$ que cumpla $f(S^{*}) < f(S)$. Una vez que esto ocurre, se devuelve el último $S^{*}$. De esta manera, a partir de una solución se estará explorando sus vecinos, y la búsqueda local se detendrá al hallar una mínimo local.
+    \par Dado V el conjunto de vecinos del Vecindario y S la solución original, si $\forall S^{*}\in V, f(S) < f(S^{*})$  se devuelve la solución S. En caso contrario, se aplica nuevamente la búsqueda local sobre $S^{*}$ cuyo valor en f sea el menor, y se repite el procedimiento hasta que no haya un $S^{*}$ que cumpla $f(S^{*}) < f(S)$. Una vez que esto ocurre, se devuelve el último $S^{*}$. 
+    \par De esta manera, a partir de una solución se estará explorando sus vecinos, y la búsqueda local se detendrá al hallar una mínimo local.
 
     \subsubsection{Vecindad 1}
 
-    \par Se realiza una búsqueda local aplicado a nuestro problema de la siguiente manera. La solución inicial S, se obtiene de aplicar la heurística del vecino más cercano (explicada en el Ejercicio 2) a los parámetros pasados por input. Una vez obtenida esta solución, contamos con la función \textbf{h} la cual generará la primer vecindad. Luego, dada la solución S (la cual en nuestro caso, S consiste en una tupla con distancia, recorrido y cantidad de estaciones), 
-    En este caso, la función $h$ se denomina \emph{dameVecindario}, y se encarga de intercambiar únicamente las \emph{pokeparadas} dentro del recorrido de S. Por cada intercambio generado, se guarda este nuevo recorrido en un vector.
+    \par Se realiza una búsqueda local aplicado a nuestro problema de la siguiente manera. La solución inicial S, se obtiene de aplicar la heurística del vecino más cercano (explicada en el Ejercicio 2) a los parámetros pasados por entrada. En nuestro caso, S consiste en una tupla con distancia, recorrido y cantidad de estaciones.
+    \par Una vez obtenida esta solución, contamos con la función \textbf{h} la cual generará la primer vecindad. En este caso, la función $h$ se denomina \emph{dameVecindario}, y se encarga de intercambiar únicamente las \emph{pokeparadas} dentro del recorrido de S. Por cada intercambio generado, se guarda este nuevo recorrido en un vector.
 
     \begin{codesnippet}
     \begin{verbatim}
@@ -26,17 +27,17 @@
                 Fin
             Fin Si
         Fin
-    Devolver vecindario
+        Devolver vecindario
     \end{verbatim}
     \end{codesnippet}
 
     En nuestro caso, una solución es mejor que otra si una logra conquistar todos los Gimnasios recorriendo menor distancia que la otra, manteniendo siempre el invariante de no pasar por la misma estación más de una vez. 
-    Una vez obtenido el vecindario, la función f evalúa cada solución. En nuestro caso f se llama "dameDistancia" y se encarga de calcular la distancia de cada solución obtenida, guardándola en el vector vecindario. Luego compara cada una con S. 
-    \par Si la distancia de algún recorrido nuevo, por ejemplo $S^{'}$, en el vecindario es menor que la distancia que recorrió S, se repite el ciclo de búsqueda local sobre $S^{'}$. Caso contrario, se devuelve la solución S con su recorrido, su distancia y la cantidad de estaciones por donde pasó.
+    Una vez obtenido el vecindario, la función f evalúa cada solución. En nuestro caso f se llama “dameDistancia“ y se encarga de calcular la distancia de cada solución obtenida, guardándola en el vector vecindario. Luego compara cada una con S. 
+    \par Si la distancia de algún recorrido nuevo en el vecindario (por ejemplo $S^{'}$) es menor que la distancia que recorrió S, se repite el ciclo de búsqueda local sobre algún $S^{'}$. Caso contrario, se devuelve la solución S con su recorrido, su distancia y la cantidad de estaciones por donde pasó.
 
    \subsubsection{Vecindad 2}
 
-    \par A diferencia de la Vecindad 1, la función h se llama "dameVecindario2" y se encarga de intercambiar únicamente los \emph{gimnasios} dentro del recorrido S, siempre que cada intercambio de gimnasios en el recorrido no cause que alguno de los gimnasios no pueda ser conquistado.
+    \par A diferencia de la Vecindad 1, la función h se llama “dameVecindario2“ y se encarga de intercambiar únicamente los \emph{gimnasios} dentro del recorrido S, siempre que cada intercambio de gimnasios en el recorrido no cause que alguno de los gimnasios no pueda ser conquistado.
 
     \begin{codesnippet}
     \begin{verbatim}
@@ -68,19 +69,21 @@
             \item Para ingresar a la búsqueda local, se copia el vector recorrido, de la solución inicial S, esto cuesta \ord(N+M).
             \item Luego se entra al ciclo principal de búsqueda local que en el peor de los casos tendrá M! iteraciones. Esto se debe a que, dado que en cada iteración se permutan ciertas pokeparadas, en el peor de los casos, siempre encuentra una solución mejor. Va a tomar \ord(M!) iteraciones recorrer todas las permutaciones posibles.
             \item Dentro del ciclo principal, se busca el vecindario de una solución. Para esto se llama a la función \emph{dameVecindario} con el vector \emph{recorrido}.
-            La misma función, recorre el vector hasta la posición i. Hasta que el i-ésimo elemento sea pokeparada. Luego recorre el vector restante, desde i+1 hasta recorrido.size()-1. Es decir, la complejidad del ciclo es de 
+            La misma función, recorre el vector hasta que el i-ésimo elemento sea pokeparada. Luego recorre el vector restante, desde i+1 hasta recorrido.size()-1. Es decir, la complejidad del ciclo, siendo r la cantidad de estaciones del recorrido, es de 
             \[
-            \ord(\sum_{i=0}^{recorrido.size()-1} i)
-            \]
-            Que dada la progresión aritmética,
+            \ord(\sum_{i=0}^{r-1} i)
+            \] 
+            
+            \par Que dada la progresión aritmética,
             \[
-            \sum_{i=0}^{recorrido.size()-1} i = recorrido.size()*(recorrido.size()-1)
+            \sum_{i=0}^{r-1} i = r * (r - 1)
             \]
-            Esto quedaría,
+
+            \par Esto quedaría,
             \[
-            \ord(recorrido.size()*(recorrido.size()-1)/2)
+            \ord(r * (r - 1) / 2)
             \]
-            Además, como mencionamos anteriormente, el tamaño del recorrido es en el peor caso \ord(N+M). Luego,
+            \par Además, como mencionamos anteriormente, el tamaño del recorrido en el peor caso es \ord(N+M). Luego,
             \[
             \ord((N+M))*(N+M-1)/2)
             \]
