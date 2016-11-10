@@ -5,6 +5,8 @@ solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distanc
 	solucion s2;
 	solucion best;
 	int i = 0;
+	bool mejor;
+	double nuevaSol;
 
 	while (i < criterio.first)
 	{
@@ -12,15 +14,23 @@ solucion solverEj4(vector<Estacion> estaciones, vector<vector<double> > &distanc
 		vector<Estacion> estacionesAux = estaciones; //copio porque solucionEj3 modifica estaciones
 		s2 = solucionEj3(s1, estacionesAux, distancias, k, vecindarioBusqLocal);
 
-		if (i == 0 || get<0>(s2) < get<0>(best)) {
+		mejor = false;
+		nuevaSol = get<0>(s2);
+		if (i == 0 || (nuevaSol > -1 && nuevaSol < get<0>(best))) {
 			best = s2;
+			if (i > 0) {
+				mejor = true;
+			}
 		}
-		else if (criterio.second) {
+		
+		if (!criterio.second) {//primer criterio suma uno siempre
 			i++;
 		}
-
-		if (!criterio.second)
-			i++;
+		else { //segundo criterio suma uno siempre que no se encuentre una mejor solución (y la primera iteración)
+			if (!mejor) {
+				i++;
+			}
+		}
 	}
 	
 	return best;
