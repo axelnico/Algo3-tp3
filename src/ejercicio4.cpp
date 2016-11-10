@@ -66,7 +66,13 @@ solucion greedyRandomized(const vector<Estacion> estaciones, const vector<vector
 			
 		ultimoID = proximo;
 
-		estacionesAuxiliar.erase(estacionesAuxiliar.begin() + proximo);
+		for (int i = 0; i < estacionesAuxiliar.size(); ++i)
+		{
+			if (estacionesAuxiliar[i].id == proximo) { 
+				estacionesAuxiliar.erase(estacionesAuxiliar.begin() + i);
+				break;
+			}
+		}
 
 		//Si no me quedan gimnasios por conquistar, gané
 		if (sonTodosPotas(estacionesAuxiliar)) //O(n) pero no se multiplica por el n del while. Se suma porque va disminuyendo el n
