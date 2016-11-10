@@ -2,6 +2,15 @@
 
 using namespace std;
 
+void imprimir_estaciones(vector<Estacion> &estaciones){
+  cout << endl;
+  for (int i = 0; i < estaciones.size(); ++i)
+  {
+    cout << estaciones[i].id << " ";
+  }
+  cout << endl;
+}
+
 tuple<double, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const vector<vector<double> > &distancias, int n, int m, int k){
   vector<int> camino_nulo;
   tuple<double, int, vector<int> > solucion = make_tuple(-1,-1,camino_nulo);
@@ -13,6 +22,13 @@ tuple<double, int, vector<int> > solverEj1(vector<Estacion> &estaciones, const v
 }
 
 void BT_capturar_gimnasios(vector<Estacion> &estaciones, const vector< vector<double> > &distancias, int n, int m, int k, std::vector<Estacion> &visitados, int potasActuales, tuple<double,int,vector<int> > &soluciones){
+  if (visitados.size() == 3 && visitados[0].id == 1 && visitados[1].id == 3 && visitados[2].id == 0)
+  {
+    cout << "PELOTUDO! Es solucion?? " << es_solucion(estaciones) << endl;
+    cout << distancia_acumulada(visitados,distancias) << endl;
+    cout << get<0>(soluciones) << endl;
+
+  }
   if (es_solucion(estaciones)){
     double distancia = distancia_acumulada(visitados,distancias);
     vector<int> camino;
@@ -22,14 +38,15 @@ void BT_capturar_gimnasios(vector<Estacion> &estaciones, const vector< vector<do
     soluciones = (make_tuple(distancia, visitados.size(), camino));
   }
   else{
+    // imprimir_estaciones(visitados);
     for (int i = 0; i < estaciones.size(); ++i) {
-      int nueva_distancia = 0;
+      double nueva_distancia = 0;
       if (visitados.size() > 0) {
         int id_ultimo_visitado = visitados.back().id;
-        int proxima_distancia = distancias[id_ultimo_visitado][estaciones[i].id];
+        double proxima_distancia = distancias[id_ultimo_visitado][estaciones[i].id];
         nueva_distancia = proxima_distancia + distancia_acumulada(visitados,distancias);
       }
-      if ( (get<0>(soluciones) >= 0 && nueva_distancia < get<0>(soluciones)) || (get<0>(soluciones) < 0) ) {        //Poda: solucion posible no sea peor que solucion actual
+      if ( (get<0>(soluciones) >= 0 && nueva_distancia < get<0>(soluciones)) || (get<0>(soluciones) < 0) ) {
         if (puede_ganar_gimnasio(estaciones[i],potasActuales) || puede_recibir_potas(estaciones[i],potasActuales,k)) {    //Poda: no va a la pokeparada si la mochila está llena
           visitados.push_back(estaciones[i]);
           int nuevoPotasActuales = (estaciones[i].esGimnasio || potasActuales + 3 <= k) ? potasActuales + estaciones[i].potas : k;
