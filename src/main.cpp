@@ -39,6 +39,8 @@ void imprimir_res(tuple<double,int,vector<int > > res);
 tuple<vector<vector<double> >, vector<Estacion> > dataentry(int & n, int & m, int & k);
 
 tuple<vector<vector<double> >, vector<Estacion> > dataentry2(int & n, int & m, int & k);
+tuple<vector<vector<double> >, vector<Estacion>, pair<int, bool>, bool, int> dataentry3(int & n, int & m, int & k);
+
 
 int main(int argc, char *argv[]) {
     int numeroDeEjercicio = 0;
@@ -101,7 +103,7 @@ int main(int argc, char *argv[]) {
                 tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
-                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                for (int repeticiones = 0; repeticiones < 1; ++repeticiones) {
                     start_timer();
                     std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
                     cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
@@ -216,25 +218,42 @@ int main(int argc, char *argv[]) {
         int iCriterio = 0;
         int iBusqLocal = 0;
         bool busqLocal = false;
-
-        tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
-        while (1 > grasp || grasp > n+m) {
-            cout << "Elija un valor menor o igual a " << n+m << " para limitar el tamaño de RCL " << endl;
-            cin >> grasp;
+        tuple<int, bool> critParada;
+        if(!experimentos){
+            tuple<vector<vector<double> >, vector<Estacion> > input = dataentry(n, m, k);
+            while (1 > grasp || grasp > n+m) {
+                cout << "Elija un valor menor o igual a " << n+m << " para limitar el tamaño de RCL " << endl;
+                cin >> grasp;
+            }
+            cout << "Elija el criterio de parada (1 o 2) y su límite" << endl;
+            cin >> iCriterio >> limite;
+            criterio = iCriterio == 2;
+            cout << "Elija si la búsqueda local será por pokeparadas o por gimnasios (1 o 2) " << endl;
+            cin >> iBusqLocal;
+            busqLocal = iBusqLocal == 2;
+            vector<vector<double> > distancias = get<0>(input);
+            vector<Estacion> estaciones = get<1>(input);
+            solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, { limite, criterio }, busqLocal);
+            imprimir_res(res);
+        } 
+        else {
+            for (int inputs = 0; inputs < instancias; ++inputs) {
+                auto input = dataentry3(n, m, k);
+                vector<vector<double> > distancias = get<0>(input);
+                vector<Estacion> estaciones = get<1>(input);
+                pair<int, bool> criterio2 = get<2>(input);
+                bool busqLocalAux = get<3>(input);
+                grasp = get<4>(input);
+                for (int limite = 1; limite < 100; limite++) {            
+                    for (int repeticiones = 0; repeticiones < 50; ++repeticiones) {
+                        criterio2 = make_pair(limite ,get<2>(input).second);
+                        start_timer();
+                        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio2, busqLocalAux);
+                        cout << stop_timer() << ", " << get<0>(res) << ", " << limite << endl;
+                    }
+                }
+            }
         }
-        cout << "Elija el criterio de parada (1 o 2) y su límite" << endl;
-        cin >> iCriterio >> limite;
-        criterio = iCriterio == 2;
-
-        cout << "Elija si la búsqueda local será por pokeparadas o por gimnasios (1 o 2) " << endl;
-        cin >> iBusqLocal;
-        busqLocal = iBusqLocal == 2;
-
-        vector<vector<double> > distancias = get<0>(input);
-        vector<Estacion> estaciones = get<1>(input);
-        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, { limite, criterio }, busqLocal);
-
-        imprimir_res(res);
     }
 
   return 0;
@@ -252,6 +271,31 @@ tuple<vector<vector<double> >, vector<Estacion> > dataentry2(int & n, int & m, i
     cin >> n >> m >> k;
     return cargar_input(n,m);
 }
+
+tuple<vector<vector<double> >, vector<Estacion>, pair<int, bool>, bool, int> dataentry3(int & n, int & m, int & k){
+    tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
+    int grasp = 0;
+    bool criterio = false;
+    int limite = 0;
+    bool busqLocal = false;
+    int icriterio;
+    int ibusqLocal;
+    
+    cin >> grasp >> icriterio >> limite >> ibusqLocal;
+
+    criterio = icriterio == 2;
+    busqLocal = ibusqLocal == 2;
+
+    vector<vector<double> > distancias = get<0>(input);
+    vector<Estacion> estaciones = get<1>(input);
+    pair<int, bool> crit = {limite, criterio};
+
+    return make_tuple(distancias, estaciones, crit, busqLocal, grasp);
+}
+/*
+lodesiempre
+grasp criterio(1 o 2) limite busqLocal(1 o 2)
+*/
 
 tuple<vector<vector<double> >, vector<Estacion> > cargar_input(int n, int m){
   vector< tuple <int, int, int> > gimnasios_y_paradas;
