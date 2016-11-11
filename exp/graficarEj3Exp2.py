@@ -73,7 +73,7 @@ pylab.plot(nm, promedio3NP,'bo', label= 'vecindario b')
 
 
 
-ax1.set_title("Distancia segun Estaciones para vecindario A")
+ax1.set_title("Distancia segun Estaciones")
 ax1.set_xlabel('Cantidad de gimnasios + pokeparadas')
 ax1.set_ylabel('Distancias')
 

@@ -7,7 +7,7 @@ import sys
 # Antes de usar esto, tirar en consola "./tp1 1 -exp > resEj1.txt". CUIDADO CON PISAR EL ARCHIVO ANTERIOR
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
-arr = np.loadtxt("salida_exp1_ej3b.data", delimiter=',')
+arr = np.loadtxt("salida_exp1_ej3a.data", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P
@@ -47,7 +47,7 @@ nm = np.array(nMasm[0:14])
 
 
 cota = 'factorial(x)*x*x*x'
-deAUno = range(1,7)
+deAUno = range(1,8)
 grafCota = graph(cota, deAUno)
 deAUno = np.array(deAUno)
 
@@ -61,11 +61,10 @@ ax1 = fig.add_subplot(111)
 pylab.plot(nm, promedio1NP,'red', marker='o', label= '4 Gimnasios')
 pylab.plot(nm, promedio2NP,'blue', marker='*', label= '5 Gimnasios')
 pylab.plot(nm, promedio3NP,'green', marker='^', label= '6 Gimnasios')
-
 #pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
 
 
-ax1.set_title("Tiempo segun cantidad de gimnasios vecindad B")
+ax1.set_title("Tiempo segun cantidad de gimnasios vecindad A")
 ax1.set_xlabel('Cantidad de gimnasios + pokeparadas')
 # ax1.set_xscale('linear')
 ax1.set_ylabel('Tiempo de procesamiento en ns')
@@ -74,6 +73,6 @@ ax1.set_ylabel('Tiempo de procesamiento en ns')
 
 leg = ax1.legend()
 
-leg = plt.legend( loc = 'upper left')
+leg = plt.legend( loc = 'upper right')
 
 plt.show()
