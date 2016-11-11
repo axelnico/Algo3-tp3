@@ -18,7 +18,8 @@
 
          \begin{codesnippet}
             \begin{verbatim}
-solverEj4(vector<Estacion> estaciones, vector<vector<double> > distancias, int n, int m, int k, int grasp, pair<int, bool> criterio, bool vecindarioBusqLocal) {
+solverEj4(vector<Estacion> estaciones, vector<vector<double> > distancias, n, m,
+          k, grasp, <int, bool> criterio, bool vecindarioBusqLocal) {
   solucion s1
   solucion s2
   solucion best
@@ -33,7 +34,7 @@ solverEj4(vector<Estacion> estaciones, vector<vector<double> > distancias, int n
     mejor = false
     nuevaSol = get<0>(s2)
     si i == 0  ó (nuevaSol > -1 && nuevaSol < get<0>(best)) 
-      best = s2;
+      best = s2
       si (i > 0) 
         mejor = true
       
@@ -43,7 +44,13 @@ solverEj4(vector<Estacion> estaciones, vector<vector<double> > distancias, int n
     si no
       si (!mejor)
         i++
-  
-  return best
+  fin mientras
+  devolver best
             \end{verbatim}
             \end{codesnippet}
+
+
+        El algoritmo consiste en un ciclo, el cual se ejecuta mientras no se haya llegado a la condición de terminación. La condición de terminación está dada por una tupla (denominada criterio) que contiene en su primer coordenada un entero, que es el que se usa en la condición del ciclo para saber si hay que cortar o no. La segunda coordenada es un booleano y sirve para identificar cual de los dos criterios que definimos se está utilizando. El booleano si es verdadero indica que se usa el criterio de parar cuando no se pudo mejorar en k veces la solución siendo k el entero de la primera coordenada. Si es falso, significa que se usa el criterio de correr directamente k veces el ciclo, siendo k también el entero de la primer coordenada.
+        En el cuerpo del ciclo lo que se realiza es obtener una solución llamando a la función \textit{greedyRandomized}, la cual realiza lo mismo que la implementada en el ejercicio 2, salvo que en vez de seleccionar a la estación más cercana a la que se puede ir en cada paso, selecciona una al azar de n estaciones cercanas, siendo n el entero \textit{grasp} que se le pasa a la función. Luego de eso se aplica búsqueda local, llamando a la función \textit{solucionEj3}, la cual es exactamente la misma que la desarrollada en el ejercicio 3. Si nos encontramos en la primera iteración del ciclo o la solución obtenida es mejor que la anterior que teniamos, entonces se actualiza la nueva mejor solución obtenida con la encontrada en esta iteración.
+        Finalmente se pregunta si se está usando el criterio de ejecutar k veces fijo (con lo cual la variable \textit{criterio.second} sería falsa) y en caso de ser así se suma uno al contador del ciclo. Sino, se trata del otro criterio y sólo se actualiza el contador si no se encontró una mejor solución en la iteración (hecho representado por el valor de la variable booleana \textit{mejor}), sumándole 1.
+        Una vez terminado el ciclo se devuelve la mejor solución obtenida.
