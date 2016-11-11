@@ -177,6 +177,66 @@
     \subsection{Detalles Implementativos}
 
     
+    Las clases y estructuras utilizadas en el algoritmo son las mismas que las del primer ejericio. El algoritmo propuesto para las búsquedas locales es el siguiente: 
+
+            \begin{codesnippet}
+            \begin{verbatim}
+
+solucion busquedaLocal(vector<int> recorridoInicial, vector<Estacion> estaciones, 
+    matriz<double> distancias, double distancia, bool elegirVecindario)
+    
+    matriz<int> vecindario;
+    double distanciaMinima;
+    double distanciaAux;
+    int proximoEstado;
+    bool hayanSoluciones = true;
+    vector<int> recorrido = recorridoInicial;
+
+    mientras hayanSoluciones
+        vecindario = dameVecindario(estaciones, recorrido, elegirVecindario)
+        //obtiene un vecindario de soluciones
+        
+        proximoEstado = -1;
+
+        si el vecindario no es vacio
+            
+            distanciaMinima = distancia;
+            
+            //Busco algun vecino con distancia mas chica
+            para cada vecino entre 0 y tam(vecindario)
+                
+                distanciaAux = dameDistancia(vecindario[vecino], distancias);
+                //obtiene las distancia recorridas de la solucion vecino-ésima
+
+                si distanciaAux < distanciaMinima
+                    distanciaMinima = distanciaAux;
+                    proximoEstado = vecino;
+                fin si
+            fin para cada
+        fin si
+    
+        si proximoEstado > -1
+            recorrido = vecindario[proximoEstado];
+            distancia = distanciaMinima;
+        sino
+            hayanSoluciones = false;
+        fin si
+
+    fin mientras
+
+    devolver solucion (distancia, tam(recorrido), recorrido);
+fin busquedaLocal
+            \end{verbatim}
+            \end{codesnippet}
+
+
+            El algoritmo obtiene una primera solución \textbf{recorridoInicial} en base al algoritmo greedy goloso implementado en el Ejercicio 2.
+            \par Luego, busca un vecindario de soluciones en base a la solución obtenida (dado el parámetro \textbf{elegirVecindario}, se elige uno de los dos tipos de vecindarios).
+            \par Se obtiene la mejor solución del vecindario, es decir, la que menor distancia recorre. Llamémosla S.
+            \par Por último se vuelve a repetir el procedimiento, buscando un vecindario de soluciones a partir de la solución S.
+
+            \par Todo este procedimiento se repite hasta que el vecindario de soluciones no contenga ninguna solución mejor que la solución ya obtenida.
+
 
     % 5. Realizar una experimentación computacional para medir la performance del programa implementado. Usar un conjunto de casos de test en función de los parámetros de entrada, con instancias aleatorias e instancias particulares (de peor/mejor caso en tiempo de ejecución, por ejemplo). Presentar en forma gráfica una comparación entre los tiempos medidos y la complejidad teórica calculada y extraer conclusiones.
     \subsection{Experimentación}
@@ -191,7 +251,7 @@
                 \item Por otro lado, se compararon los tres algoritmos juntos, corriendo 16 instancias creadas también manualmente. Por cada instancia, aumentamos de la misma manera la cantidad de gimnasios, pokeparadas y capacidad de las mochilas. Manteniendo siempre que la distancia entre cada estacion es 1.
             \end{itemize}
 
-             En ambas comparaciones, por cada algoritmo, se corró 30 veces la misma instancia, sacando un promedio de la distancia devuelta. Luego, en función de la cantidad de estaciones (n+m), se comparó qué distancias devolvían.
+             En ambas comparaciones, por cada algoritmo, se corrió 30 veces la misma instancia, sacando un promedio de la distancia devuelta. Luego, en función de la cantidad de estaciones (n+m), se comparó qué distancias devolvían.
 
 \blindtext
 
@@ -210,7 +270,7 @@
 
 Para estas instancias, se puede observar que a medida que crece la cantidad de estaciones, crece la brecha entre la solución heurística con búsqueda local, y la solución exacta con backtracking. Esto se debe principalmente a que, a mayor cantidad de estaciones, el campo de soluciones crece. Es decir, mientras que backtracking recorre absolutamente todo el campo de soluciones obteniendo un mínimo global, la búsqueda local a partir de un resultado, recorre únicamente sus vecinos, deteniéndose en los mínimos locales. 
 
-\par Luego dado el vecindario A, se observa que para instancias chicas, las soluciones se asemejan a las exactas pero sus distancias empiezan a diferenciarse recién para 8 estaciones. Mientras que en el vecindario B, desde el primer momento, Backtracking encuentra mejores soluciones. Esto podría confirmar la hipótesis que para ciertas instancias, intercambiar pokeparadas, hace una mejor búsqueda en el vecindario de soluciones. 
+\par Luego dado el vecindario A, se observa que para instancias chicas, las soluciones se asemejan a las exactas pero sus distancias empiezan a diferenciarse a partir de contar con 8 estaciones. Mientras que en el vecindario B, desde el primer momento Backtracking encuentra mejores soluciones. Esto nos convence de que  para ciertas instancias, intercambiar pokeparadas hace una mejor búsqueda en el vecindario de soluciones. 
 
 Luego, como mencionamos, se compararon los resultados de ambos vecindarios juntos y el resultado exacto.
 
@@ -222,9 +282,4 @@ Luego, como mencionamos, se compararon los resultados de ambos vecindarios junto
   \end{figure}
 
 
-Para este entonces, se usaron menos instancia para observar el comportamiento de los distintos vecindario en comparación con Backtracking.  Como se puede observar, para instancias chicas las distancias obtenidas por el vecindario A se asemejan a las de backtracking, es decir a las soluciones exactas. Pero a medida que la cantidad de estaciones crecen, la brecha entre Backtracking y vecindario A crece. Esto mismo no sucede con el vecindario B, donde desde un principio, mantiene una brecha creciente con el resultado exacto. Por lo tanto, afirma la hipótesis anteriormente mencionada.
-
-
-    \subsubsection{Experimento 2: Performance} 
-
-La segunda experimentación busca comparar el rendimiento de cada una de las vecindades. Para esto, 
+Para este caso, se usaron menos instancias para observar el comportamiento de los distintos vecindario en comparación con Backtracking.  Como se puede observar, para instancias chicas las distancias obtenidas por el vecindario A se asemejan a las de backtracking, es decir, a las soluciones exactas. Pero a medida que la cantidad de estaciones crecen, la brecha entre Backtracking y vecindario A crece. Esto mismo no sucede con el vecindario B, donde desde un principio mantiene una brecha creciente con el resultado exacto. Por lo tanto, afirma la hipótesis anteriormente mencionada.
