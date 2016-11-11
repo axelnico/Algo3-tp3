@@ -103,7 +103,7 @@ bool puedoMeter(const vector<Estacion>& estaciones, const vector<int>& recorrido
 			pociones = min(pociones + 3, k);
 		}
 		else {
-			pociones -= estaciones[r].potas;
+			pociones += estaciones[r].potas;
 		}
 	}
 
