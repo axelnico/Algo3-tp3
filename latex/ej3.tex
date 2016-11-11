@@ -251,7 +251,9 @@ fin busquedaLocal
                 \item Por otro lado, se compararon los tres algoritmos juntos, corriendo 16 instancias creadas también manualmente. Por cada instancia, aumentamos de la misma manera la cantidad de gimnasios, pokeparadas y capacidad de las mochilas. Manteniendo siempre que la distancia entre cada estacion es 1.
             \end{itemize}
 
-             En ambas comparaciones, por cada algoritmo, se corrió 30 veces la misma instancia, sacando un promedio de la distancia devuelta. Luego, en función de la cantidad de estaciones (n+m), se comparó qué distancias devolvían.
+             En ambas comparaciones, por cada algoritmo, se corrió 30 veces la misma instancia, sacando un promedio de la distancia devuelta. Luego, en función de la cantidad de estaciones (n+m), se comparó qué distancias devolvían. Los demás valores de entradas son los mismos que se utilizaron para el experimento de performance realizado en el Ejercicio 2.
+			 
+			 \par A continuación en los siguientes gráficos se puede observar los tiempos de ejecución y su comparación con la cota de complejidad propuesta para ambas vecindades:
 
 \blindtext
 
@@ -268,7 +270,9 @@ fin busquedaLocal
 
 \blindtext
 
-Para estas instancias, se puede observar que a medida que crece la cantidad de estaciones, crece la brecha entre la solución heurística con búsqueda local, y la solución exacta con backtracking. Esto se debe principalmente a que, a mayor cantidad de estaciones, el campo de soluciones crece. Es decir, mientras que backtracking recorre absolutamente todo el campo de soluciones obteniendo un mínimo global, la búsqueda local a partir de un resultado, recorre únicamente sus vecinos, deteniéndose en los mínimos locales. 
+Como era de esperar, el caso de los 6 gimnasios demandó más tiempo de ejecución que los otros. Para las primeras instancias los tiempos fueron muy similares ya que no hay solución posible y el algoritmo corta rápido la ejecución. La cota de complejidad teórica acota bien a los resultados obtenidos.
+
+\par Para estas instancias, se puede observar que a medida que crece la cantidad de estaciones, crece la brecha entre la solución heurística con búsqueda local, y la solución exacta con backtracking. Esto se debe principalmente a que, a mayor cantidad de estaciones, el campo de soluciones crece. Es decir, mientras que backtracking recorre absolutamente todo el campo de soluciones obteniendo un mínimo global, la búsqueda local a partir de un resultado, recorre únicamente sus vecinos, deteniéndose en los mínimos locales. 
 
 \par Luego dado el vecindario A, se observa que para instancias chicas, las soluciones se asemejan a las exactas pero sus distancias empiezan a diferenciarse a partir de contar con 8 estaciones. Mientras que en el vecindario B, desde el primer momento Backtracking encuentra mejores soluciones. Esto nos convence de que  para ciertas instancias, intercambiar pokeparadas hace una mejor búsqueda en el vecindario de soluciones. 
 
