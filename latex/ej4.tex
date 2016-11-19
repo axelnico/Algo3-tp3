@@ -18,34 +18,42 @@
 
          \begin{codesnippet}
             \begin{verbatim}
+			enum crit = { A, B }
+			
 solverEj4(vector<Estacion> estaciones, vector<vector<double> > distancias, n, m,
-          k, grasp, <int, bool> criterio, bool vecindarioBusqLocal) {
-  solucion s1
-  solucion s2
-  solucion best
-  i = 0
-  bool mejor
-  double nuevaSol
+          k, grasp, crit criterioTipo, int criterioCant, bool vecindarioBusqLocal) {
+    solucion s1
+    solucion s2
+    solucion best
+    i = 0
+    bool mejor
+    double nuevaSol
 
-  mientras (i < criterio.first)
-    s1 = greedyRandomized(estaciones, distancias, n, m, k, grasp)
-    s2 = solucionEj3(s1, estaciones, distancias, k, vecindarioBusqLocal)
+    mientras (i < criterioCant)
+        s1 = greedyRandomized(estaciones, distancias, n, m, k, grasp)
+        s2 = solucionEj3(s1, estaciones, distancias, k, vecindarioBusqLocal)
 
-    mejor = false
-    nuevaSol = get<0>(s2)
-    si i == 0  ó (nuevaSol > -1 && nuevaSol < get<0>(best)) 
-      best = s2
-      si (i > 0) 
-        mejor = true
-      
+        mejor = False
+        nuevaSol = s2.first
+        si i == 0 || (nuevaSol > -1 && nuevaSol < best.first) 
+            best = s2
+            si i > 0
+                mejor = True
+            fin si
+        fin si
+          
+
+        si criterioTipo == A
+            i++
+        fin si
+
+        si criterioTipo == B && mejor == False
+            i++
+        fin si
+		
+    fin mientras
     
-    si (!criterio.second)
-      i++
-    si no
-      si (!mejor)
-        i++
-  fin mientras
-  devolver best
+    devolver best
             \end{verbatim}
             \end{codesnippet}
 
