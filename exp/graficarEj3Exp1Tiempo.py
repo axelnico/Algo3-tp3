@@ -7,7 +7,7 @@ import sys
 # Antes de usar esto, tirar en consola "./tp1 1 -exp > resEj1.txt". CUIDADO CON PISAR EL ARCHIVO ANTERIOR
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
-arr = np.loadtxt("salida_exp1_ej3a.data", delimiter=',')
+arr = np.loadtxt("Salidas/salida_exp1_ej3a.data", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P

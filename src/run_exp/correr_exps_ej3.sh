@@ -20,18 +20,18 @@ make
 
 # Imprimir experimento2 del ejercicio 3
 
- # ./tp3 1 -exp 30 <../exp/Entradas/entrada_exp1.txt > ../exp/Salidas/salida_exp2_ej3_Distancia66
- # ./tp3 1 -exp 20 <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- # ./tp3 1 -exp 16 <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 1 -exp 30 <../exp/Entradas/entrada_exp1.txt > ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 1 -exp 20 <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 1 -exp 16 <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
 
- # ./tp3 3 -exp 30 a <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- # ./tp3 3 -exp 20 a <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- # ./tp3 3 -exp 16 a <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 3 -exp 30 a <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 3 -exp 20 a <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 3 -exp 16 a <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
 
 
- # ./tp3 3 -exp 30 b <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- # ./tp3 3 -exp 20 b <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- # ./tp3 3 -exp 16 b <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 3 -exp 30 b <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 3 -exp 20 b <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ ./tp3 3 -exp 16 b <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
 
 
 
