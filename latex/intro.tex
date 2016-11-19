@@ -21,6 +21,8 @@ las cuales las siguientes fueron iguales para los tres problemas:
 			con unidad de tiempo en microsegundos.}
 \end{itemize}
 
+Los expermientos en los cuales se utilizaron instancias aleatorias fueron desarrollados usando la librería Random de la STL de C++ y bajo las siguientes condiciones (salvo en el ejercicio 2 que además se uso otró caso aleatorio): la cantidad de gimnasios varía entre 1 y 40; las pociones que requieren los gimnasios para vencerlos varían entre 0 y 20; el tamaño de la mochila se configuró como la suma de las pociones que necesita cada gimnasio y la cantidad de pokeparadas es el tamaño de la mochila dividido por tres, de la cual se toma la parte entera y se le suma uno. Las posiciones de las estaciones varían entre 0 y 1000.
+
 
 En todos los casos, el input del programa se dió de la siguiente manera:
 Una línea con tres valores enteros positivos, $n$, $m$ y $k$, separados por espacios; los valores $n$ y $m$ indican la cantidad gimnasios y paradas, respectivamente, mientras que $k$ indica el tamaño de la mochila. A continuación, siguen $n$ líneas, representando los gimnasios. Cada una contiene 3 enteros, $x$, $y$ y $p$, donde $x$ e $y$ indican la posición, y $p$ la cantidad de pociones necesarias para vencer el gimnasio. Las siguentes $m$ lineas indican la posición de las pokeparadas, cada una contiene dos enteros $x$ e $y$. En el caso de Búsqueda Local, se agrega el input para indicar el vecindario que será recorrido dentro de la búsqueda.
