@@ -86,11 +86,6 @@ Luego del ordenamiento se llama nuevamente a la función que devuelve el id de l
 
             \begin{codesnippet}
             \begin{verbatim}
-
-
-
-
-
 ordenar(lista<Estacion> estaciones, matriz<double> distancias, id_estacion_actual)
 
   lista<int> ids_vistos
@@ -113,7 +108,7 @@ Lo que hace la función \textit{ordenar} es recorrer la lista de distancias de l
             % 3. Deducir una cota de complejidad temporal del algoritmo propuesto y justificar por qué el algoritmo cumple la cota dada. Utilizar el modelo uniforme.
     \subsection{Complejidad teórica}
 
-      La función que resuelve el problema (solverEj2) realiza las siguientes operaciones con el siguiente costo temporal: La inicialización de la lista y la tupla se realizan en $O(1)$. La función que es llamada \textit{donde voy} tiene complejidad temporal $O(n+m)$ ya que recorre todas las estaciones analizando en $O(1)$ si se puede ir a alguna de ellas. La función que devuelve el índice de la estación con un id determinado también tiene complejidad $O(n+m)$ ya que recorre toda la lista de estaciones en el peor caso. El agregar de la lista (implementada como un vector) se realiza en $O(1)$ amortizado y el borrar se realiza en $O(n+m)$. Finalmente falta sólo analizar la complejidad de la función \textit{greedy capturar gimnasios} y con ella determinar la complejidad resultante de solverEj2. 
+      La función que resuelve el problema (solverEj2) realiza las siguientes operaciones con el siguiente costo temporal: La inicialización de la lista y la tupla se realizan en $O(1)$. La función que es llamada \textit{donde voy} tiene complejidad temporal $O(n+m)$ ya que recorre todas las estaciones analizando en $O(1)$ si se puede ir a alguna de ellas. La función que devuelve el índice de la estación con un id determinado también tiene complejidad $O(n+m)$ ya que recorre toda la lista de estaciones en el peor caso. El agregar al final de la lista (implementada sobre vector) se realiza en $O(1)$ amortizado y el borrar (en cualquier posición) se realiza en $O(n+m)$. Finalmente falta sólo analizar la complejidad de la función \textit{greedy capturar gimnasios} y con ella determinar la complejidad resultante de solverEj2. 
       Esta última función tiene un ciclo que se ejecuta en el peor caso $n+m$ veces. En cada una de las iteraciones se pregunta si se encontró una solución o no. Para ello se recorre la lista de estaciones para verificar que no quede ningun gimnasio sin visitar. Esto por lo tanto tiene una complejidad $O(n+m)$ en el peor caso. En el cuerpo del ciclo se llama a la función ordenar la cual recorre la lista de estaciones (en $O(n+m)$) y en cada iteración recupera el id del más cercano. Para recuperar este id, la función \textit{id mas cercano que no viste} recorre todas las distancias de las demas estaciones en $O(n+m)$, preguntando en cada caso si esa estación se vio o no (en $O(n+m)$). Luego ordenar en cada iteración realiza el swap correspondiente de estaciones, que para el mismo necesita recorrer nuevamente todas las estaciones ($O(n+m)$) para poder recuperar el id de la estación que quiere intercambiar. En conclusión, ordenar realiza en el peor caso $O(n+m)*O(n+m)*O(n+m)$ operaciones resultanto en una complejidad temporal de $O(n+m)^3$. 
       Después de ordenar, la función greedy llama a la función donde voy ($O(n+m)$). Se realiza una comparación con el id devuelto de esta función en $O(1)$ y si es distinto de -1 se llama a la función que devuelve el índice de la estación ($O(n+m)$). Las otras operaciones del ciclo se realizan en tiempo cosntante ($O(1)$). 
       Después del ciclo se pregunta si se encontró o no solución chequeando la lista de estaciones ($O(n+m)$ en el peor caso). La distancia acumulada se calcula iterando todos las estaciones vistas ($O(n+m)$ en el peor caso) y se arma el camino ($O(n+m)$ en el peor caso). En definitiva el ciclo es el que domina la complejidad de la función ya que por lo dicho realiza $O(n+m)*O(n+m)*O(n+m)*O(n+m)*O(n+m) = O(n+m)^5$ operaciones.
