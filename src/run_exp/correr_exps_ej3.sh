@@ -20,18 +20,18 @@ make
 
 # Imprimir experimento2 del ejercicio 3
 
- ./tp3 1 -exp 30 <../exp/Entradas/entrada_exp1.txt > ../exp/Salidas/salida_exp2_ej3_Distancia66
- ./tp3 1 -exp 20 <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- ./tp3 1 -exp 16 <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 1 -exp 30 <../exp/Entradas/entrada_exp1.txt > ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 1 -exp 20 <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 1 -exp 16 <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
 
- ./tp3 3 -exp 30 a <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- ./tp3 3 -exp 20 a <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- ./tp3 3 -exp 16 a <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 3 -exp 30 a <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 3 -exp 20 a <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 3 -exp 16 a <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
 
 
- ./tp3 3 -exp 30 b <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- ./tp3 3 -exp 20 b <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
- ./tp3 3 -exp 16 b <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 3 -exp 30 b <../exp/Entradas/entrada_exp1.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 3 -exp 20 b <../exp/Entradas/entrada_exp4_20input_gym_fijos.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
+ # ./tp3 3 -exp 16 b <../exp/Entradas/entrada_exp2_16input_con_sol.txt >> ../exp/Salidas/salida_exp2_ej3_Distancia66
 
 
 
@@ -44,3 +44,14 @@ make
 # ./tp3 3 -exp 16 a <../exp/entrada_exp2_16input_con_sol.txt >> ../exp/salida_exp2_ej3.1
 
 # ./tp3 3 -exp 16 b <../exp/entrada_exp2_16input_con_sol.txt >> ../exp/salida_exp2_ej3.1
+
+
+# Imprimir experimento 3 del ejercicio 3
+
+ ./tp3 1 -expRandom 50 a >../exp/ej3_experimentoRandom_50instancias.txt
+
+ ./tp3 3 -exp 50 a <../exp/ej3_experimentoRandom_50instancias.txt >> ../exp/salida_exp3.txt
+
+ ./tp3 3 -exp 50 b <../exp/ej3_experimentoRandom_50instancias.txt >> ../exp/salida_exp3.txt
+
+ ./tp3 2 -exp 50 <../exp/ej3_experimentoRandom_50instancias.txt >> ../exp/salida_exp3.txt

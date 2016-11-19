@@ -240,7 +240,7 @@ fin busquedaLocal
 
     % 5. Realizar una experimentación computacional para medir la performance del programa implementado. Usar un conjunto de casos de test en función de los parámetros de entrada, con instancias aleatorias e instancias particulares (de peor/mejor caso en tiempo de ejecución, por ejemplo). Presentar en forma gráfica una comparación entre los tiempos medidos y la complejidad teórica calculada y extraer conclusiones.
     \subsection{Experimentación}
-    Los experimentos realizados permiten observar las diferentes calidades de solución para ambos vecindarios, es decir, se comparó junto al resultado exacto dado por backtracking, qué vecindario devolvía la menor distancia posible. Además se comparó la performance de cada vecindario, es decir, se calculó el tiempo en ns por cada uno. En el primer experimento, utilizamos instancias particulares que serán explicadas en él. En el segundo, se generó un mayor número de instancias, asegurándose que tengan solución, y se realizaron las mismas comparaciones.
+    Los experimentos realizados permiten observar las diferentes calidades de solución para ambos vecindarios, es decir, en el primer experimento se comparó junto al resultado exacto dado por backtracking, qué vecindario devolvía la menor distancia posible, mientras que en el segundo experimento, se comparó las soluciones devueltas por búsqueda local contra las devueltas por el algoritmo greedy. Además en ambos experimentos, se comparó la performance de cada vecindario, es decir, se calculó el tiempo en ns por cada uno. En cuanto a instancias, en el primer experimento, utilizamos instancias particulares que serán explicadas en él. Mientras que en el segundo, se generó un mayor número de instancias random, asegurándonos que tengan solución.
 
 
 
@@ -253,14 +253,14 @@ fin busquedaLocal
             Para experimentar acerca de la calidad de los resultados de ambas vecindades, se generaron distintas comparaciones. 
 
             \begin{itemize}
-                \item Por un lado, se comparó cada vecindario por separado con backtracking. Para esto se generaron 66 instancias, de las cuales, las primeras 20 instancias cumplen las mismas condiciones mencionadas en \textbf{Ejercicio 1: Experimento 1}. Por otro lado las siguientes 16 instancias  cumplen con las mismas condiciones que menciona el \textbf{Ejercicio 1: Experimento 2} y por último, fueron generadas 30 instancias arbitrarias.
+                \item Por un lado, se comparó cada vecindario por separado con backtracking. Para esto se generaron 66 instancias, de las cuales, las primeras 20 instancias cumplen las mismas condiciones mencionadas en \textbf{Ejercicio 1: Experimento 1}. Por otro lado las siguientes 16 instancias  cumplen con las mismas condiciones que menciona el \textbf{Ejercicio 1: Experimento 2} y por último, fueron generadas 30 instancias que por cada una se aumenta en 1 la cantidad de gimnasios y pokeparadas, manteniendo siempre que la distancia entre cada estación es 1.
  
-                \item Por otro lado, se compararon los tres algoritmos juntos, corriendo 16 instancias creadas también manualmente. Por cada instancia, aumentamos de la misma manera la cantidad de gimnasios, pokeparadas y capacidad de las mochilas. Manteniendo siempre que la distancia entre cada estacion es 1.
+                \item Por otro lado, se compararon los tres algoritmos juntos, corriendo 16 instancias creadas también manualmente. Por cada instancia, aumentamos de la misma manera la cantidad de gimnasios, pokeparadas y capacidad de las mochilas. Al igual que la anterior comparación, se mantuvo que la distancia entre cada estación es 1.
             \end{itemize}
 
              En ambas comparaciones, por cada algoritmo, se corrió 30 veces la misma instancia, sacando un promedio de la distancia devuelta. Luego, en función de la cantidad de estaciones (n+m), se comparó qué distancias devolvían. Los demás valores de entradas son los mismos que se utilizaron para el experimento de performance realizado en el Ejercicio 2.
 			 
-			 \par A continuación en los siguientes gráficos se puede observar los tiempos de ejecución y su comparación con la cota de complejidad propuesta para ambas vecindades:
+			 \par A continuación en los siguientes gráficos se puede observar la calidad de resultado de cada vecindario en comparación con el algoritmo exacto.
 
 \blindtext
 
@@ -277,13 +277,14 @@ fin busquedaLocal
 
 \blindtext
 
-Como era de esperar, el caso de los 6 gimnasios demandó más tiempo de ejecución que los otros. Para las primeras instancias los tiempos fueron muy similares ya que no hay solución posible y el algoritmo corta rápido la ejecución. La cota de complejidad teórica acota bien a los resultados obtenidos.
 
-\par Para estas instancias, se puede observar que a medida que crece la cantidad de estaciones, crece la brecha entre la solución heurística con búsqueda local, y la solución exacta con backtracking. Esto se debe principalmente a que, a mayor cantidad de estaciones, el campo de soluciones crece. Es decir, mientras que backtracking recorre absolutamente todo el campo de soluciones obteniendo un mínimo global, la búsqueda local a partir de un resultado, recorre únicamente sus vecinos, deteniéndose en los mínimos locales. 
+\par Para estas instancias, se puede observar que a medida que crece la cantidad de estaciones, crece la brecha entre la solución heurística con búsqueda local, y la solución exacta con backtracking. Esto se debe principalmente a que, a mayor cantidad de estaciones, el campo de soluciones crece. Es decir, mientras que backtracking recorre absolutamente todo el campo de soluciones obteniendo un mínimo global, la búsqueda local a partir de un resultado, recorre únicamente sus vecinos, deteniéndose en los mínimos locales.
 
-\par Luego dado el vecindario A, se observa que para instancias chicas, las soluciones se asemejan a las exactas pero sus distancias empiezan a diferenciarse a partir de contar con 8 estaciones. Mientras que en el vecindario B, desde el primer momento Backtracking encuentra mejores soluciones. Esto nos convence de que  para ciertas instancias, intercambiar pokeparadas hace una mejor búsqueda en el vecindario de soluciones. 
+\par Además, no esta demás mencionar, que previo a la búsqueda local, se corre un algoritmo greedy y cuya solución devuelta, dada la configuración de nuestras instancias (las cuales aumentan linealmente la cantidad de estaciones, y por cada estación que se agrega se incrementa su ubicación), en la cual se basará la búsqueda local tiende a empeorar a medida que hicimos crecer la cantidad de estaciones (esto es explicado en el \textbf{Ejercicio 2}). Entonces, esto influye directamente en las soluciones encontradas por la búsqueda local, pues debido a que la búsqueda comienza desde una solución la cual puede llegar a diferir de la mejor posible, y que la búsqueda local se detiene en un mínimo local, la mejor solución que encontrará la búsqueda local para cualquier vecindario será peor a la que devuelve el algoritmo exacto, que en nuestro caso, será el mínimo global.
 
-Luego, como mencionamos, se compararon los resultados de ambos vecindarios juntos y el resultado exacto.
+\par Luego dado el vecindario A, se observa que para instancias chicas, las soluciones se asemejan a las exactas pero sus distancias empiezan a diferenciarse a partir 8 estaciones. Mientras que en el vecindario B, desde un primer momento Backtracking encuentra mejores soluciones. Esto nos asegura de que para ciertas instancias, intercambiar pokeparadas hace una mejor búsqueda en el vecindario de soluciones. 
+
+Para poder afirmar nuestra hipótesis, se mostrará a continuación una comparación entre las vecindades y el algoritmo exacto.
 
   \begin{figure}[H]
       \begin{center}
@@ -299,7 +300,7 @@ Para este caso, se usaron menos instancias para observar el comportamiento de lo
             Para experimentar acerca de la performance de los resultados de ambas vecindades, se generaron distintas comparaciones. 
 
             \begin{itemize}
-                \item Por un lado se realizaron comparaciones para la vecindad A, en la cual se intercambian pokeparadas.
+                \item Por un lado se realizaron comparaciones para la vecindad A, en la cual en cada instancia se intercambian únicamente pokeparadas.
  
                 \item Por otro lado, se realizaron comparaciones para la vecindad B, en la cual se intercambian gimnasios (siempre y cuando la solución siga siendo válida).
             \end{itemize}
@@ -324,3 +325,11 @@ Para este caso, se usaron menos instancias para observar el comportamiento de lo
 Para estas instancias, se puede observar que en ambos casos, a medida que crece la cantidad de estaciones, aumenta el tiempo de procesamiento de manera muy similar.
 \par Se puede suponer que para la vecindad A el tiempo de procesamiento debería crecer más rápido que para la vecindad B, debido a que para la vecindad A se pueden intercambiar cualquier par de pokeparadas, mientras que en el vecindario B sólo se pueden intercambiar algunos gimnasios entre sí (además de que para estos experimentos, la cantidad de pokeparadas tiende a ser mucho mayor que la cantidad de gimnasios)
 \par Sin embargo, el tiempo de procesamiento es similar ya que para el vecindario B, para cada intercambio de gimnasios se debe chequear que la nueva solución generada sea válida. Y esto implica recorrer cada estación del recorrido, chequeando que para cada gimnasio por el que se pasa, se pase con la cantidad de pokebolas necesarias.
+
+
+        \subsubsection{Experimento 2}
+
+        Para el próximo experimento, comparamos tanto calidad de solución como tiempo de corrida de, por un lado los vecindarios entre sí, por otro los vecindarios y el algoritmo greedy, y finalmente los tres juntos. Para esto, se generaron 50 instancias rándom, para comparar los tiempos y la distancia, se corrió 20 veces el algoritmo y se hizo un promedio del tiempo y distancia.
+
+        \par Para el siguiente experimento, queremos probar que realmente, hacer una búsqueda local mejora la solución obtenida del algoritmo heurístico. Esta hipótesis es tomada debido a que, búsqueda local se basa en la solución devuelta por greedy y busca, a partir de ella, encontrar una solución mejor. Por otro lado, queremos ver como se comportan los vecindarios para cualquier instancia, para ver si realmente, dado que el vecindario A tiene más posibilidades de intercambias pokeparadas, esto produce mejores soluciones que el vecindario B, el cuál intercambia gimnasios y tiene menos posibilidades de soluciones válidas.
+
