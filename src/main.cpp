@@ -99,7 +99,6 @@ int main(int argc, char *argv[]) {
         else if(experimentos && !random) {
             for (int inputs = 0; inputs < instancias; ++inputs) {
                 int n,m,k;
-                int contador = 0;
                 cin >> n >> m >> k;
                 tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
                 vector<vector<double> > distancias = get<0>(input);
@@ -107,10 +106,7 @@ int main(int argc, char *argv[]) {
                 for (int repeticiones = 0; repeticiones < 1; ++repeticiones) {
                     start_timer();
                     std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
-                    while(contador < 30){
                         cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
-                        contador++;
-                    }
                 }
             }
         }
