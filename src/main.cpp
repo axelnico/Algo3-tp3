@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
                 for (int repeticiones = 0; repeticiones < 1; ++repeticiones) {
                     start_timer();
                     std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
-                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+                        cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
                 }
             }
         }
