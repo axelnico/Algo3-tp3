@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
             std::tuple<double, int, std::vector<int> > res = solverEj2(estaciones, distancias, n, m, k);
             imprimir_res(res);
         }
-        else {
+        else if(experimentos && !random){
             for (int inputs = 0; inputs < instancias; ++inputs) {
                 int n,m,k;
                 cin >> n >> m >> k;
@@ -166,6 +166,57 @@ int main(int argc, char *argv[]) {
                     start_timer();
                     std::tuple<double, int, std::vector<int> > res = solverEj2(copiaEstaciones, distancias, n, m, k);
                     cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+                }
+            }
+        }
+        else {
+            int k = 100;
+            for (int i = 1; i < 102; ++i) {
+                cout << 5 << " " << i << " " << k << endl;
+                cout << 0 << " " << 0 << " " << 3 << endl;
+                cout << 1 << " " << 1 << " " << 3 << endl;
+                cout << 2 << " " << 2 << " " << 3 << endl;
+                cout << 3 << " " << 3 << " " << 3 << endl;
+                cout << 4 << " " << 4 << " " << 3 << endl;
+                for (int j = 0; j < i; ++j) {
+                    cout << j+6 << " " << j+6 << endl;
+                }
+            }
+            for (int i = 1; i < 102; ++i) {
+                cout << 10 << " " << i << " " << k << endl;
+                cout << 0 << " " << 0 << " " << 3 << endl;
+                cout << 1 << " " << 1 << " " << 3 << endl;
+                cout << 2 << " " << 2 << " " << 3 << endl;
+                cout << 3 << " " << 3 << " " << 3 << endl;
+                cout << 4 << " " << 4 << " " << 3 << endl;
+                cout << 5 << " " << 5 << " " << 3 << endl;
+                cout << 6 << " " << 6 << " " << 3 << endl;
+                cout << 7 << " " << 7 << " " << 3 << endl;
+                cout << 8 << " " << 8 << " " << 3 << endl;
+                cout << 9 << " " << 9 << " " << 3 << endl;
+                for (int j = 0; j < i; ++j) {
+                    cout << j+11 << " " << j+11 << endl;
+                }
+            }
+            for (int i = 1; i < 102; ++i) {
+                cout << 15 << " " << i << " " << k << endl;
+                cout << 0 << " " << 0 << " " << 3 << endl;
+                cout << 1 << " " << 1 << " " << 3 << endl;
+                cout << 2 << " " << 2 << " " << 3 << endl;
+                cout << 3 << " " << 3 << " " << 3 << endl;
+                cout << 4 << " " << 4 << " " << 3 << endl;
+                cout << 5 << " " << 5 << " " << 3 << endl;
+                cout << 6 << " " << 6 << " " << 3 << endl;
+                cout << 7 << " " << 7 << " " << 3 << endl;
+                cout << 8 << " " << 8 << " " << 3 << endl;
+                cout << 9 << " " << 9 << " " << 3 << endl;
+                cout << 10 << " " << 10 << " " << 3 << endl;
+                cout << 11 << " " << 11 << " " << 3 << endl;
+                cout << 12 << " " << 12 << " " << 3 << endl;
+                cout << 13 << " " << 13 << " " << 3 << endl;
+                cout << 14 << " " << 14 << " " << 3 << endl;
+                for (int j = 0; j < i; ++j) {
+                    cout << j+16 << " " << j+16 << endl;
                 }
             }
         }

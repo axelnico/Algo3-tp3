@@ -180,13 +180,17 @@ fin BT_capturar_gimnasios
       Para este experimento, como mencionamos antes, construimos 16 instancias en las que aumentamos linealmente entre 1 y 8 la cantidad de pokeparadas y gimnasios (ambas al mismo tiempo), fijamos en forma relativa a la cantidad de pokeparadas el tamaño de la mochila y colocamos a cada gimnasio un valor entre 1 y 3 pociones para las primeras 8 instancias y fijamos en 3 cada una en las 8 siguientes.
       Para este experimento esperabamos que las segundas 8 instancias tomen más tiempo que las primeras, ya que en las primeras 8 hay soluciones en las que no se pasan por todas las pokeparadas, teniendo más chances de encontrar una solución mejor y que se utilice la poda que saca los casos en los que se está contruyendo una solución peor a la mejor encontrada hasta el momento. Esto ocurre porque en dos instancias con misma cantidad de pokeparadas y gimnasios, en el segundo caso es necesario pasar por todas las pokeparadas, ya que en cada gimnasio se gastan las 3 pociones que se recolectaron en alguna pokeparada, mientras que en el primer caso hay algunos gimnasios que permiten mantener algunas pociones en lugar de gastarlas todas, permitiendo ahorrar pociones en algún gimnasio para usarlas en otro.
 
-      Los resultados obtenidos de este experimento se plasmaron en el siguiente gráfico, el cual tiene una línea que representa (a modo de referencia) la cota de complejidad:
+      Los resultados obtenidos de este experimento se plasmaron en los siguientes gráficos, los cuales tienen una línea que representa (a modo de referencia) la cota de complejidad y muestran de manera aproximada el funcionamiento para entre 2 y 6 estaciones (el primero) y entre 2 y 16 estaciones (el segundo):
 
   \begin{figure}[H]
-      \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp2_ej1.jpeg}
-        \caption{}
-      \end{center}
+      \minipage{0.5\textwidth}
+      \includegraphics[width=\linewidth]{imagenes/exp2_ej1_corto.jpeg}
+      \caption{Vecindario A}
+      \endminipage\hfill
+      \minipage{0.5\textwidth}%
+      \includegraphics[width=\linewidth]{imagenes/exp2_ej1.jpeg}
+      \caption{Vecindario B}
+      \endminipage
   \end{figure}
 
       Observamos que, como esperabamos, a igual tamaño de entrada, las instancias que necesitan menor cantidad de pociones por gimnasio toman menos tiempo que las instancias que necesitan 3 o más posiones por gimnasio. Esto muestra que nuestra hipótesis funciona para los resultados de este experimento, por lo que concluímos que la poda de eliminar ramas en las que se construye una solución peor que la mejor hallada hasta el momento también resulta de utilidad cuando hay mayor cantidad de soluciones posibles. 
