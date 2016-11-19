@@ -8,7 +8,7 @@ import sys
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
 #arr = np.loadtxt("experimentoLoco3.data", delimiter=',')
-arr = np.loadtxt("salida_exp2_ej3.1", delimiter=',')
+arr = np.loadtxt("Salidas/salida_exp2_ej3_Distancia66", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P
@@ -40,10 +40,10 @@ while k < len(dist):
   nMasm.append(m[k] + n[k])
   k += 30
 
-promedio1NP = np.array(promedioTiempo[0:15])
-promedio2NP = np.array(promedioTiempo[16:31])
-promedio3NP = np.array(promedioTiempo[32:47])
-nm = np.array(nMasm[0:15])
+promedio1NP = np.array(promedioTiempo[0:65])
+#promedio2NP = np.array(promedioTiempo[66:131])
+promedio3NP = np.array(promedioTiempo[132:197])
+nm = np.array(nMasm[0:65])
 
 
 # cota = 'factorial(x)*x*x*x'
@@ -59,7 +59,7 @@ fig = plt.figure()
 fig.patch.set_facecolor('white')
 ax1 = fig.add_subplot(111)
 pylab.plot(nm, promedio1NP,'r^', label= 'backtracking')
-pylab.plot(nm, promedio2NP,'gD', label= 'vecindario a')
+#pylab.plot(nm, promedio2NP,'gD', label= 'vecindario a')
 pylab.plot(nm, promedio3NP,'bo', label= 'vecindario b')
 # pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
 # fig2 = plt.figure()

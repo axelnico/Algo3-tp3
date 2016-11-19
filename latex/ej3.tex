@@ -3,8 +3,8 @@
     \subsection{Descripción del problema y solución propuesta}
 
     \par Una vez obtenida una heurística greedy para resolver nuestra variante de TSP, utilizamos una \textbf{Búsqueda Local} para analizar una mayor cantidad de soluciones posibles. Es decir, dada una solución inicial S (obtenida de aplicar a una instancia de entrada, el algoritmo heurístico implementado en el Ejercicio 2) se obtienen los vecinos de S, es decir, un “vecindario“ de soluciones. Y de este vecindario, se obtiene el vecino cuya solución mejore a S. Luego se realiza una búsqueda local sobre este vecino. 
-    \par Sea V este vecindario, $\forall S^{*}\in V, S^{*} = h(S)$. h es una función que obtiene un vecino a partir de S, perteneciente a V. En otras palabras, h altera la solución S para encontrar una solución parecida que pueda mejorar el resultado. Por otro lado, se cuenta con una función f que da valor a cada una de las soluciones. En nuestro caso, sean S y $S^{'}$, diremos que una solución S es mejor que $S^{'}$ si $f(S) < f(S^{'})$. Luego para cada $S^{*}\in V$, se evalúa f($S^{*}$). 
-    \par Dado V el conjunto de vecinos del Vecindario y S la solución original, si $\forall S^{*}\in V, f(S) < f(S^{*})$  se devuelve la solución S. En caso contrario, se aplica nuevamente la búsqueda local sobre $S^{*}$ cuyo valor en f sea el menor, y se repite el procedimiento hasta que no haya un $S^{*}$ que cumpla $f(S^{*}) < f(S)$. Una vez que esto ocurre, se devuelve el último $S^{*}$. 
+    \par Sea V este vecindario, $\forall S^{*}\in V, S^{*} = h(S)$ h es una función que obtiene un vecino a partir de S, perteneciente a V. En otras palabras, h altera la solución S para encontrar una solución parecida que pueda mejorar el resultado. Por otro lado, se cuenta con una función f que da valor a cada una de las soluciones. En nuestro caso, sean S y $S^{'}$, diremos que una solución S es mejor que $S^{'}$ si $f(S) < f(S^{'})$. Luego para cada $S^{*}\in V$, se evalúa f($S^{*}$). 
+    \par Dado V el conjunto de vecinos del Vecindario y S la solución original, si $\forall S^{*}\in V$, $f(S) < f(S^{*})$  se devuelve la solución S. En caso contrario, se recorre el vecindario de soluciones y se aplica nuevamente la búsqueda local sobre el $S^{*} \in Vecindario $ cuyo valor sea el mínimo, y se reemplaza a S por $S^{*}$. Esto se repite hasta que no haya un $S^{*}$ que cumpla $f(S^{*}) < f(S)$. Una vez que esto ocurre, se devuelve S. 
     \par De esta manera, a partir de una solución se estará explorando sus vecinos, y la búsqueda local se detendrá al hallar una mínimo local.
 
     \subsubsection{Vecindad A}
@@ -33,7 +33,7 @@
 
     En nuestro caso, una solución es mejor que otra si una logra conquistar todos los Gimnasios recorriendo menor distancia que la otra, manteniendo siempre el invariante de no pasar por la misma estación más de una vez. 
     Una vez obtenido el vecindario, la función f evalúa cada solución. En nuestro caso f se llama “dameDistancia“ y se encarga de calcular la distancia de cada solución obtenida, guardándola en el vector vecindario. Luego compara cada una con S. 
-    \par Si la distancia de algún recorrido nuevo en el vecindario (por ejemplo $S^{'}$) es menor que la distancia que recorrió S, se repite el ciclo de búsqueda local sobre algún $S^{'}$. Caso contrario, se devuelve la solución S con su recorrido, su distancia y la cantidad de estaciones por donde pasó.
+    \par Si la distancia de algún recorrido nuevo en el vecindario (por ejemplo $S^{*}$) es menor que la distancia que recorrió S, se repite el ciclo de búsqueda local sobre algún $S^{*}$. Caso contrario, se devuelve la solución S con su recorrido, su distancia y la cantidad de estaciones por donde pasó.
 
    \subsubsection{Vecindad B}
 
@@ -143,7 +143,7 @@
                 \ord(2*(N+M)) = \ord(N+M)
             \]
 
-            Esto quiere decir que, por cada ciclo de \emph{dameVecindario2}, debe copiar el vector y chequear que sea válido. Y las iteraciones de esta función eran \ord((N+M)*(N+M-1)/2). Luego quedaríá \ord((N+M)*(N+M-1)/2*(N+M)), entonces
+            Esto quiere decir que, por cada ciclo de \emph{dameVecindario2}, debe copiar el vector y chequear que sea válido. Y las iteraciones de esta función eran \ord((N+M)*(N+M-1)/2). Luego quedaría \ord((N+M)*(N+M-1)/2*(N+M)), entonces
             \[
                 \ord((N+M)*(N+M-1)/2*(N+M)) = \ord((N+M)^3)
             \]
@@ -177,7 +177,7 @@
     \subsection{Detalles Implementativos}
 
     
-    Las clases y estructuras utilizadas en el algoritmo son las mismas que las del primer ejericio. El algoritmo propuesto para las búsquedas locales es el siguiente: 
+    Las clases y estructuras utilizadas en el algoritmo son las mismas que las del primer ejercicio. El algoritmo propuesto para las búsquedas locales es el siguiente: 
 
             \begin{codesnippet}
             \begin{verbatim}
@@ -198,15 +198,15 @@ solucion busquedaLocal(vector<int> recorridoInicial, vector<Estacion> estaciones
         
         proximoEstado = -1;
 
-        si el vecindario no es vacio
+        si el vecindario no es vacío
             
             distanciaMinima = distancia;
             
-            //Busco algun vecino con distancia mas chica
+            //Busco algún vecino con distancia mas chica
             para cada vecino entre 0 y tam(vecindario)
                 
                 distanciaAux = dameDistancia(vecindario[vecino], distancias);
-                //obtiene las distancia recorridas de la solucion vecino-ésima
+                //obtiene las distancia recorridas de la solución vecino-ésima
 
                 si distanciaAux < distanciaMinima
                     distanciaMinima = distanciaAux;
@@ -240,9 +240,16 @@ fin busquedaLocal
 
     % 5. Realizar una experimentación computacional para medir la performance del programa implementado. Usar un conjunto de casos de test en función de los parámetros de entrada, con instancias aleatorias e instancias particulares (de peor/mejor caso en tiempo de ejecución, por ejemplo). Presentar en forma gráfica una comparación entre los tiempos medidos y la complejidad teórica calculada y extraer conclusiones.
     \subsection{Experimentación}
-    Los experimentos realizados permiten observar las diferentes calidades de solución para ambos vecindarios, es decir, se comparó junto al resultado exacto dado por backtracking, qué vecindario devolvía la menor distancia posible. Como hipótesis mantuvimos que, dado que en el vecindario A se intercambian pokeparadas, el campo de soluciones recorridas por él es mayor al del vecindario B, debido a que, al intercambiar pokeparadas de una solución esta sigue siendo solución, mientras que en el vecindario B, por cada intercambio de gimnasios, debe filtrar aquellos que no devuelven una solución válida, teniendo menos margen para generar vecinos. Entonces, \textbf{en general}, esto permite que el vecindario A, obtenga mejores soluciones que el B. Además se comparó la performance de cada vecindario.
+    Los experimentos realizados permiten observar las diferentes calidades de solución para ambos vecindarios, es decir, se comparó junto al resultado exacto dado por backtracking, qué vecindario devolvía la menor distancia posible. Además se comparó la performance de cada vecindario, es decir, se calculó el tiempo en ns por cada uno. En el primer experimento, utilizamos instancias particulares que serán explicadas en él. En el segundo, se generó un mayor número de instancias, asegurándose que tengan solución, y se realizaron las mismas comparaciones.
 
-        \subsubsection{Experimento 1: Calidad de resultado} 
+
+
+        \subsubsection{Experimento 1} 
+
+            Como hipótesis mantuvimos que, dado que en el vecindario A se intercambian pokeparadas, el campo de soluciones recorridas por él es mayor al del vecindario B, debido a que, al intercambiar pokeparadas de una solución esta sigue siendo solución, mientras que en el vecindario B, por cada intercambio de gimnasios, debe filtrar aquellos que no devuelven una solución válida, teniendo menos margen para generar vecinos. Entonces, \textbf{en general}, esto permite que el vecindario A, obtenga mejores soluciones que el B. 
+
+        \subsubsection{Experimento 1: Calidad de resultados} 
+
             Para experimentar acerca de la calidad de los resultados de ambas vecindades, se generaron distintas comparaciones. 
 
             \begin{itemize}
@@ -259,11 +266,11 @@ fin busquedaLocal
 
 \begin{figure}[H]
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{imagenes/Exp2Ej3A.png}
+  \includegraphics[width=\linewidth]{imagenes/Ej3/Exp2Ej3A.png}
   \caption{Vecindario A}
 \endminipage\hfill
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{imagenes/Exp2Ej3B.png}
+  \includegraphics[width=\linewidth]{imagenes/Ej3/Exp2Ej3B.png}
   \caption{Vecindario B}
 \endminipage
 \end{figure}
@@ -280,7 +287,7 @@ Luego, como mencionamos, se compararon los resultados de ambos vecindarios junto
 
   \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/Exp2Ej3TODO.png}
+        \includegraphics[width=0.7\columnwidth]{imagenes/Ej3/Exp2Ej3TODO.png}
         \caption{Comparación vecindario y backtracking}
       \end{center}
   \end{figure}
@@ -288,7 +295,7 @@ Luego, como mencionamos, se compararon los resultados de ambos vecindarios junto
 
 Para este caso, se usaron menos instancias para observar el comportamiento de los distintos vecindario en comparación con Backtracking.  Como se puede observar, para instancias chicas las distancias obtenidas por el vecindario A se asemejan a las de backtracking, es decir, a las soluciones exactas. Pero a medida que la cantidad de estaciones crecen, la brecha entre Backtracking y vecindario A crece. Esto mismo no sucede con el vecindario B, donde desde un principio mantiene una brecha creciente con el resultado exacto. Por lo tanto, afirma la hipótesis anteriormente mencionada.
 
-\subsubsection{Experimento 1: Performance de resultado} 
+\subsubsection{Experimento 1: Performance} 
             Para experimentar acerca de la performance de los resultados de ambas vecindades, se generaron distintas comparaciones. 
 
             \begin{itemize}
@@ -303,11 +310,11 @@ Para este caso, se usaron menos instancias para observar el comportamiento de lo
 
 \begin{figure}[H]
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{imagenes/Exp1Ej3a.png}
+  \includegraphics[width=\linewidth]{imagenes/Ej3/Exp1Ej3a.png}
   \caption{Vecindario A}
 \endminipage\hfill
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{imagenes/Exp1Ej3b.png}
+  \includegraphics[width=\linewidth]{imagenes/Ej3/Exp1Ej3b.png}
   \caption{Vecindario B}
 \endminipage
 \end{figure}
