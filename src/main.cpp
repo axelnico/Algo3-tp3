@@ -113,21 +113,22 @@ int main(int argc, char *argv[]) {
         else {
             random_device rd;
             mt19937 gen(rd());
-            uniform_int_distribution<> gyms(1,75);
-            uniform_int_distribution<> cantPosiones(0,30);
+            uniform_int_distribution<> gyms(1,40);
+            uniform_int_distribution<> cantPosiones(0,20);
             uniform_int_distribution<> x(0,1000);
             uniform_int_distribution<> y(0,1000);
+            vector<tuple<int,int,int> > gimnasios;
             for (int i = 0; i < instancias; ++i) {
                 int n = gyms(gen);
-                vector<tuple<int,int,int> > gimnasios;
+                gimnasios.empty();
                 for (int i = 0; i < n; ++i) {
                     gimnasios.push_back(make_tuple(x(gen), y(gen), cantPosiones(gen)));
                 }
-                int sumPosiones;
-                for (int i = 0; i < gimnasios.size(); ++i) {
+                int sumPosiones = 0;
+                for (int i = 0; i < n; ++i) {
                     sumPosiones += get<2>(gimnasios[i]);
                 }
-                int m = ((sumPosiones % 3) == 0) ? (sumPosiones / 3) : (sumPosiones / 3) + 1;
+                int m = (sumPosiones / 3) + 1;
 
                 cout << n << " " << m << " " << sumPosiones << endl;
                 for (int i = 0; i < n; ++i) {
@@ -160,7 +161,7 @@ int main(int argc, char *argv[]) {
                 tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
-                for (int repeticiones = 0; repeticiones < 150; ++repeticiones) {
+                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                     vector<Estacion> copiaEstaciones = estaciones;
                     start_timer();
                     std::tuple<double, int, std::vector<int> > res = solverEj2(copiaEstaciones, distancias, n, m, k);
