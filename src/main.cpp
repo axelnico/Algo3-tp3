@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
         cout << "   -exp para experimentos" << endl;
         cout << "   -exp n para experimentos de n instancias" << endl;
         cout << "   -exp n a/b para experimentos de n instancias con el vecindario a o b" << endl;
-        cout << "   -exp -expRandom n para generar n instancias random" << endl;
+        cout << "   -expRandom n para generar n instancias random" << endl;
         return -1;
     }
 
@@ -113,23 +113,30 @@ int main(int argc, char *argv[]) {
         else {
             random_device rd;
             mt19937 gen(rd());
-            uniform_int_distribution<> gyms(1,8);
-            uniform_int_distribution<> pokeparadas(1,8);
-            uniform_int_distribution<> tamMochila(0,48);
-            uniform_int_distribution<> cantPosiones(0,24);
-            uniform_int_distribution<> x(0,100);
-            uniform_int_distribution<> y(0,100);
+            uniform_int_distribution<> gyms(1,75);
+            uniform_int_distribution<> cantPosiones(0,30);
+            uniform_int_distribution<> x(0,1000);
+            uniform_int_distribution<> y(0,1000);
             for (int i = 0; i < instancias; ++i) {
                 int n = gyms(gen);
-                int m = pokeparadas(gen);
-                int k = tamMochila(gen);
-                cout << n << " " << m << " " << k << endl;
+                vector<tuple<int,int,int> > gimnasios;
                 for (int i = 0; i < n; ++i) {
-                    cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
+                    gimnasios.push_back(make_tuple(x(gen), y(gen), cantPosiones(gen)));
+                }
+                int sumPosiones;
+                for (int i = 0; i < gimnasios.size(); ++i) {
+                    sumPosiones += get<2>(gimnasios[i]);
+                }
+                int m = ((sumPosiones % 3) == 0) ? (sumPosiones / 3) : (sumPosiones / 3) + 1;
+
+                cout << n << " " << m << " " << sumPosiones << endl;
+                for (int i = 0; i < n; ++i) {
+                    cout << get<0>(gimnasios[i]) << " " << get<1>(gimnasios[i]) << " " << get<2>(gimnasios[i]) << endl;
                 }
                 for (int i = 0; i < m; ++i) {
                     cout << x(gen) << " " << y(gen) << endl;
                 }
+                cout << endl;
             }
         }
     }
