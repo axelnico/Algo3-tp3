@@ -77,7 +77,7 @@ fin BT_capturar_gimnasios
 
             En cada iteración de la función, se chequea si el estado actual de los parametros es una solución al problema. Para esto, se revisa todo el vector de estaciones en búsqueda de algúna Estación que sea gimnasio. Si no hay, entonces efectivamente es una solución y se construye la tupla con lo que devuelve el algoritmo para luego imprimir el output correspondiente. Caso contrario, se recorre todo el vector de estaciones para chequear todos los posibles lugares a los que se puede ir desde la ubicación actual e ir a todos ellos.
 
-            Para decidir si podemos ir o no a una estación chequeamos la cantidad de pociones actuales junto con el tamaño de la mochila y las pociones de la estación a la que se desea ir. Si es un gimnasio, analizamos si $pociones + pociones(gimnasio) > 0$. Dado que el gimnasio tiene la cantidad de pociones en negativo (como mencionamos anteriormente), si esta suma deciende de 0 entonces quiere decir que las pociones que tenemos en la mochila no son suficientes para conquistar ese gimnasio, por lo que no tendría sentido ir ya que esto solamente aumentaría la distancia recorrida (y esto último ocurre porque como todas las estaciones están conectadas,  $\forall v,w,r : distancia(v,w) \leq distancia(v,r) + distancia(r,w)$). Si es una pokeparada, observamos si $pociones = k$ con $k$ tamaño de la mochila. La razón es que cada pokeparada otorga 3 pociones pero si la mochila se llena entonces se descartan las excedentes, mas si la mochila esta totalmente llena, se descartan todas las pociones de esa pokeparada; y teniendo en cuenta lo dicho recientemente, si hay solución debería existir otra estación tal que se pueda visitar sin agregar innecesariamente distancia recorrida a la solución actual.
+            Para decidir si podemos ir o no a una estación chequeamos la cantidad de pociones actuales que se tienen junto con el tamaño de la mochila y las pociones de la estación a la que se desea ir. Si es un gimnasio, analizamos si $pociones + pociones(gimnasio) > 0$. Dado que el gimnasio tiene la cantidad de pociones en negativo (como mencionamos anteriormente), si esta suma deciende de 0 quiere decir que las pociones que tenemos en la mochila no son suficientes para conquistar ese gimnasio, por lo que no tendría sentido ir ya que esto solamente aumentaría la distancia recorrida (y esto último ocurre porque como todas las estaciones están conectadas,  $\forall v,w,r \in Estaciones : distancia(v,w) \leq distancia(v,r) + distancia(r,w)$). Si es una pokeparada, observamos si $pociones = k$ con $k$ tamaño de la mochila. La razón es que cada pokeparada otorga 3 pociones pero si la mochila se llena entonces se descartan las excedentes. En particular, si la mochila esta totalmente llena, se descartan todas las pociones de esa pokeparada; y teniendo en cuenta lo dicho recientemente, si hay solución debería existir otra estación tal que se pueda visitar sin agregar innecesariamente distancia recorrida a la solución actual.
 
             Antes de entrar en la función descripta, se realizan dos chequeos (las podas). Primero, que no exista un gimnasio cuya cantidad de pociones sea mayor al tamaño de la mochila, ya que si esto ocurriera, incluso pasando por todas las pokeparadas posibles nunca alcanzaríamos la cantidad necesaria para conquistar ese gimnasio. Un ejemplo puede ser 2 pokeparadas, 1 gimnasio que necesita 10 pociones y tamaño de mochila 9. En segundo lugar, que la suma total de pociones necesarias para conquistar a cada gimnasio sea menor o igual a la cantidad de $pokeparadas*3$. Esto se hace para descartar los casos en los que incluso teniendo el tamaño de mochila suficiente para guardar todas las pociones de todas las pokeparadas, las mismas no alcancen para conquistar todos los gimnasios. Un caso ejemplo sería 1 pokeparada, 2 gimnasios que necesitan 3 pociones y tamaño de mochila 3.
 
@@ -154,7 +154,7 @@ fin BT_capturar_gimnasios
 
   \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_ej1.jpeg}
+        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_ej1_nuevo.jpeg}
         \caption{}
       \end{center}
   \end{figure}
@@ -163,7 +163,7 @@ fin BT_capturar_gimnasios
 
   \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_2_ej1.jpeg}
+        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_2_ej1_nuevo.jpeg}
         \caption{}
       \end{center}
   \end{figure}
@@ -185,11 +185,11 @@ fin BT_capturar_gimnasios
   \begin{figure}[H]
       \minipage{0.5\textwidth}
       \includegraphics[width=\linewidth]{imagenes/exp2_ej1_corto.jpeg}
-      \caption{Vecindario A}
+      \caption{2 a 6 estaciones}
       \endminipage\hfill
       \minipage{0.5\textwidth}%
       \includegraphics[width=\linewidth]{imagenes/exp2_ej1.jpeg}
-      \caption{Vecindario B}
+      \caption{2 a 16 estaciones}
       \endminipage
   \end{figure}
 
