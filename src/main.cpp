@@ -345,7 +345,6 @@ int main(int argc, char *argv[]) {
                         
                     }
                     int m = (sumPosiones / 3) + 1;
-
                     
                     for (int j = 0; j < m; ++j) {
                         xs2.push_back(x(gen));
@@ -354,28 +353,35 @@ int main(int argc, char *argv[]) {
                 }
 
                 for (int ju = 0; ju < 4; ju++) {
+                    int contadorMagico = 0;
+                    int contadorMagico2 = 0;
     	            for (int i = 0; i < instancias; ++i) {
     	                int n = ns[i];
+
     	                gimnasios.empty();
 
                         int sumPosiones = 0;
     	                for (int j = 0; j < n; ++j) {
-                            int index = j * (i + 1);
-    	                    gimnasios.push_back(make_tuple(xs[index], ys[index], cantPoss[index]));
+                            int index = contadorMagico + j;
+                            
+                            gimnasios.push_back(make_tuple(xs[index], ys[index], cantPoss[index]));
                             sumPosiones += cantPoss[index];
-    	                }
-    	                int m = (sumPosiones / 3) + 1;
+                        }
+                        contadorMagico += n;
+                        int m = (sumPosiones / 3) + 1;
 
-    	                cout << n << " " << m << " " << sumPosiones << endl;
-    	                for (int j = 0; j < n; ++j) {
-    	                    cout << get<0>(gimnasios[j]) << " " << get<1>(gimnasios[j]) << " " << get<2>(gimnasios[j]) << endl;
-    	                }
-    	                for (int j = 0; j < m; ++j) {
-                            int index = j * (i + 1);
-    	                    cout << xs2[index] << " " << ys2[index] << endl;
-    	                }
+                        cout << n << " " << m << " " << sumPosiones << endl;
+                        for (int j = 0; j < n; ++j) {
+                            cout << get<0>(gimnasios[j]) << " " << get<1>(gimnasios[j]) << " " << get<2>(gimnasios[j]) << endl;
+                        }
+                        for (int j = 0; j < m; ++j) {
+
+                            int index = contadorMagico2 + j;
+                            cout << xs2[index] << " " << ys2[index] << endl;
+                        }
+                        contadorMagico2 += m;
     	            	
-                        int cantEstacion = (int)((gimnasios.size() + m) / 2);
+                        int cantEstacion = (gimnasios.size() + m) / 2;
                         if (ju == 0)
                             cout << cantEstacion << " " << 1 << " " << 0 << " " << 1 << endl;
                         else if (ju == 1)
