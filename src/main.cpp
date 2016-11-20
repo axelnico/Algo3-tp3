@@ -281,7 +281,7 @@ int main(int argc, char *argv[]) {
                 pair<int, bool> criterio = get<2>(input);
                 bool busqLocalAux = get<3>(input);
                 // grasp = get<4>(input);
-                for (grasp = 1; grasp < 31; grasp++) {            
+                for (grasp = 1; grasp < 16; grasp++) {            
                     for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                         start_timer();
                         solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
