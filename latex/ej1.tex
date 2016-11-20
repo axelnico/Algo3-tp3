@@ -77,7 +77,7 @@ fin BT_capturar_gimnasios
 
             En cada iteración de la función, se chequea si el estado actual de los parametros es una solución al problema. Para esto, se revisa todo el vector de estaciones en búsqueda de algúna Estación que sea gimnasio. Si no hay, entonces efectivamente es una solución y se construye la tupla con lo que devuelve el algoritmo para luego imprimir el output correspondiente. Caso contrario, se recorre todo el vector de estaciones para chequear todos los posibles lugares a los que se puede ir desde la ubicación actual e ir a todos ellos.
 
-            Para decidir si podemos ir o no a una estación chequeamos la cantidad de pociones actuales junto con el tamaño de la mochila y las pociones de la estación a la que se desea ir. Si es un gimnasio, analizamos si $pociones + pociones(gimnasio) > 0$. Dado que el gimnasio tiene la cantidad de pociones en negativo (como mencionamos anteriormente), si esta suma deciende de 0 entonces quiere decir que las pociones que tenemos en la mochila no son suficientes para conquistar ese gimnasio, por lo que no tendría sentido ir ya que esto solamente aumentaría la distancia recorrida (y esto último ocurre porque como todas las estaciones están conectadas,  $\forall v,w,r : distancia(v,w) \leq distancia(v,r) + distancia(r,w)$). Si es una pokeparada, observamos si $pociones = k$ con $k$ tamaño de la mochila. La razón es que cada pokeparada otorga 3 pociones pero si la mochila se llena entonces se descartan las excedentes, mas si la mochila esta totalmente llena, se descartan todas las pociones de esa pokeparada; y teniendo en cuenta lo dicho recientemente, si hay solución debería existir otra estación tal que se pueda visitar sin agregar innecesariamente distancia recorrida a la solución actual.
+            Para decidir si podemos ir o no a una estación chequeamos la cantidad de pociones actuales que se tienen junto con el tamaño de la mochila y las pociones de la estación a la que se desea ir. Si es un gimnasio, analizamos si $pociones + pociones(gimnasio) > 0$. Dado que el gimnasio tiene la cantidad de pociones en negativo (como mencionamos anteriormente), si esta suma deciende de 0 quiere decir que las pociones que tenemos en la mochila no son suficientes para conquistar ese gimnasio, por lo que no tendría sentido ir ya que esto solamente aumentaría la distancia recorrida (y esto último ocurre porque como todas las estaciones están conectadas,  $\forall v,w,r \in Estaciones : distancia(v,w) \leq distancia(v,r) + distancia(r,w)$). Si es una pokeparada, observamos si $pociones = k$ con $k$ tamaño de la mochila. La razón es que cada pokeparada otorga 3 pociones pero si la mochila se llena entonces se descartan las excedentes. En particular, si la mochila esta totalmente llena, se descartan todas las pociones de esa pokeparada; y teniendo en cuenta lo dicho recientemente, si hay solución debería existir otra estación tal que se pueda visitar sin agregar innecesariamente distancia recorrida a la solución actual.
 
             Antes de entrar en la función descripta, se realizan dos chequeos (las podas). Primero, que no exista un gimnasio cuya cantidad de pociones sea mayor al tamaño de la mochila, ya que si esto ocurriera, incluso pasando por todas las pokeparadas posibles nunca alcanzaríamos la cantidad necesaria para conquistar ese gimnasio. Un ejemplo puede ser 2 pokeparadas, 1 gimnasio que necesita 10 pociones y tamaño de mochila 9. En segundo lugar, que la suma total de pociones necesarias para conquistar a cada gimnasio sea menor o igual a la cantidad de $pokeparadas*3$. Esto se hace para descartar los casos en los que incluso teniendo el tamaño de mochila suficiente para guardar todas las pociones de todas las pokeparadas, las mismas no alcancen para conquistar todos los gimnasios. Un caso ejemplo sería 1 pokeparada, 2 gimnasios que necesitan 3 pociones y tamaño de mochila 3.
 
@@ -154,7 +154,7 @@ fin BT_capturar_gimnasios
 
   \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_ej1.jpeg}
+        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_ej1_nuevo.jpeg}
         \caption{}
       \end{center}
   \end{figure}
@@ -163,7 +163,7 @@ fin BT_capturar_gimnasios
 
   \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_2_ej1.jpeg}
+        \includegraphics[width=0.7\columnwidth]{imagenes/exp1_2_ej1_nuevo.jpeg}
         \caption{}
       \end{center}
   \end{figure}
@@ -180,13 +180,17 @@ fin BT_capturar_gimnasios
       Para este experimento, como mencionamos antes, construimos 16 instancias en las que aumentamos linealmente entre 1 y 8 la cantidad de pokeparadas y gimnasios (ambas al mismo tiempo), fijamos en forma relativa a la cantidad de pokeparadas el tamaño de la mochila y colocamos a cada gimnasio un valor entre 1 y 3 pociones para las primeras 8 instancias y fijamos en 3 cada una en las 8 siguientes.
       Para este experimento esperabamos que las segundas 8 instancias tomen más tiempo que las primeras, ya que en las primeras 8 hay soluciones en las que no se pasan por todas las pokeparadas, teniendo más chances de encontrar una solución mejor y que se utilice la poda que saca los casos en los que se está contruyendo una solución peor a la mejor encontrada hasta el momento. Esto ocurre porque en dos instancias con misma cantidad de pokeparadas y gimnasios, en el segundo caso es necesario pasar por todas las pokeparadas, ya que en cada gimnasio se gastan las 3 pociones que se recolectaron en alguna pokeparada, mientras que en el primer caso hay algunos gimnasios que permiten mantener algunas pociones en lugar de gastarlas todas, permitiendo ahorrar pociones en algún gimnasio para usarlas en otro.
 
-      Los resultados obtenidos de este experimento se plasmaron en el siguiente gráfico, el cual tiene una línea que representa (a modo de referencia) la cota de complejidad:
+      Los resultados obtenidos de este experimento se plasmaron en los siguientes gráficos, los cuales tienen una línea que representa (a modo de referencia) la cota de complejidad y muestran de manera aproximada el funcionamiento para entre 2 y 6 estaciones (el primero) y entre 2 y 16 estaciones (el segundo):
 
   \begin{figure}[H]
-      \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/exp2_ej1.jpeg}
-        \caption{}
-      \end{center}
+      \minipage{0.5\textwidth}
+      \includegraphics[width=\linewidth]{imagenes/exp2_ej1_corto.jpeg}
+      \caption{2 a 6 estaciones}
+      \endminipage\hfill
+      \minipage{0.5\textwidth}%
+      \includegraphics[width=\linewidth]{imagenes/exp2_ej1.jpeg}
+      \caption{2 a 16 estaciones}
+      \endminipage
   \end{figure}
 
       Observamos que, como esperabamos, a igual tamaño de entrada, las instancias que necesitan menor cantidad de pociones por gimnasio toman menos tiempo que las instancias que necesitan 3 o más posiones por gimnasio. Esto muestra que nuestra hipótesis funciona para los resultados de este experimento, por lo que concluímos que la poda de eliminar ramas en las que se construye una solución peor que la mejor hallada hasta el momento también resulta de utilidad cuando hay mayor cantidad de soluciones posibles. 

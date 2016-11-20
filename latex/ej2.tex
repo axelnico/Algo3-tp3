@@ -86,11 +86,6 @@ Luego del ordenamiento se llama nuevamente a la función que devuelve el id de l
 
             \begin{codesnippet}
             \begin{verbatim}
-
-
-
-
-
 ordenar(lista<Estacion> estaciones, matriz<double> distancias, id_estacion_actual)
 
   lista<int> ids_vistos
@@ -113,7 +108,7 @@ Lo que hace la función \textit{ordenar} es recorrer la lista de distancias de l
             % 3. Deducir una cota de complejidad temporal del algoritmo propuesto y justificar por qué el algoritmo cumple la cota dada. Utilizar el modelo uniforme.
     \subsection{Complejidad teórica}
 
-      La función que resuelve el problema (solverEj2) realiza las siguientes operaciones con el siguiente costo temporal: La inicialización de la lista y la tupla se realizan en $O(1)$. La función que es llamada \textit{donde voy} tiene complejidad temporal $O(n+m)$ ya que recorre todas las estaciones analizando en $O(1)$ si se puede ir a alguna de ellas. La función que devuelve el índice de la estación con un id determinado también tiene complejidad $O(n+m)$ ya que recorre toda la lista de estaciones en el peor caso. El agregar de la lista (implementada como un vector) se realiza en $O(1)$ amortizado y el borrar se realiza en $O(n+m)$. Finalmente falta sólo analizar la complejidad de la función \textit{greedy capturar gimnasios} y con ella determinar la complejidad resultante de solverEj2. 
+      La función que resuelve el problema (solverEj2) realiza las siguientes operaciones con el siguiente costo temporal: La inicialización de la lista y la tupla se realizan en $O(1)$. La función que es llamada \textit{donde voy} tiene complejidad temporal $O(n+m)$ ya que recorre todas las estaciones analizando en $O(1)$ si se puede ir a alguna de ellas. La función que devuelve el índice de la estación con un id determinado también tiene complejidad $O(n+m)$ ya que recorre toda la lista de estaciones en el peor caso. El agregar al final de la lista (implementada sobre vector) se realiza en $O(1)$ amortizado y el borrar (en cualquier posición) se realiza en $O(n+m)$. Finalmente falta sólo analizar la complejidad de la función \textit{greedy capturar gimnasios} y con ella determinar la complejidad resultante de solverEj2. 
       Esta última función tiene un ciclo que se ejecuta en el peor caso $n+m$ veces. En cada una de las iteraciones se pregunta si se encontró una solución o no. Para ello se recorre la lista de estaciones para verificar que no quede ningun gimnasio sin visitar. Esto por lo tanto tiene una complejidad $O(n+m)$ en el peor caso. En el cuerpo del ciclo se llama a la función ordenar la cual recorre la lista de estaciones (en $O(n+m)$) y en cada iteración recupera el id del más cercano. Para recuperar este id, la función \textit{id mas cercano que no viste} recorre todas las distancias de las demas estaciones en $O(n+m)$, preguntando en cada caso si esa estación se vio o no (en $O(n+m)$). Luego ordenar en cada iteración realiza el swap correspondiente de estaciones, que para el mismo necesita recorrer nuevamente todas las estaciones ($O(n+m)$) para poder recuperar el id de la estación que quiere intercambiar. En conclusión, ordenar realiza en el peor caso $O(n+m)*O(n+m)*O(n+m)$ operaciones resultanto en una complejidad temporal de $O(n+m)^3$. 
       Después de ordenar, la función greedy llama a la función donde voy ($O(n+m)$). Se realiza una comparación con el id devuelto de esta función en $O(1)$ y si es distinto de -1 se llama a la función que devuelve el índice de la estación ($O(n+m)$). Las otras operaciones del ciclo se realizan en tiempo cosntante ($O(1)$). 
       Después del ciclo se pregunta si se encontró o no solución chequeando la lista de estaciones ($O(n+m)$ en el peor caso). La distancia acumulada se calcula iterando todos las estaciones vistas ($O(n+m)$ en el peor caso) y se arma el camino ($O(n+m)$ en el peor caso). En definitiva el ciclo es el que domina la complejidad de la función ya que por lo dicho realiza $O(n+m)*O(n+m)*O(n+m)*O(n+m)*O(n+m) = O(n+m)^5$ operaciones.
@@ -186,27 +181,38 @@ Lo que hace la función \textit{ordenar} es recorrer la lista de distancias de l
       Los experimentos que realizamos para observar los tiempos de ejecución del algoritmo en función del tamaño de entrada consistieron en el análisis de casos que contemplan:
 
       \begin{itemize}
-        \item Configuraciones de valores en los cuales se evaluan distintas cantidades de estaciones, tomando como capacidad de la mochila, un tamaño superior a todo lo que se puede obtener.
+        \item Configuraciones de valores en los cuales se evaluan distintas cantidades de estaciones, tomando como capacidad de la mochila, un tamaño superior a todo lo que se puede obtener y un valor menor a todo lo que se puede obtener.
         \item Casos random generados a partir de la librería Random de la STL de C++ utilizando distribución uniforme
       \end{itemize}
 
       Para todos los casos, el algoritmo se ejecutó 150 veces con cada instancia para intentar tener la mayor presición posible en cuanto a tiempo de ejecución.
 
       \subsubsection{Analisis de configuraciones de valores que están en la cota de complejidad}
-      En esta instancia generamos entradas que aumentaban linealmente de 1 a 16 la cantidad de pokeparadas, fijando el tamaño de la mochila en 100 y marcando a cada gimnasio con 3 pociones necesarias para vencerlo. Además, las ubicaciones de cada estación se configuraron cada una a distancia 1 de la anterior y la siguiente: para la estación $i$ la ubicación es ($i$,$i$).
-      Se probaron estos casos con 4, 5 y 6 gimnasios, en donde cada gimnasio requiere 3 pociones para vencerlo. Se esperó que a medida que se aumenta la cantidad de gimnasios, aumente también el tiempo de ejecución del mismo. Las primeras instancias no tienen solución ya que la cantidad de pokeparadas no alcanza para enfrentar a los gimnasios.
+      En esta instancia generamos entradas que aumentaban linealmente de 1 a 100 la cantidad de pokeparadas, fijando el tamaño de la mochila en 100 y marcando a cada gimnasio con 3 pociones necesarias para vencerlo. Además, las ubicaciones de cada estación se configuraron cada una a distancia 1 de la anterior y la siguiente: para la estación $i$ la ubicación es ($i$,$i$).
+      Se probaron estos casos con 5, 10 y 15 gimnasios, en donde cada gimnasio requiere 3 pociones para vencerlo. Se esperó que a medida que se aumenta la cantidad de gimnasios, aumente también el tiempo de ejecución del mismo. Las primeras instancias no tienen solución ya que la cantidad de pokeparadas no alcanza para enfrentar a los gimnasios.
 
-      A continuación en el siguiente gráfico se puede observar los tiempos de ejecución y su comparación con la cota de complejidad teorica propuesta:
+      A continuación en el siguiente gráfico se puede observar los tiempos de ejecución:
 
 
       \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=1.0\columnwidth]{imagenes/exp4_ej2.jpeg}
+        \includegraphics[width=1.0\columnwidth]{imagenes/exp1_ej2_nuevo.jpeg}
         \caption{}
       \end{center}
   \end{figure}
 
-      Como era de esperar, el caso de los 6 gimnasios demandó más tiempo de ejecución que los otros. Para las primeras instancias los tiempos fueron muy similares ya que no hay solución posible y el algoritmo corta rápido la ejecución. En el gráfico además se agregó una línea que representa (a modo de referencia) la cota de complejidad.
+      Como era de esperar, el caso de los 15 gimnasios demandó más tiempo de ejecución que los otros. Para las primeras instancias los tiempos fueron muy similares ya que no hay solución posible y el algoritmo corta rápido la ejecución. En el gráfico además se agregó una línea que representa (a modo de referencia) la cota de complejidad. Se puede también observar que a medida que aumenta el número de pokeparadas también aumenta el tiempo de ejecución. Esto se debe a que debido a la construcción de las intancias, el algoritmo recorre las pokeparadas primero, ya que están muy próximas entre sí. Cabe destacar, que al colocar un tamaño de mochila en 100, una vez que se recorren 34 pokeparadas la mochila se llena, por lo que el algoritmo deja de recorrer las pokeparadas aunque estén próximas y comienza a recorrer los gimnasios. Por lo tanto se puede observar que a partir de 34 pokeparadas el tiempo de ejecución no cambia significativamente, ya que no se visitan las demás pokeparadas. El cambio en el tiempo de ejecución se debe a que si bien no se recorren más pokeparadas, si se aumenta su número aumenta también el tiempo en ordenar las estaciones por distancia en cada estación, además de los tiempos de busquéda en las estaciones. 
+
+      Se realizó el mismo experimento pero utilizando un tamaño de mochila superior a todo lo que se puede obtener (10000) para poder comprobar que el tiempo de ejecución cambia significativamente en comparación con el experimento anterior ya que ahora el algoritmo recorre todas las pokeparadas por proximidad. Los resultados son los siguientes:
+
+      \begin{figure}[H]
+      \begin{center}
+        \includegraphics[width=1.0\columnwidth]{imagenes/exp1_ej2_nuevo_mochila_grande.jpeg}
+        \caption{}
+      \end{center}
+  \end{figure}
+
+      Del gráfico se puede sacar como conclusión que al usar un tamaño de mochila superior a todo lo que se puede obtener, cambia notablemente el tiempo de ejecución en función de la cantidad de pokeparadas, ya que se recorren todas y no se para ya que la mochila no se puede llenar. Se mantiene que también al aumentar la cantidad de gimnasios cambia el tiempo considerablemente.
 
       \subsubsection{Analisis de casos aleatorios}
       En esta instancia se generaron casos aleatorios usando la librería Random de la STL de C++, variando la cantidad de gimnasios y pokeparadas entre 1 y 8 y el tamaño de la mochila entre 0 y 48, la cantidad de pociones entre 0 y 24. Las posiciones de las estaciones varían entre 0 y 100. Para la mayoría de los casos el algoritmo no retornó solución.
@@ -220,3 +226,15 @@ Lo que hace la función \textit{ordenar} es recorrer la lista de distancias de l
   \end{figure}
 
      El gráfico es un boxplot el cual tiene agrupado los tiempos de ejecución por cantidad de estaciones. Se optó por realizar de esta forma ya que al tratarse de casos random, hubo varias instancias con la misma cantidad de estaciones generadas. Como era de esperarse, las instancias que más tiempo demandaron fueron las que más estaciones tenian. En los primeros casos, con pocas estaciones, los tiempos estuvieron mucho menos dispersos y no hubo prácticamente outliers. Para las instancias más grandes se observa una dispersión mucho más amplia (longitud de la caja) debido a que al tener más estaciones y depender fuertemente de su distribución espacial, el algortimo en algunos casos pudo recorrer todos los gimnasios (cuando encontró solución) y en otros casos, que fueron la mayoría no encontró solución, deteniendosé en su búsqueda en distintas iteraciones del mismo. En algunos casos también recorrió todas las estaciones tomando más tiempo de ejecución. Los puntos aislados observados se tratan de outliers, instancias que demandaron un tiempo muy superior o menor al resto de las demás. El unico caso particular es cuando las estaciones fueron 15 que al ser pocas las instancias generadas con random, presentó un comportamiento similar al de las que tenian pocas estaciones.
+     
+     Finalmente se corrió el expermiento aleatorio mencionado en la introducción. Los resultados obtenidos se pueden visualizar en el siguiente gráfico:
+
+     \begin{figure}[H]
+      \begin{center}
+        \includegraphics[width=1.0\columnwidth]{imagenes/random_ej2.jpeg}
+        \caption{}
+      \end{center}
+  \end{figure}
+
+    Se puede observar como en los demás experimentos que al aumentar la cantidad de estaciones también aumenta el tiempo de ejecución. La mayoría de los casos pudieron ser resueltos por el algoritmo. 
+
