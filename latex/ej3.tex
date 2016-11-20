@@ -329,7 +329,67 @@ Para estas instancias, se puede observar que en ambos casos, a medida que crece 
 
         \subsubsection{Experimento 2}
 
-        Para el próximo experimento, comparamos tanto calidad de solución como tiempo de corrida de, por un lado los vecindarios entre sí, por otro los vecindarios y el algoritmo greedy, y finalmente los tres juntos. Para esto, se generaron 50 instancias rándom, para comparar los tiempos y la distancia, se corrió 20 veces el algoritmo y se hizo un promedio del tiempo y distancia.
+        En el próximo experimento, comparamos la calidad de solución y el tiempo de corrida de los vecindarios entre sí, y por otro de los vecindarios y el algoritmo greedy, y finalmente los tres juntos. Para esto, se generaron 50 instancias rándom, para cada instancia se corrió el algoritmo 20 veces. Luego se obtuvo un promedio de las 20 corridas hechas para cada instancia (promedio del tiempo de ejecución y de la calidad de la solución).
 
-        \par Para el siguiente experimento, queremos probar que realmente, hacer una búsqueda local mejora la solución obtenida del algoritmo heurístico. Esta hipótesis es tomada debido a que, búsqueda local se basa en la solución devuelta por greedy y busca, a partir de ella, encontrar una solución mejor. Por otro lado, queremos ver como se comportan los vecindarios para cualquier instancia, para ver si realmente, dado que el vecindario A tiene más posibilidades de intercambias pokeparadas, esto produce mejores soluciones que el vecindario B, el cuál intercambia gimnasios y tiene menos posibilidades de soluciones válidas.
+        \par Para el siguiente experimento queremos probar que realmente, hacer una búsqueda local mejora la solución obtenida del algoritmo heurístico. Esta hipótesis es tomada debido a que, búsqueda local se basa en la solución devuelta por greedy y busca, a partir de ella, encontrar una solución mejor. Por otro lado, queremos ver como se comportan los vecindarios para cualquier instancia, para ver si realmente, dado que el vecindario A tiene más posibilidades de intercambias pokeparadas, esto produce mejores soluciones que el vecindario B, el cuál intercambia gimnasios y tiene menos posibilidades de soluciones válidas.
 
+        \subsubsection{Experimento 2: Calidad de resultados} 
+
+            Para experimentar acerca de la calidad de los resultados, se generaron distintas comparaciones. 
+
+            \begin{itemize}
+                \item Por un lado, se compararon los resultados obtenidos ejecutando una búsqueda local haciendo uso del vecindario A, con los obtenidos del vecindario B.
+                Dado que el vecindario A da lugar a muchos intercambios posibles, ya que intercambiar dos pokeparadas cualesquiera mantiene una solución válida, mientras que el vecindario B debe descartar varios intercambios de gimnasios ya que algunos pueden dejar un recorrido inválido, nuestra hipótesis fue que la búsqueda local sobre el vecindario A iba a retornar mejores soluciones que la búsqueda local sobre el vecindario B.
+ 
+                \item Por otro lado, se compararon los resultados obtenidos ejecutando una búsqueda local haciendo uso del vecindario A, con los obtenidos a partir del algoritmo greedy (implementado en el Ejercicio 2).
+                El objetivo fue poder visualizar que dado una solución obtenida por el algoritmo greedy, ejecutar sobre ésta una búsqueda local, la mejora.
+                Elegimos el vecindario A para la búsqueda local ya que es la que más soluciones posibles retorna, debido a la cantidad de intercambios de pokeparadas que se pueden hacer, sobre la cantidad de intercambios de gimnasios que retornan soluciones válidas.
+            \end{itemize}
+
+             En ambas comparaciones, se corrió 20 veces el algoritmo sobre cada instancia de 50 obtenidas de forma aleatoria. Luego se sacó un promedio de las 20 distancias devueltas para cada instancia, obteniendo 50 resultados. Y por último, se realizó una comparación de cada resultado en función de la cantidad de estaciones (n+m).
+             
+             \par A continuación en los siguientes gráficos se pueden observar la calidad de resultados obtenidos en ambas comparaciones.
+
+\blindtext
+
+  \begin{figure}[H]
+      \begin{center}
+        \includegraphics[width=0.7\columnwidth]{imagenes/Ej3/Exp3Ej3ABDistancia.png}
+        \caption{Vecindario A vs Vecindario B}
+      \end{center}
+  \end{figure}
+
+    \begin{figure}[H]
+      \begin{center}
+        \includegraphics[width=0.7\columnwidth]{imagenes/Ej3/Exp3Ej3AGDistancia.png}
+        \caption{Greedy vs Vecindario A}
+      \end{center}
+  \end{figure}
+
+\blindtext
+
+
+\par Para el gráfico que compara ambos vecindarios se puede ver que, como suponíamos, las soluciones obtenidas a partir del vecindario A tienden a ser mejores que las soluciones obtenidas a partir del vecindario B.
+
+\par Y de igual manera, para el gráfico que compara la solución obtenida a partir del algoritmo greedy con aplicarle a ésta la búsqueda local usando el vecindario A, se puede ver que, como suponíamos, la búsqueda local mejora las soluciones obtenidas a partir del algoritmo greedy.
+
+\subsubsection{Experimento 2: Performance} 
+            Para experimentar acerca de la performance de los resultados de ambas vecindades y del algoritmo greedy sin búsqueda local, se corrió 20 veces cada algoritmo sobre cada instancia de 50 obtenidas de forma aleatoria. Luego se sacó un promedio del tiempo de ejecución (en ns) de las 20 corridas para cada instancia, obteniendo así 50 resultados. Y por último, se realizó una comparación de cada resultado en función de la cantidad de estaciones (n+m).
+
+            \par Nuestra hipótesis fue que en orden de menor a mayor tiempo de procesamiento estaba el algoritmo greedy, el algoritmo con búsqueda local con el Vecindario B, y por último el algoritmo con búsqueda local con el vecindario A.
+            \par El algoritmo greedy tenía que ser el más rapido simplemente porque ambas búsquedas locales comienzan ejecutando el algoritmo greedy y luego realizan los intercambios válidos. Al realizar estos intercambios, la diferencia del tiempo de procesamiento aumenta en comparación con el algoritmo greedy.
+            \par Y luego, al comparar el tiempo de procesamiento entre ambas vecindades, suponemos que la vecindad A tardará más que la vecindad B, debido a que para la vecindad A se pueden intercambiar cualquier par de pokeparadas, mientras que en el vecindario B sólo se pueden intercambiar algunos gimnasios entre sí (además de que para estos experimentos, la cantidad de pokeparadas tiende a ser mucho mayor que la cantidad de gimnasios).
+            Mas allá de que para la búsqueda local con el vecindario B (a diferencia del vecindario A), se deba verificar que para cada intercambio, la solución siga siendo válida (y sino, descartarla), el tiempo sigue siendo mayor debido a que la cantidad de intercambios de pokeparadas es mucho mayor a la cantidad de intercambios de gimnasios que se pueden realizar.
+
+\blindtext
+
+    \begin{figure}[H]
+      \begin{center}
+        \includegraphics[width=0.7\columnwidth]{imagenes/Ej3/Exp3EJ3TodoTiempo.png}
+        \caption{Greedy vs Vecindario A}
+      \end{center}
+    \end{figure}
+
+\blindtext
+
+En este gráfico se puede observar que el tiempo de procesamiento para cada algoritmo coincide con la hipótesis. La que menos tiempo de procesamiento tiene es la greedy. Luego la búsqueda local con el vecindario B y luego la búsqueda local con el vecindario A.
