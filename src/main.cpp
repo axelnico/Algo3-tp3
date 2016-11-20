@@ -274,52 +274,120 @@ int main(int argc, char *argv[]) {
             imprimir_res(res);
         } 
         else if (experimentos && !random) {
+            /*for (int inputs = 0; inputs < instancias; ++inputs) {
+                auto input = dataentry3(n, m, k);
+                vector<vector<double> > distancias = get<0>(input);
+                vector<Estacion> estaciones = get<1>(input);
+                pair<int, bool> criterio = get<2>(input);
+                bool busqLocalAux = get<3>(input);
+                
+                for (grasp = 1; grasp <= 15; grasp++) {
+                    for (int repeticiones = 0; repeticiones < 20; ++repeticiones) {
+                        start_timer();
+                        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
+                        cout << stop_timer() << ", " << get<0>(res) << ", " << grasp << endl;
+                    }
+                }
+            }*/
+            
+
             for (int inputs = 0; inputs < instancias; ++inputs) {
                 auto input = dataentry3(n, m, k);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
                 pair<int, bool> criterio = get<2>(input);
                 bool busqLocalAux = get<3>(input);
+                grasp = get<4>(input);
+
                 // grasp = get<4>(input);
-                for (grasp = 1; grasp < 16; grasp++) {            
-                    for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                for (int crit = 1; crit < 15; crit++) {            
+                    criterio.first = crit;
+
+                    for (int repeticiones = 0; repeticiones < 20; ++repeticiones) {
                         start_timer();
+                        
                         solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
-                        cout << stop_timer() << ", " << get<0>(res) << ", " << grasp << endl;
+
+                        cout << stop_timer() << ", " << get<0>(res) << ", " << criterio.first << endl;
                     }
                 }
             }
+
         } else
             {
 	            random_device rd;
 	            mt19937 gen(rd());
-	            uniform_int_distribution<> gyms(1,20);
+	            uniform_int_distribution<> gyms(1,15);
 	            uniform_int_distribution<> cantPosiones(0,20);
 	            uniform_int_distribution<> x(0,1000);
 	            uniform_int_distribution<> y(0,1000);
 	            vector<tuple<int,int,int> > gimnasios;
-	            for (int i = 0; i < instancias; ++i) {
-	                int n = gyms(gen);
-	                gimnasios.empty();
-	                for (int i = 0; i < n; ++i) {
-	                    gimnasios.push_back(make_tuple(x(gen), y(gen), cantPosiones(gen)));
-	                }
-	                int sumPosiones = 0;
-	                for (int i = 0; i < n; ++i) {
-	                    sumPosiones += get<2>(gimnasios[i]);
-	                }
-	                int m = (sumPosiones / 3) + 1;
 
-	                cout << n << " " << m << " " << sumPosiones << endl;
-	                for (int i = 0; i < n; ++i) {
-	                    cout << get<0>(gimnasios[i]) << " " << get<1>(gimnasios[i]) << " " << get<2>(gimnasios[i]) << endl;
-	                }
-	                for (int i = 0; i < m; ++i) {
-	                    cout << x(gen) << " " << y(gen) << endl;
-	                }
-	            	cout << "CAMBIA ACA LA CONFIGURACION" << endl;
-	                cout << endl;
-	            }
+                vector<int> ns;
+                vector<int> xs;
+                vector<int> ys;
+                vector<int> cantPoss;
+
+                vector<int> xs2;
+                vector<int> ys2;
+
+                for (int i = 0; i < instancias; ++i) {
+                    int n = gyms(gen);
+                    ns.push_back(n);
+
+                    int sumPosiones = 0;
+                    for (int j = 0; j < n; ++j) {
+                        xs.push_back(x(gen));
+                        ys.push_back(y(gen));
+                        int pos = cantPosiones(gen);
+                        cantPoss.push_back(pos);
+                        sumPosiones += pos;
+                        
+                    }
+                    int m = (sumPosiones / 3) + 1;
+
+                    
+                    for (int j = 0; j < m; ++j) {
+                        xs2.push_back(x(gen));
+                        ys2.push_back(y(gen));
+                    }
+                }
+
+                for (int ju = 0; ju < 4; ju++) {
+    	            for (int i = 0; i < instancias; ++i) {
+    	                int n = ns[i];
+    	                gimnasios.empty();
+
+                        int sumPosiones = 0;
+    	                for (int j = 0; j < n; ++j) {
+                            int index = j * (i + 1);
+    	                    gimnasios.push_back(make_tuple(xs[index], ys[index], cantPoss[index]));
+                            sumPosiones += cantPoss[index];
+    	                }
+    	                int m = (sumPosiones / 3) + 1;
+
+    	                cout << n << " " << m << " " << sumPosiones << endl;
+    	                for (int j = 0; j < n; ++j) {
+    	                    cout << get<0>(gimnasios[j]) << " " << get<1>(gimnasios[j]) << " " << get<2>(gimnasios[j]) << endl;
+    	                }
+    	                for (int j = 0; j < m; ++j) {
+                            int index = j * (i + 1);
+    	                    cout << xs2[index] << " " << ys2[index] << endl;
+    	                }
+    	            	
+                        int cantEstacion = (int)((gimnasios.size() + m) / 2);
+                        if (ju == 0)
+                            cout << cantEstacion << " " << 1 << " " << 0 << " " << 1 << endl;
+                        else if (ju == 1)
+                            cout << cantEstacion << " " << 1 << " " << 0 << " " << 2 << endl;
+                        else if (ju == 2)
+                            cout << cantEstacion << " " << 2 << " " << 0 << " " << 1 << endl;
+                        else if (ju == 3)
+                            cout << cantEstacion << " " << 2 << " " << 0 << " " << 2 << endl;
+
+                        cout << endl;
+    	            }
+                }
             }
         }
   return 0;
