@@ -182,7 +182,7 @@ int main(int argc, char *argv[]) {
             solucion res = solverEj3(estaciones, distancias, n, m, k, vecindario == 'a');
             imprimir_res(res);
         }
-        else if (experimentos && !random){
+        else{
             int n,m,k;
             for (int inputs = 0; inputs < instancias; ++inputs) {
                 tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
@@ -194,28 +194,6 @@ int main(int argc, char *argv[]) {
                     cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
                 }                
             }
-        } else
-            {
-                random_device rd;
-                mt19937 gen(rd());
-                uniform_int_distribution<> gyms(1,8);
-                uniform_int_distribution<> pokeparadas(1,8);
-                uniform_int_distribution<> tamMochila(0,48);
-                uniform_int_distribution<> cantPosiones(0,24);
-                uniform_int_distribution<> x(0,100);
-                uniform_int_distribution<> y(0,100);
-                for (int i = 0; i < instancias; ++i) {
-                    int n = gyms(gen);
-                    int m = pokeparadas(gen);
-                    int k = tamMochila(gen);
-                    cout << n << " " << m << " " << k << endl;
-                    for (int i = 0; i < n; ++i) {
-                        cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
-                    }
-                    for (int i = 0; i < m; ++i) {
-                        cout << x(gen) << " " << y(gen) << endl;
-                    }
-                }
         }
     }
     else if (numeroDeEjercicio == 4) {
@@ -244,26 +222,47 @@ int main(int argc, char *argv[]) {
             solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, { limite, criterio }, busqLocal);
             imprimir_res(res);
         } 
-        else {
+        else if (experimentos && !random) {
             for (int inputs = 0; inputs < instancias; ++inputs) {
                 auto input = dataentry3(n, m, k);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
-                pair<int, bool> criterio2 = get<2>(input);
+                pair<int, bool> criterio = get<2>(input);
                 bool busqLocalAux = get<3>(input);
-                grasp = get<4>(input);
-                for (int limite = 1; limite < 100; limite++) {            
-                    for (int repeticiones = 0; repeticiones < 50; ++repeticiones) {
-                        criterio2 = make_pair(limite ,get<2>(input).second);
+                // grasp = get<4>(input);
+                for (grasp = 1; grasp < 31; grasp++) {            
+                    for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                         start_timer();
-                        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio2, busqLocalAux);
-                        cout << stop_timer() << ", " << get<0>(res) << ", " << limite << endl;
+                        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
+                        cout << stop_timer() << ", " << get<0>(res) << ", " << grasp << endl;
                     }
                 }
             }
+        } else
+            {
+                random_device rd;
+                mt19937 gen(rd());
+                uniform_int_distribution<> gyms(1,8);
+                uniform_int_distribution<> pokeparadas(1,8);
+                uniform_int_distribution<> tamMochila(0,48);
+                uniform_int_distribution<> cantPosiones(0,24);
+                uniform_int_distribution<> x(0,100);
+                uniform_int_distribution<> y(0,100);
+                for (int i = 0; i < instancias; ++i) {
+                    int n = gyms(gen);
+                    int m = pokeparadas(gen);
+                    int k = tamMochila(gen);
+                    cout << n << " " << m << " " << k << endl;
+                    for (int i = 0; i < n; ++i) {
+                        cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
+                    }
+                    for (int i = 0; i < m; ++i) {
+                        cout << x(gen) << " " << y(gen) << endl;
+                    }
+                    cout << "CAMBIA ACA LA CONFIGURACION" << endl;
+                }
+            }
         }
-    }
-
   return 0;
 }
 
