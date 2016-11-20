@@ -293,7 +293,7 @@ int main(int argc, char *argv[]) {
             {
 	            random_device rd;
 	            mt19937 gen(rd());
-	            uniform_int_distribution<> gyms(1,30);
+	            uniform_int_distribution<> gyms(1,20);
 	            uniform_int_distribution<> cantPosiones(0,20);
 	            uniform_int_distribution<> x(0,1000);
 	            uniform_int_distribution<> y(0,1000);
