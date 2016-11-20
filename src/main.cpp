@@ -113,8 +113,8 @@ int main(int argc, char *argv[]) {
         else {
             random_device rd;
             mt19937 gen(rd());
-            uniform_int_distribution<> gyms(1,40);
-            uniform_int_distribution<> cantPosiones(0,20);
+            uniform_int_distribution<> gyms(1,10);
+            uniform_int_distribution<> cantPosiones(0,10);
             uniform_int_distribution<> x(0,1000);
             uniform_int_distribution<> y(0,1000);
             vector<tuple<int,int,int> > gimnasios;
@@ -291,27 +291,35 @@ int main(int argc, char *argv[]) {
             }
         } else
             {
-                random_device rd;
-                mt19937 gen(rd());
-                uniform_int_distribution<> gyms(1,8);
-                uniform_int_distribution<> pokeparadas(1,8);
-                uniform_int_distribution<> tamMochila(0,48);
-                uniform_int_distribution<> cantPosiones(0,24);
-                uniform_int_distribution<> x(0,100);
-                uniform_int_distribution<> y(0,100);
-                for (int i = 0; i < instancias; ++i) {
-                    int n = gyms(gen);
-                    int m = pokeparadas(gen);
-                    int k = tamMochila(gen);
-                    cout << n << " " << m << " " << k << endl;
-                    for (int i = 0; i < n; ++i) {
-                        cout << x(gen) << " " << y(gen) << " " << cantPosiones(gen) << endl;
-                    }
-                    for (int i = 0; i < m; ++i) {
-                        cout << x(gen) << " " << y(gen) << endl;
-                    }
-                    cout << "CAMBIA ACA LA CONFIGURACION" << endl;
-                }
+	            random_device rd;
+	            mt19937 gen(rd());
+	            uniform_int_distribution<> gyms(1,30);
+	            uniform_int_distribution<> cantPosiones(0,20);
+	            uniform_int_distribution<> x(0,1000);
+	            uniform_int_distribution<> y(0,1000);
+	            vector<tuple<int,int,int> > gimnasios;
+	            for (int i = 0; i < instancias; ++i) {
+	                int n = gyms(gen);
+	                gimnasios.empty();
+	                for (int i = 0; i < n; ++i) {
+	                    gimnasios.push_back(make_tuple(x(gen), y(gen), cantPosiones(gen)));
+	                }
+	                int sumPosiones = 0;
+	                for (int i = 0; i < n; ++i) {
+	                    sumPosiones += get<2>(gimnasios[i]);
+	                }
+	                int m = (sumPosiones / 3) + 1;
+
+	                cout << n << " " << m << " " << sumPosiones << endl;
+	                for (int i = 0; i < n; ++i) {
+	                    cout << get<0>(gimnasios[i]) << " " << get<1>(gimnasios[i]) << " " << get<2>(gimnasios[i]) << endl;
+	                }
+	                for (int i = 0; i < m; ++i) {
+	                    cout << x(gen) << " " << y(gen) << endl;
+	                }
+	            	cout << "CAMBIA ACA LA CONFIGURACION" << endl;
+	                cout << endl;
+	            }
             }
         }
   return 0;
