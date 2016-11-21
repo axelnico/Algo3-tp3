@@ -381,7 +381,7 @@ int main(int argc, char *argv[]) {
                         }
                         contadorMagico2 += m;
     	            	
-                        int cantEstacion = (gimnasios.size() + m) / 2;
+                        int cantEstacion = (n + m) / 2;
                         if (ju == 0)
                             cout << cantEstacion << " " << 1 << " " << 0 << " " << 1 << endl;
                         else if (ju == 1)
