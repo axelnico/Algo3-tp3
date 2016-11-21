@@ -120,7 +120,7 @@ int main(int argc, char *argv[]) {
             vector<tuple<int,int,int> > gimnasios;
             for (int i = 0; i < instancias; ++i) {
                 int n = gyms(gen);
-                gimnasios.empty();
+                gimnasios.clear();
                 for (int i = 0; i < n; ++i) {
                     gimnasios.push_back(make_tuple(x(gen), y(gen), cantPosiones(gen)));
                 }
@@ -300,7 +300,7 @@ int main(int argc, char *argv[]) {
                 grasp = get<4>(input);
 
                 // grasp = get<4>(input);
-                for (int crit = 1; crit < 15; crit++) {            
+                for (int crit = 1; crit <= 15; crit++) {            
                     criterio.first = crit;
 
                     for (int repeticiones = 0; repeticiones < 20; ++repeticiones) {
@@ -331,20 +331,30 @@ int main(int argc, char *argv[]) {
                 vector<int> xs2;
                 vector<int> ys2;
 
+                int sumPosiones = 0;
+                int m;
+                int index;
+                int pos;
+                int n;
+                int contadorMagico;
+                int contadorMagico2;
+                int pocionesParaConqGimnasio;
+
                 for (int i = 0; i < instancias; ++i) {
-                    int n = gyms(gen);
+                    n = gyms(gen);
                     ns.push_back(n);
 
-                    int sumPosiones = 0;
+                    sumPosiones = 0;
                     for (int j = 0; j < n; ++j) {
                         xs.push_back(x(gen));
                         ys.push_back(y(gen));
-                        int pos = cantPosiones(gen);
+                        pos = cantPosiones(gen);
                         cantPoss.push_back(pos);
                         sumPosiones += pos;
                         
                     }
-                    int m = (sumPosiones / 3) + 1;
+
+                    m = (sumPosiones / 3) + 1;
                     
                     for (int j = 0; j < m; ++j) {
                         xs2.push_back(x(gen));
@@ -353,34 +363,33 @@ int main(int argc, char *argv[]) {
                 }
 
                 for (int ju = 0; ju < 4; ju++) {
-                    int contadorMagico = 0;
-                    int contadorMagico2 = 0;
+                    contadorMagico = 0;
+                    contadorMagico2 = 0;
     	            for (int i = 0; i < instancias; ++i) {
-    	                int n = ns[i];
+    	                n = ns[i];
 
-    	                gimnasios.empty();
-
-                        int sumPosiones = 0;
+    	                gimnasios.clear();
+                        sumPosiones = 0;
     	                for (int j = 0; j < n; ++j) {
-                            int index = contadorMagico + j;
-                            
-                            gimnasios.push_back(make_tuple(xs[index], ys[index], cantPoss[index]));
-                            sumPosiones += cantPoss[index];
+                            pocionesParaConqGimnasio = cantPoss[contadorMagico];
+                            gimnasios.push_back(make_tuple(xs[contadorMagico], ys[contadorMagico], pocionesParaConqGimnasio));
+                            sumPosiones = sumPosiones + pocionesParaConqGimnasio;
+                            contadorMagico++;
                         }
-                        contadorMagico += n;
-                        int m = (sumPosiones / 3) + 1;
 
+                        m = (sumPosiones / 3) + 1;
+                        
                         cout << n << " " << m << " " << sumPosiones << endl;
+
                         for (int j = 0; j < n; ++j) {
                             cout << get<0>(gimnasios[j]) << " " << get<1>(gimnasios[j]) << " " << get<2>(gimnasios[j]) << endl;
                         }
                         for (int j = 0; j < m; ++j) {
 
-                            int index = contadorMagico2 + j;
-                            cout << xs2[index] << " " << ys2[index] << endl;
+                            cout << xs2[contadorMagico2] << " " << ys2[contadorMagico2] << endl;
+                            contadorMagico2++;
                         }
-                        contadorMagico2 += m;
-    	            	
+                        
                         int cantEstacion = (n + m) / 2;
                         if (ju == 0)
                             cout << cantEstacion << " " << 1 << " " << 0 << " " << 1 << endl;
