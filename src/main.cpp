@@ -274,7 +274,7 @@ int main(int argc, char *argv[]) {
             imprimir_res(res);
         } 
         else if (experimentos && !random) {
-            /*for (int inputs = 0; inputs < instancias; ++inputs) {
+            for (int inputs = 0; inputs < instancias; ++inputs) {
                 auto input = dataentry3(n, m, k);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
@@ -288,30 +288,30 @@ int main(int argc, char *argv[]) {
                         cout << stop_timer() << ", " << get<0>(res) << ", " << grasp << endl;
                     }
                 }
-            }*/
+            }
             
 
-            for (int inputs = 0; inputs < instancias; ++inputs) {
-                auto input = dataentry3(n, m, k);
-                vector<vector<double> > distancias = get<0>(input);
-                vector<Estacion> estaciones = get<1>(input);
-                pair<int, bool> criterio = get<2>(input);
-                bool busqLocalAux = get<3>(input);
-                grasp = get<4>(input);
+            // for (int inputs = 0; inputs < instancias; ++inputs) {
+            //     auto input = dataentry3(n, m, k);
+            //     vector<vector<double> > distancias = get<0>(input);
+            //     vector<Estacion> estaciones = get<1>(input);
+            //     pair<int, bool> criterio = get<2>(input);
+            //     bool busqLocalAux = get<3>(input);
+            //     grasp = get<4>(input);
 
-                // grasp = get<4>(input);
-                for (int crit = 1; crit <= 15; crit++) {            
-                    criterio.first = crit;
+            //     // grasp = get<4>(input);
+            //     for (int crit = 1; crit <= 15; crit++) {            
+            //         criterio.first = crit;
 
-                    for (int repeticiones = 0; repeticiones < 20; ++repeticiones) {
-                        start_timer();
+            //         for (int repeticiones = 0; repeticiones < 20; ++repeticiones) {
+            //             start_timer();
                         
-                        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
+            //             solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
 
-                        cout << stop_timer() << ", " << get<0>(res) << ", " << criterio.first << endl;
-                    }
-                }
-            }
+            //             cout << stop_timer() << ", " << get<0>(res) << ", " << criterio.first << endl;
+            //         }
+            //     }
+            // }
 
         } else
             {
@@ -390,15 +390,16 @@ int main(int argc, char *argv[]) {
                             contadorMagico2++;
                         }
                         
-                        int cantEstacion = (n + m) / 2;
+                        int cantEstacion = 0;
+                        int crit = 15;
                         if (ju == 0)
-                            cout << cantEstacion << " " << 1 << " " << 0 << " " << 1 << endl;
+                            cout << cantEstacion << " " << 1 << " " << crit << " " << 1 << endl;
                         else if (ju == 1)
-                            cout << cantEstacion << " " << 1 << " " << 0 << " " << 2 << endl;
+                            cout << cantEstacion << " " << 1 << " " << crit << " " << 2 << endl;
                         else if (ju == 2)
-                            cout << cantEstacion << " " << 2 << " " << 0 << " " << 1 << endl;
+                            cout << cantEstacion << " " << 2 << " " << crit << " " << 1 << endl;
                         else if (ju == 3)
-                            cout << cantEstacion << " " << 2 << " " << 0 << " " << 2 << endl;
+                            cout << cantEstacion << " " << 2 << " " << crit << " " << 2 << endl;
 
                         cout << endl;
     	            }

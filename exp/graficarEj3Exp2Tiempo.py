@@ -7,7 +7,7 @@ import sys
 # Antes de usar esto, tirar en consola "./tp1 1 -exp > resEj1.txt". CUIDADO CON PISAR EL ARCHIVO ANTERIOR
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
-arr = np.loadtxt("Salidas/ej3_salida_exp3.txt", delimiter=',')
+arr = np.loadtxt("Salidas/ej3_salida2_exp3.txt", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P
@@ -34,10 +34,10 @@ k = 0
 promedioTiempo = []
 nMasm = []
 while k < len(tiempo):
-  subList = tiempo[k:k+20]
+  subList = tiempo[k:k+30]
   promedioTiempo.append(promedio(subList))
   nMasm.append(m[k] + n[k])
-  k += 20
+  k += 30
 
 
 promedio1NP = np.array(promedioTiempo[0:49])
@@ -64,7 +64,7 @@ pylab.plot(nm, promedio3NP,'r^', label= 'greedy')
 #pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
 
 
-ax1.set_title("Tiempo segun cantidad de gimnasios vecindad A")
+ax1.set_title("Tiempo segun cantidad de estaciones")
 ax1.set_xlabel('Cantidad de gimnasios + pokeparadas')
 # ax1.set_xscale('linear')
 ax1.set_ylabel('Tiempo de procesamiento en ns')

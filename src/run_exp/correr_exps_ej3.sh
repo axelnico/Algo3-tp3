@@ -1,5 +1,8 @@
+cd ../
+
 make clean
 make
+
 
 
 #Imprimir experimento1 del ejercicio 3
@@ -40,7 +43,7 @@ make
 
 
 # ./tp3 1 -exp 16 <../exp/entrada_exp2_16input_con_sol.txt >> ../exp/salida_exp2_ej3.1
-
+	
 # ./tp3 3 -exp 16 a <../exp/entrada_exp2_16input_con_sol.txt >> ../exp/salida_exp2_ej3.1
 
 # ./tp3 3 -exp 16 b <../exp/entrada_exp2_16input_con_sol.txt >> ../exp/salida_exp2_ej3.1
@@ -48,10 +51,10 @@ make
 
 # Imprimir experimento 3 del ejercicio 3
 
- ./tp3 1 -expRandom 50 a >../exp/ej3_experimentoRandom_50instancias.txt
+ ./tp3 1 -expRandom 50 a >../exp/ej3_experimentoRandom2_50instancias.txt
 
- ./tp3 3 -exp 50 a <../exp/ej3_experimentoRandom_50instancias.txt >> ../exp/salida_exp3.txt
+ ./tp3 3 -exp 50 a <../exp/ej3_experimentoRandom2_50instancias.txt > ../exp/salida2_exp3.txt
 
- ./tp3 3 -exp 50 b <../exp/ej3_experimentoRandom_50instancias.txt >> ../exp/salida_exp3.txt
+ ./tp3 3 -exp 50 b <../exp/ej3_experimentoRandom2_50instancias.txt >> ../exp/salida2_exp3.txt
 
- ./tp3 2 -exp 50 <../exp/ej3_experimentoRandom_50instancias.txt >> ../exp/salida_exp3.txt
+ ./tp3 2 -exp 50 <../exp/ej3_experimentoRandom2_50instancias.txt >> ../exp/salida2_exp3.txt

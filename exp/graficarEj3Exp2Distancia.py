@@ -8,7 +8,7 @@ import sys
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
 #arr = np.loadtxt("experimentoLoco3.data", delimiter=',')
-arr = np.loadtxt("Salidas/ej3_salida_exp3.txt", delimiter=',')
+arr = np.loadtxt("Salidas/ej3_salida2_exp3.txt", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P
@@ -35,10 +35,10 @@ k = 0
 promedioTiempo = []
 nMasm = []
 while k < len(dist):
-  subList = dist[k:k+20]
+  subList = dist[k:k+30]
   promedioTiempo.append(promedio(subList))
   nMasm.append(m[k] + n[k])
-  k += 20
+  k += 30
 
 promedio1NP = np.array(promedioTiempo[0:49]) #vecindario A
 promedio2NP = np.array(promedioTiempo[50:99]) #vecindario B
