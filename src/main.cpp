@@ -254,13 +254,14 @@ int main(int argc, char *argv[]) {
             //     }                
             // }
             for (int inputs = 0; inputs < instancias; ++inputs) {
+                int n,m,k
                 tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
                 for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                     start_timer();
-                    solucion res = solverEj3(estaciones, distancias, n, m, k, false); //cambiar true por true para vecindario B
-                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 3 << ", " << "B" << endl;
+                    solucion res = solverEj3(estaciones, distancias, n, m, k, false); //cambiar false por true para vecindario B
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 3 << ", " << "A" << endl;
                 }  
             }
         }
@@ -333,6 +334,8 @@ int main(int argc, char *argv[]) {
 
             for (int inputs = 0; inputs < instancias; ++inputs) {
                 int rcl = 2;
+                int n, m, k;
+                cin >> n >> m >> k;
                 tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
                 bool criterioDeParada = true; //criterio 2 = true, 1 = false
                 int limite = 30;
@@ -342,7 +345,8 @@ int main(int argc, char *argv[]) {
                 for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                     start_timer();
                     solucion res = solverEj4(estaciones, distancias, n, m, k, rcl, { limite, criterioDeParada }, busqLocal);
-                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 4 << ", " << "B"  << rcl << ", " << limite << ", " << endl;
+                cout << "gil" << endl;
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 4 << ", " << "A"  << rcl << ", " << limite << ", " << endl;
                 }  
             }
         } 
@@ -482,6 +486,7 @@ grasp criterio(1 o 2) limite busqLocal(1 o 2)
 tuple<vector<vector<double> >, vector<Estacion> > cargar_input(int n, int m){
   vector< tuple <int, int, int> > gimnasios_y_paradas;
 
+    cout << "forro" << endl;
   for (int i = 0; i < n; i++) {
     int x,y,p;
     cin >> x >> y >> p;
