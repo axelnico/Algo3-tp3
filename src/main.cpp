@@ -106,38 +106,46 @@ int main(int argc, char *argv[]) {
                 for (int repeticiones = 0; repeticiones < 1; ++repeticiones) {
                     start_timer();
                     std::tuple<double, int, std::vector<int> > res = solverEj1(estaciones, distancias, n, m, k);
-                        cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+                        cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 1 << endl;
                 }
             }
         }
         else {
             random_device rd;
             mt19937 gen(rd());
-            uniform_int_distribution<> gyms(1,10);
-            uniform_int_distribution<> cantPosiones(0,10);
+            uniform_int_distribution<> gyms(1,50);
+            uniform_int_distribution<> cantPosiones(0,50);
             uniform_int_distribution<> x(0,1000);
             uniform_int_distribution<> y(0,1000);
             vector<tuple<int,int,int> > gimnasios;
+            vector<int> nMasMQueYaSalieron;
             for (int i = 0; i < instancias; ++i) {
                 int n = gyms(gen);
                 gimnasios.clear();
-                for (int i = 0; i < n; ++i) {
+                for (int index1 = 0; index1 < n; ++index1) {
                     gimnasios.push_back(make_tuple(x(gen), y(gen), cantPosiones(gen)));
                 }
                 int sumPosiones = 0;
-                for (int i = 0; i < n; ++i) {
-                    sumPosiones += get<2>(gimnasios[i]);
+                for (int index2 = 0; index2 < n; ++index2) {
+                    sumPosiones += get<2>(gimnasios[index2]);
                 }
                 int m = (sumPosiones / 3) + 1;
 
-                cout << n << " " << m << " " << sumPosiones << endl;
-                for (int i = 0; i < n; ++i) {
-                    cout << get<0>(gimnasios[i]) << " " << get<1>(gimnasios[i]) << " " << get<2>(gimnasios[i]) << endl;
+                if(!esta(nMasMQueYaSalieron, n+m) && n+m <= 100){
+                    nMasMQueYaSalieron.push_back(n+m);
+                    cout << n << " " << m << " " << sumPosiones << endl;
+                    for (int index3 = 0; index3 < n; ++index3) {
+                        cout << get<0>(gimnasios[index3]) << " " << get<1>(gimnasios[index3]) << " " << get<2>(gimnasios[index3]) << endl;
+                    }
+                    for (int index4 = 0; index4 < m; ++index4) {
+                        cout << x(gen) << " " << y(gen) << endl;
+                    }
+                    cout << endl;
                 }
-                for (int i = 0; i < m; ++i) {
-                    cout << x(gen) << " " << y(gen) << endl;
+                else {
+                    i--;
                 }
-                cout << endl;
+
             }
         }
     }
@@ -165,7 +173,7 @@ int main(int argc, char *argv[]) {
                     vector<Estacion> copiaEstaciones = estaciones;
                     start_timer();
                     std::tuple<double, int, std::vector<int> > res = solverEj2(copiaEstaciones, distancias, n, m, k);
-                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 2 << endl;
                 }
             }
         }
@@ -235,15 +243,25 @@ int main(int argc, char *argv[]) {
         }
         else{
             int n,m,k;
+            // for (int inputs = 0; inputs < instancias; ++inputs) {
+            //     tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
+            //     vector<vector<double> > distancias = get<0>(input);
+            //     vector<Estacion> estaciones = get<1>(input);
+            //     for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+            //         start_timer();
+            //         solucion res = solverEj3(estaciones, distancias, n, m, k, vecindarioExp == 'a');
+            //         cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 3 << endl;
+            //     }                
+            // }
             for (int inputs = 0; inputs < instancias; ++inputs) {
                 tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
                 for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                     start_timer();
-                    solucion res = solverEj3(estaciones, distancias, n, m, k, vecindarioExp == 'a');
-                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << endl;
-                }                
+                    solucion res = solverEj3(estaciones, distancias, n, m, k, false); //cambiar true por true para vecindario B
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 3 << ", " << "B" << endl;
+                }  
             }
         }
     }
@@ -274,22 +292,22 @@ int main(int argc, char *argv[]) {
             imprimir_res(res);
         } 
         else if (experimentos && !random) {
-            for (int inputs = 0; inputs < instancias; ++inputs) {
-                auto input = dataentry3(n, m, k);
-                vector<vector<double> > distancias = get<0>(input);
-                vector<Estacion> estaciones = get<1>(input);
-                pair<int, bool> criterio = get<2>(input);
-                bool busqLocalAux = get<3>(input);
+            // for (int inputs = 0; inputs < instancias; ++inputs) {
+            //     auto input = dataentry3(n, m, k);
+            //     vector<vector<double> > distancias = get<0>(input);
+            //     vector<Estacion> estaciones = get<1>(input);
+            //     pair<int, bool> criterio = get<2>(input);
+            //     bool busqLocalAux = get<3>(input);
                 
-                for (grasp = 1; grasp <= 15; grasp++) {
-                    for (int repeticiones = 0; repeticiones < 20; ++repeticiones) {
-                        start_timer();
-                        solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
-                        cout << stop_timer() << ", " << get<0>(res) << ", " << grasp << endl;
-                    }
-                }
-            }
-            
+            //     for (grasp = 1; grasp <= 15; grasp++) {
+            //         for (int repeticiones = 0; repeticiones < 20; ++repeticiones) {
+            //             start_timer();
+            //             solucion res = solverEj4(estaciones, distancias, n, m, k, grasp, criterio, busqLocalAux);
+            //             cout << stop_timer() << ", " << get<0>(res) << ", " << grasp << endl;
+            //         }
+            //     }
+            // }
+        
 
             // for (int inputs = 0; inputs < instancias; ++inputs) {
             //     auto input = dataentry3(n, m, k);
@@ -313,8 +331,22 @@ int main(int argc, char *argv[]) {
             //     }
             // }
 
-        } else
-            {
+            for (int inputs = 0; inputs < instancias; ++inputs) {
+                int rcl = 2;
+                tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
+                bool criterioDeParada = true; //criterio 2 = true, 1 = false
+                int limite = 30;
+                bool busqLocal = false; // false = pokeparadas, true = gimnasios
+                vector<vector<double> > distancias = get<0>(input);
+                vector<Estacion> estaciones = get<1>(input);
+                for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
+                    start_timer();
+                    solucion res = solverEj4(estaciones, distancias, n, m, k, rcl, { limite, criterioDeParada }, busqLocal);
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 4 << ", " << "B"  << rcl << ", " << limite << ", " << endl;
+                }  
+            }
+        } 
+        else {
 	            random_device rd;
 	            mt19937 gen(rd());
 	            uniform_int_distribution<> gyms(1,15);
@@ -405,7 +437,7 @@ int main(int argc, char *argv[]) {
     	            }
                 }
             }
-        }
+    }
   return 0;
 }
 
