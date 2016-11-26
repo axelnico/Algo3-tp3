@@ -254,7 +254,7 @@ int main(int argc, char *argv[]) {
             //     }                
             // }
             for (int inputs = 0; inputs < instancias; ++inputs) {
-                int n,m,k
+                int n,m,k;
                 tuple<vector<vector<double> >, vector<Estacion> > input = dataentry2(n, m, k);
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
