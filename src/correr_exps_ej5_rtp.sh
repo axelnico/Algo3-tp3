@@ -16,4 +16,3 @@ echo "corriendo ej3 con 99 instancias.."
 ./tp3 3 -exp 99 <../exp/entradaEj5/random_99_inputs.txt >>../exp/salidaEj5/random_99_inputs.csv
 echo "corriendo ej4 con 99 instancias.."
 ./tp3 4 -exp 99 <../exp/entradaEj5/random_99_inputs.txt >>../exp/salidaEj5/random_99_inputs.csv
-
