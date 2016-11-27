@@ -260,8 +260,8 @@ int main(int argc, char *argv[]) {
                 vector<Estacion> estaciones = get<1>(input);
                 for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                     start_timer();
-                    solucion res = solverEj3(estaciones, distancias, n, m, k, false); //cambiar false por true para vecindario B
-                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 3 << ", " << "A" << endl;
+                    solucion res = solverEj3(estaciones, distancias, n, m, k, true); //cambiar false por true para vecindario B
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 3 << ", " << "B" << endl;
                 }  
             }
         }
@@ -333,13 +333,13 @@ int main(int argc, char *argv[]) {
             // }
 
             for (int inputs = 0; inputs < instancias; ++inputs) {
-                int rcl = 2;
+                int rcl = 1;
                 int n, m, k;
                 cin >> n >> m >> k;
                 tuple<vector<vector<double> >, vector<Estacion> > input = cargar_input(n,m);
                 bool criterioDeParada = true; //criterio 2 = true, 1 = false
-                int limite = 30;
-                bool busqLocal = false; // false = pokeparadas, true = gimnasios
+                int limite = 10;
+                bool busqLocal = true; // false = pokeparadas, true = gimnasios
                 vector<vector<double> > distancias = get<0>(input);
                 vector<Estacion> estaciones = get<1>(input);
                 for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
