@@ -345,7 +345,7 @@ int main(int argc, char *argv[]) {
                 for (int repeticiones = 0; repeticiones < 30; ++repeticiones) {
                     start_timer();
                     solucion res = solverEj4(estaciones, distancias, n, m, k, rcl, { limite, criterioDeParada }, busqLocal);
-                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 4 << ", " << "A"  << rcl << ", " << limite << ", " << endl;
+                    cout << stop_timer() << ", " << n << ", " << m << ", " << k << ", " << get<0>(res) << ", " << get<1>(res) << ", " << 4 << ", " << "A, " << rcl << ", " << limite << endl;
                 }  
             }
         } 
