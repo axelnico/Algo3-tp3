@@ -65,37 +65,13 @@ solverEj4(vector<Estacion> estaciones, vector<vector<double> > distancias, n, m,
 
   \subsection{Experimentación}
 
-    Para poder comparar cada configuración posible y obtener de ahí la configuración óptima. Se fijó una instancia la cual tenía 8 pokeparadas y 8 gimnasios, además de fijar el tamaño de la mochila para asegurar que siempre haya solución. Esto se hizo para poder comparar en una misma instancia todas las posibles configuraciones. La instancia mencionada es:
-
-\begin{codesnippet}
-  \begin{verbatim}
-         8 8 24
-         1 1 1
-         2 2 2
-         3 3 3
-         4 4 1
-         5 5 2
-         6 6 3
-         7 7 1
-         8 8 2
-         9 9
-         10 10
-         11 11
-         12 12
-         13 13
-         14 14
-         15 15
-         16 16
-  \end{verbatim}
-\end{codesnippet}
-
-Luego se realizaron dos experimentos. En el primero, se iteró sobre la cantidad de vértices que entrarán en la RCL, lista en la cual se randomiza, para obtener alguna nueva estacion. Mientras que en el segundo, se iteró sobre el límite de cada criterio de parada. Para ambos al igual que en el \textbf{Ejercicio 3}, se buscó comparar por un lado, qué configuración devolvía valores óptimos, además de qué configuración corría en menor tiempo. En cada gráfico se usaron las siguientes referencias, P = Criterio de paradas, i = Iteraciones del criterio, V = vecindario de búsqueda local, RCL = K vértices que accederan a la RCL.
+    Para poder comparar cada configuración posible y obtener de ahí la configuración óptima. Se generaron 30 instancias random, las cuales nos aseguramos que tengan solución. Luego se realizaron dos experimentos. En el primero, se iteró sobre la cantidad de vértices que entran en la RCL. Mientras que en el segundo, se iteró sobre el límite de cada criterio de parada. Para ambos al igual que en el \textbf{Ejercicio 3}, se buscó comparar por un lado, qué configuración devolvía mejores distancias, además de qué configuración corría en menor tiempo. En cada gráfico se usaron las siguientes referencias, P = Criterio de paradas, i = Iteraciones del criterio, V = vecindario de búsqueda local, RCL = K vértices que accederan a la RCL.
 
 \subsubsection{Experimento 1: RCL}
 
-En el siguiente experimento, se crearon 4 instancias, las mismas mantenían los gimnasios y pokeparadas anteriormente mencionados. Mientras que por cada instancia se modificó el vecindario utilizado en la Búsqueda Local y el criterio de parada (la cantidad de iteraciones se fijó en 100).
+En el siguiente experimento, se crearon 30 instancias random, las mismas tenían, entre 1 y 15 gimnasios. Los mismos requerían entre 0 y 20 pociones. Las posiciones de las estaciones también fueron random. Además, se usaron las 30 instancias con 4 configuraciones distintas. En las 4 configuraciones se modificó por un lado el vecindario utilizado en la Búsqueda Local y el criterio de parada, en el cual la cantidad de iteraciones del criterio se fijó en 15.
 
-De esta manera las siguientes 4 instancias son 
+De esta manera las siguientes 4 configuraciones son 
 
 \begin{table}[H]
 \centering
@@ -103,38 +79,46 @@ De esta manera las siguientes 4 instancias son
  \hline
  Instancias&Busqueda Local&Criterio de parada\\ 
  \hline
- Instancia 0 & Vecindario A & Iterar K veces\\
+ Configuración 0 & Vecindario A & Iterar K veces\\
  \hline
- Instancia 1 & Vecindario A & Iterar hasta K peores\\
+ Configuración 1 & Vecindario A & Iterar hasta K peores\\
  \hline
- Instancia 2 & Vecindario B & Iterar K veces \\
+ Configuración 2 & Vecindario B & Iterar K veces \\
  \hline
- Instancia 3 & Vecindario B & Iterar hasta K peores\\
+ Configuración 3 & Vecindario B & Iterar hasta K peores\\
  \hline
 \end{tabular}
-\caption{Instancias experimento 1}
+\caption{Configuraciones experimento 1}
 \end{table}
 
 
-Luego por cada instancia, se iteró el K de RCL, de 1 a 16. Por cada K, se corrió 100 veces el mismo algoritmo, y se sacó un promedio del tiempo y de la distancia. De esta manera para cada K, se calculó cuánto tiempo tardó el algoritmo además de la calidad de solucion. Luego, los resultados fueron, 
-
+Luego por cada instancia, con cada configuración, se iteró el K de RCL, de 1 a 15. Por cada K, se corrió 20 veces el mismo algoritmo, y se sacó un promedio del tiempo y de la distancia.
+Además se sacó un promedio de la distancia y el tiempo, entre las 30 instancias con la misma configuración y el mismo K. De esta manera se contaba con un solo promedio de tiempo y distancia por cada K, y por cada configuracion.
 
   \begin{figure}[H]
       \begin{center}
-        \includegraphics[width=0.7\columnwidth]{imagenes/Exp1TIempoEJ4.png}
+        \includegraphics[width=0.7\columnwidth]{imagenes/Ej4/ej4_exp1_Tiempo.png}
       \end{center}
   \end{figure}
 
 
-  Luego, a partir de esta experimentación, pudimos observar que a medida que crecía la lista RCL, el algoritmo obtenía mayor posibilidad de random. Esto generó una mayor tardanza a medida que crecía el K. Por otro lado, pudimos observar que otro aspecto que influye en el tiempo de corrida, fue vecindario utilizado. Nuevamente como fue mencionado en \textbf{Ejercicio 3}, debido a que intercambiar gimnasios en los recorridos, genera menos soluciones (pues caer en un recorrido válido intercambiando gimnasios con distintas pociones es muy poco probable). Luego, intercambiar pokeparadas, dado que no puede suceder que intercambiar en una solución pokeparadas, caiga en un recorrido válido, entonces cualquier intercambio puede llegar a ser un posible mínimo local. Luego en primer lugar, observamos que a menor K, tiene menos tiempo de corrida. Por otro lado, el vecindario B corre en menor tiempo que el A.
+  Luego, a partir de esta experimentación, pudimos observar que a medida que crecía la lista RCL, crecía la cantidad de elementos a randomizar, y esto impactaba directamente en el tiempo de ejecución. En el gráfico esto se observa por el crecimiento del tiempo con respecto al crecimiento del tamaño de la RCL. Por otro lado, pudimos notar que el aspecto fundamental para el tiempo de corrida, fue el vecindario utilizado. Esto se debe a que, como fue mencionado en el \textbf{Ejercicio 3}, debido a que intercambiar gimnasios en los recorridos, genera menos soluciones, pues caer en un recorrido válido intercambiando gimnasios con distintas pociones es muy poco probable. Luego, intercambiar pokeparadas, dado que no puede suceder que caiga en un recorrido inválido, cualquier intercambio puede llegar a ser una posible mejor solución o mínimo local. Finalmente, otro aspecto que impactó directamente en el tiempo de ejecución, fue el criterio de parada. Si bien la diferencia de tiempo es mínima para el vecindario B, dentro del vecindario A se puede observar que en todo momento, el criterio de parada 1 con 15 iteraciones, era aquel que menos tardaba. Concluyendo de esta manera, que en cuanto a tiempos, la configuración más optima, se da con el vecindario B, y con el criterio de parada 1, además de un RCL = 1. La comparación en cuanto a criterios, se da en la sección de \textbf{Experimento 2}.
+
+  \par Un segundo aspecto a comparar es la calidad de solución,
 
 \begin{figure}[H]
     \begin{center}
-      \includegraphics[width=0.7\columnwidth]{imagenes/Exp1DistanciaEj4.png}
+      \includegraphics[width=0.7\columnwidth]{imagenes/Ej4/ej4_exp1_Distancia.png}
     \end{center}
 \end{figure}
 
-Para este nuevo experimento comparamos la calidad de la solución. Por un lado observamos que con un menor RCL, las soluciones son óptimas. Por otro lado, observamos que los criterios de parada no generan una diferencia destacable en cuanto a performance en los algoritmos. Luego, el vecindario A, si bien corre en más tiempo que el B, genera mejores soluciones. Mejor es para un tamaño de RCL pequeño.
+
+Para este entonces, volvemos a notar como el vecindario, es la sección fundamental de la metaheurística, dado que, comparando a partir de los vecindarios, el vecindario A, es aquel que mejor distancia consigue, a diferencia del B, para todo criterio y para todo valor de RCL, nuevamente la justificación de porqué el vecindario A supera al vecindario B, es explicado en el \textbf{Ejercicio 3}. Para poder sacar una mejor conclusión, debemos comparar el vecindario A y el vecindario B independientemente.
+Por un lado en el vecindario A, notamos que para un RCL = 2, es donde, para cualquier criterio, consigue la mejor distancia. Esto podría deberse a que, a mayor RCL, las posibilidades de obtener, luego de randomizar la RCL, una próxima estación con una distancia corta, es menor. Mientras que, para un RCL = 1, el algoritmo metaheurístico, pasaría a ser similar a un algoritmo greedy, junto con una búsqueda local. Por otro lado, dentro del vecindario A, no encontramos una mejora lo suficientemente notable, como para decidir acerca de qué criterio de parada, es óptimo junto a él. Por otro lado, el vecindario B, tiene un empeoramiento de calidad de solución a medida que crece el RCL. Esto puede deberse, no tanto a la influencia de la randomización, sino a la búsqueda local, dado que en general, el vecindario B tiene una peor calidad de solución. Al igual que con el vecindario A, no notamos ninguna mejora a partir del criterio de parada. Luego, de este experimento, concluímos que el vecindario A con una RCL = 2, es quien devuelve una mejor solución, sin importar el criterio de parada.
+
+
+\par Finalmente, la conclusión de este experimento, es que, en principio, no se puede obtener un algoritmo eficiente en cuanto a tiempo y calidad de la solución a la vez si se depende de la RCL. Por otro lado, la fuerte influencia de los vecindarios utilizados en la búsqueda local dentro del algoritmo, tanto para tiempos como para calidad de solución. Es decir, según que sea necesario, el vecindario A devolverá una mejor solución, en más tiempo. Así como el vecindario B, tarda menos y es peor en cuanto a solución. Por otro lado, el tamaño de la RCL, fue el segundo factor de crecimiento, tanto para distancia como para tiempos. En ambas comparaciones, (exceptuando que en RCL = 2, la solución mejoró), tanto el tiempo como la calidad de solución, empeoraban a medida que crecía. Luego se buscará en próximos experimentos, ver cuánto influye el criterio y sus iteraciones.
+
 
 
 \subsubsection{Experimento 2: Iterar el límite de los criterios de parada}
