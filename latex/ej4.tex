@@ -65,11 +65,11 @@ solverEj4(vector<Estacion> estaciones, vector<vector<double> > distancias, n, m,
 
   \subsection{Experimentación}
 
-    Para poder comparar cada configuración posible y obtener de ahí la configuración óptima. Se generaron 30 instancias random, las cuales nos aseguramos que tengan solución. Luego se realizaron dos experimentos. En el primero, se iteró sobre la cantidad de vértices que entran en la RCL. Mientras que en el segundo, se iteró sobre el límite de cada criterio de parada. Para ambos al igual que en el \textbf{Ejercicio 3}, se buscó comparar por un lado, qué configuración devolvía mejores distancias, además de qué configuración corría en menor tiempo. En cada gráfico se usaron las siguientes referencias, P = Criterio de paradas, i = Iteraciones del criterio, V = vecindario de búsqueda local, RCL = K vértices que accederan a la RCL.
+    Para poder comparar cada configuración posible y obtener de ahí la configuración óptima, se generaron 30 instancias random, las cuales nos aseguramos que tengan solución. Luego se realizaron dos experimentos. En el primero, se iteró sobre la cantidad de vértices que entran en la RCL. Mientras que en el segundo, se iteró sobre el límite de cada criterio de parada. Para ambos al igual que en el \textbf{Ejercicio 3}, se buscó comparar por un lado, qué configuración devolvía mejores distancias, y por otro qué configuración corría en menos tiempo. En cada gráfico se usaron las siguientes referencias, P = Criterio de paradas, i = Iteraciones del criterio, V = vecindario de búsqueda local, RCL = K vértices que accederan a la RCL.
 
 \subsubsection{Experimento 1: RCL}
 
-En el siguiente experimento, se crearon 30 instancias random, las mismas tenían, entre 1 y 15 gimnasios. Los mismos requerían entre 0 y 20 pociones. Las posiciones de las estaciones también fueron random. Además, se usaron las 30 instancias con 4 configuraciones distintas. En las 4 configuraciones se modificó por un lado el vecindario utilizado en la Búsqueda Local y el criterio de parada, en el cual la cantidad de iteraciones del criterio se fijó en 15.
+En el siguiente experimento, se crearon 30 instancias random. Las mismas tenían entre 1 y 15 gimnasios. Los mismos requerían entre 0 y 20 pociones. Las posiciones de las estaciones también fueron random. Además, estas 30 instancias se copiaron 4 veces, cada una con una configuración distinta. En cada una de las 4 configuraciones se modificó por un lado el vecindario utilizado en la Búsqueda Local y por otro, el criterio de parada en el cual la cantidad de iteraciones del criterio se fijó en 15.
 
 De esta manera las siguientes 4 configuraciones son 
 
@@ -93,7 +93,7 @@ De esta manera las siguientes 4 configuraciones son
 
 
 Luego por cada instancia, con cada configuración, se iteró el K de RCL, de 1 a 15. Por cada K, se corrió 20 veces el mismo algoritmo, y se sacó un promedio del tiempo y de la distancia.
-Además se sacó un promedio de la distancia y el tiempo, entre las 30 instancias con la misma configuración y el mismo K. De esta manera se contaba con un solo promedio de tiempo y distancia por cada K, y por cada configuracion.
+Además, se sacó un promedio de la distancia y el tiempo entre las 30 instancias con la misma configuración y el mismo K. De esta manera se contaba con un solo promedio de tiempo y distancia por cada K, y por cada configuracion.
 
   \begin{figure}[H]
       \begin{center}
@@ -102,7 +102,9 @@ Además se sacó un promedio de la distancia y el tiempo, entre las 30 instancia
   \end{figure}
 
 
-  Luego, a partir de esta experimentación, pudimos observar que a medida que crecía la lista RCL, crecía la cantidad de elementos a randomizar, y esto impactaba directamente en el tiempo de ejecución. En el gráfico esto se observa por el crecimiento del tiempo con respecto al crecimiento del tamaño de la RCL. Por otro lado, pudimos notar que el aspecto fundamental para el tiempo de corrida, fue el vecindario utilizado. Esto se debe a que, como fue mencionado en el \textbf{Ejercicio 3}, debido a que intercambiar gimnasios en los recorridos, genera menos soluciones, pues caer en un recorrido válido intercambiando gimnasios con distintas pociones es muy poco probable. Luego, intercambiar pokeparadas, dado que no puede suceder que caiga en un recorrido inválido, cualquier intercambio puede llegar a ser una posible mejor solución o mínimo local. Finalmente, otro aspecto que impactó directamente en el tiempo de ejecución, fue el criterio de parada. Si bien la diferencia de tiempo es mínima para el vecindario B, dentro del vecindario A se puede observar que en todo momento, el criterio de parada 1 con 15 iteraciones, era aquel que menos tardaba. Concluyendo de esta manera, que en cuanto a tiempos, la configuración más optima, se da con el vecindario B, y con el criterio de parada 1, además de un RCL = 1. La comparación en cuanto a criterios, se da en la sección de \textbf{Experimento 2}.
+  Luego, a partir de esta experimentación, dado que a medida que crecía la lista RCL, crecía la cantidad de elementos a randomizar, pudimos observar cómo esto impactaba directamente en el tiempo de ejecución. En el gráfico esto se observa por el crecimiento del tiempo con respecto al crecimiento del tamaño de la RCL. \par Por otro lado, pudimos notar que el factor determinante para el tiempo de corrida, fue el vecindario utilizado. 
+  \par Esto se debe a que, como fue mencionado en el \textbf{Ejercicio 3}, intercambiar pokeparadas genera más soluciones que intercambiar gimnasios en los recorridos, pues encontrar un recorrido válido intercambiando gimnasios con distintas pociones es muy poco probable, mientras que intercambiar dos pokeparadas siempre resulta un recorrido válido. Por lo tanto, la búsqueda local de gimnasios, al no encontrar recorridos válidos, termina. Mientras que la búsqueda local de pokeparadas, dado que no puede suceder que caiga en un recorrido inválido, cualquier intercambio puede llegar a ser una posible mejor solución o mínimo local. 
+  \par Finalmente, otro aspecto que impactó directamente en el tiempo de ejecución, fue el criterio de parada. Si bien la diferencia de tiempo es mínima, dentro del vecindario A se puede observar que en todo momento, el criterio de parada 1 con 15 iteraciones, era aquel que menos tardaba. Concluyendo de esta manera, que en cuanto a tiempos, la configuración más optima, se da con el vecindario B y con el criterio de parada 1, además de un RCL de un elemento. La comparación en cuanto a criterios de parada, se da en la sección de \textbf{Experimento 2}.
 
   \par Un segundo aspecto a comparar es la calidad de solución,
 
@@ -113,50 +115,79 @@ Además se sacó un promedio de la distancia y el tiempo, entre las 30 instancia
 \end{figure}
 
 
-Para este entonces, volvemos a notar como el vecindario, es la sección fundamental de la metaheurística, dado que, comparando a partir de los vecindarios, el vecindario A, es aquel que mejor distancia consigue, a diferencia del B, para todo criterio y para todo valor de RCL, nuevamente la justificación de porqué el vecindario A supera al vecindario B, es explicado en el \textbf{Ejercicio 3}. Para poder sacar una mejor conclusión, debemos comparar el vecindario A y el vecindario B independientemente.
-Por un lado en el vecindario A, notamos que para un RCL = 2, es donde, para cualquier criterio, consigue la mejor distancia. Esto podría deberse a que, a mayor RCL, las posibilidades de obtener, luego de randomizar la RCL, una próxima estación con una distancia corta, es menor. Mientras que, para un RCL = 1, el algoritmo metaheurístico, pasaría a ser similar a un algoritmo greedy, junto con una búsqueda local. Por otro lado, dentro del vecindario A, no encontramos una mejora lo suficientemente notable, como para decidir acerca de qué criterio de parada, es óptimo junto a él. Por otro lado, el vecindario B, tiene un empeoramiento de calidad de solución a medida que crece el RCL. Esto puede deberse, no tanto a la influencia de la randomización, sino a la búsqueda local, dado que en general, el vecindario B tiene una peor calidad de solución. Al igual que con el vecindario A, no notamos ninguna mejora a partir del criterio de parada. Luego, de este experimento, concluímos que el vecindario A con una RCL = 2, es quien devuelve una mejor solución, sin importar el criterio de parada.
+Para este entonces, volvemos a notar como el vecindario, es la sección fundamental de la metaheurística, dado que, comparando a partir de los vecindarios, el vecindario A es aquel que mejor distancia consigue, para todo criterio y para todo valor de RCL. La justificación de por qué las soluciones del vecindario A son mejores que las del vecindario B, está explicado en el \textbf{Ejercicio 3}. 
+\par Para sacar una mejor conclusión, comparamos el vecindario A y el vecindario B independientemente. 
+Por un lado, usando el vecindario A notamos que, para un RCL de tamaño 2 y para cualquier criterio, se consigue la mejor distancia. Esto podría deberse a que, a mayor RCL, las posibilidades de obtener una próxima estación con una distancia más corta, es menor, debido al factor random que obtiene una próxima estación de la RCL. Mientras que para un RCL de tamaño 1, el algoritmo metaheurístico pasaría a ser similar a un algoritmo greedy, junto con una búsqueda local, con lo cual recorrería menos soluciones. 
+\par Por otro lado, dentro del vecindario A, no encontramos una mejora lo suficientemente notable como para decidir acerca de cuál criterio de parada es óptimo. 
+\par Además, con el vecindario B la calidad de solución empeora a medida que crece el RCL. Esto se debe a que cuanto más tamaño tenga RCL, en cada iteración donde se construye un recorrido, se elige una estación al azar entre las que entren dentro de la RCL. Cuanto más grande sea la RCL, más estaciones posibles serán las candidatas a ser la próxima a recorrer, y por lo tanto, mayor probabilidad habrá de que no se elija la óptima. 
+También influye que en la búsqueda local, el vecindario B tiene una peor calidad de solución. 
+\par Cabe también destacar que, al igual que con el vecindario A, no notamos ninguna mejora a partir del criterio de parada. 
+\par Luego de este experimento, concluímos que el algoritmo que utiliza el vecindario A con una RCL de tamaño 2, es quien devuelve una mejor solución, sin importar el criterio de parada.
 
 
-\par Finalmente, la conclusión de este experimento, es que, en principio, no se puede obtener un algoritmo eficiente en cuanto a tiempo y calidad de la solución a la vez si se depende de la RCL. Por otro lado, la fuerte influencia de los vecindarios utilizados en la búsqueda local dentro del algoritmo, tanto para tiempos como para calidad de solución. Es decir, según que sea necesario, el vecindario A devolverá una mejor solución, en más tiempo. Así como el vecindario B, tarda menos y es peor en cuanto a solución. Por otro lado, el tamaño de la RCL, fue el segundo factor de crecimiento, tanto para distancia como para tiempos. En ambas comparaciones, (exceptuando que en RCL = 2, la solución mejoró), tanto el tiempo como la calidad de solución, empeoraban a medida que crecía. Luego se buscará en próximos experimentos, ver cuánto influye el criterio y sus iteraciones.
+\par Finalmente, obtuvimos como conclusión de este experimento que, en principio, no se puede obtener un algoritmo eficiente en cuanto a tiempo y calidad de la solución a la vez, si se depende de la RCL. Por otro lado, pudimos comprender la fuerte influencia que tienen los vecindarios utilizados en la búsqueda local dentro del algoritmo, tanto para tiempos como para calidad de solución. Es decir, el vecindario A devolverá una mejor solución, en mayor tiempo, y el vecindario B, devolverá una peor solución, en menor tiempo. 
+\par El tamaño de la RCL fue el segundo factor de crecimiento, tanto para distancia como para tiempos. En ambas comparaciones (exceptuando que en un RCL de tamaño 2, la solución mejoró), tanto el tiempo como la calidad de solución, empeoraban a medida que crecía. Luego, se buscará en próximos experimentos ver cuánto influye el criterio de parada y sus iteraciones.
 
 
 
 \subsubsection{Experimento 2: Iterar el límite de los criterios de parada}
 
-Para este segundo experimento, se usaron las mismas instancias, con la diferencia que se fijó el RCL en 5, además de iterar de 1 a 100 el límite de ambos criterios de parada.
+Para este experimento se usaron las mismas instancias que en el \textbf{Experimento 1}, pero esta vez en vez de fijar el criterio de parada e iterar el tamaño del RCL, se fijó el tamaño del RCL en la mitad de la cantidad de estaciones y se iteró de 1 a 15 el límite de ambos criterios de parada. De esta manera las 4 configuraciones son,
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ |c|c|c|c| } 
+ \hline
+ Instancias&Busqueda Local&Criterio de parada&RCL\\ 
+ \hline
+ Configuración 0 & Vecindario A & Iterar K veces & Estaciones/2\\
+ \hline
+ Configuración 1 & Vecindario A & Iterar hasta K peores & Estaciones/2\\
+ \hline
+ Configuración 2 & Vecindario B & Iterar K veces  & Estaciones/2\\
+ \hline
+ Configuración 3 & Vecindario B & Iterar hasta K peores & Estaciones/2\\
+ \hline
+\end{tabular}
+\caption{Configuraciones experimento 2}
+\end{table}
+
+Luego, se corrió cada instancia 20 veces, y se calculó el promedio del tiempo y las distancias. 
+Después por cada instancia cuyo vecindario de búsqueda local, criterio de parada y cantidad de iteraciones eran el mismo, se sacó el mismo promedio. Luego, por cada una de las 4 configuraciones, se obtuvieron 15 promedios de tiempo y distancia.
+
 
 
 \begin{figure}[H]
     \begin{center}
-      \includegraphics[width=0.7\columnwidth]{imagenes/Exp2DistanciaEj4.png}
+      \includegraphics[width=0.7\columnwidth]{imagenes/Ej4/ej4_exp2_Tiempo.png}
     \end{center}
 \end{figure}
+
+Al igual que en el \textbf{Experimento 1}, la característica determinante de las instancias, que influye en el tiempo, es el vecindario utilizado en la búsqueda local. Luego, comparando cada vecindario en particular, en ambos criterios a medida que avanza la cantidad de iteraciones, crece el tiempo de ejecución. Esto se debe claramente a que, a mayor cantidad de veces que se ejecuta un algoritmo, el tiempo de corrida crece. 
+\par Luego, si se observa el vecindario A, hay una gran diferencia de tiempos entre cada criterio de parada del algoritmo. Para esto, se debe entrar en detalle cada criterio de parada. Es decir, esto se debe a que, el \textbf{criterio 1}, hace exactamente la cantidad de iteraciones que se le indique, mientras que el \textbf{criterio 2}, sea K la cantidad de iteraciones, se ejecuta hasta encontrar K soluciones peores. O sea, si encuentra una sola solución mejor, tendrá más de K iteraciones, lo cual aumenta el tiempo de ejecución. Lo mismo se puede observar en el vecindario B, aunque es mínima la diferencia de tiempos entre criterios, es el segundo criterio por el mismo motivo que en el vecindario A el que más tarda
+\par Como primer conclusión, si nos basamos en vecindarios de la búsqueda local, el vecindario que menos tiempo toma es el B. Y a la hora de elegir un criterio de parada, si se busca un menor tiempo, se debe hacer una sola iteración para cualquier criterio. Pero si es necesario iterar en alguno, se tomaría el criterio 1 donde la cantidad de iteraciones que se le indique son las que va a realizar.
+
+\newpage
+\par Luego para analizar la calidad de solución, 
+
+
 
 \begin{figure}[H]
     \begin{center}
-      \includegraphics[width=0.7\columnwidth]{imagenes/Exp2TiempoEj4.png}
+      \includegraphics[width=0.7\columnwidth]{imagenes/Ej4/ej4_exp2_Distancia.png}
     \end{center}
 \end{figure}
 
 
-En primer lugar, en el primer gráfico como fue esperado, a mayor cantidad de iteraciones de criterio de parada, son mayores las soluciones recorridas dentro del campo de solución. Es por esto que es más probable que se encuentren mejores soluciones.
 
-\par Por otro lado, en términos de tiempo, como fue esperado si la cantidad de iteraciones de la metaheurística crece, el tiempo de corrida crece linealmente.
+En primer lugar, el objetivo del criterio de parada es mejorar la solución, cuanto más iteraciones se hace del algoritmo, mejor soluciones encuentra. Es por esto que sin importar el vecindario ni el criterio, a mayor cantidad de iteraciones, mejores soluciones encuentra. 
+\par Luego, el vecindario fue el factor que más influyó en el resultado, es decir, las soluciones del vecindario A, son claramente mejores que para el vecindario B. Además, por cada vecindario, se observa que el criterio 1 está por debajo en cuanto a calidad de solución que el criterio 2. Esto se debe, como mencionamos anteriormente, a que si se itera K veces el criterio 2, cada vez que encuentra una mejor solución, no se cuenta como iteración, por lo tanto sea S la cantidad de veces que encontró mejor solución, las iteraciones serán K+S, y tendrá mayor cantidad de iteraciones para mejorar la solución. Mientras que el criterio 1 únicamente iterará K veces el algoritmo, sin importar la mejora de la solución.
+\par De esta manera, concluímos que el criterio 2, es aquel que a mayor cantidad de iteraciones, encuentra las mejores soluciones, siempre y cuando esté complementado con el vecindario A de la búsqueda local.
 
-\par Finalmente comparamos ambos criterios de parada cada uno con una vecindad distinta
-
-
-\begin{figure}[H]
-\minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{imagenes/Exp2Ej2DistanciaCrit1.png}
-  \caption{Criterio 1}
-\endminipage\hfill
-\minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{imagenes/Exp2Ej2DistanciaCrit2.png}
-  \caption{Criterio 2}
-\endminipage
-\end{figure}
+\par Finalmente, como conclusión del segundo experimento, los resultados fueron similares al experimento 1. Debido a que si se busca una mejor solución, es necesario mayor tiempo de ejecución. Luego si se busca una mejor solución, se debe iterar la mayor cantidad de veces posible, el criterio de parada 2, junto con el vecindario A. Mientras que si se busca una solución poco óptima, en el menor tiempo posible, es necesario pocas iteraciones del criterio de parada 1, junto con el vecindario B. 
 
 
+\subsubsection{Conclusión}
 
-Se observa que nuevamente, la selección del vecindario es determinante a la hora de una mejor solución.
+Luego de comparar cada configuración posible de la metaheurística, pudimos concluir que, uno de los principales problemas que se enfrentan para este tipo de algoritmo, es el criterio entre calidad de solución y tiempo de corrida. En ambos experimentos encontramos la misma problemática. Luego si se busca optimizar más la solución, obtuvimos que es necesario elegir el vecindario A, junto con un RCL de tamaño 2, con el criterio de parada 2 haciendo la mayor cantidad de iteraciones posibles. Mientras que si se busca es un algoritmo metaheurístico rápido, es necesario el vecindario B, junto con un RCL de tamaño 1, con pocas iteraciones del criterio de parada 1. 
