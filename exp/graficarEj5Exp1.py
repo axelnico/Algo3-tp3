@@ -7,7 +7,7 @@ import sys
 # Antes de usar esto, tirar en consola "./tp1 1 -exp > resEj1.txt". CUIDADO CON PISAR EL ARCHIVO ANTERIOR
 
 # arr = np.genfromtxt("rsalida.txt", delimiter=',')
-arr = np.loadtxt("salida_exp2_ej1.data", delimiter=',')
+arr = np.loadtxt("salida_exp1a_ej5.data", delimiter=',')
 tiempo    = [row[0] for row in arr] #tiempo en MS
 n         = [row[1] for row in arr] #P
 m         = [row[2] for row in arr] #P
@@ -31,49 +31,50 @@ def factorial(list):
     return res
 
 k = 0
-promedioTiempoPocasPotas = []
+promedioTiempoBT = []
+nMasmBT = []
+while k < 180:
+  subList = tiempo[k:k+30]
+  promedioTiempoBT.append(promedio(subList))
+  nMasmBT.append(m[k])
+  k += 30
+
+
+promedioTiempoEj2 = []
 nMasm = []
-while k < 80:
-  subList = tiempo[k:k+30]
-  promedioTiempoPocasPotas.append(promedio(subList))
-  nMasm.append(m[k] + n[k])
-  k += 30
-k += 150
+while k < 1830:
+  subList = tiempo[k:k+150]
+  promedioTiempoEj2.append(promedio(subList))
+  nMasm.append(m[k])
+  k += 150
 
-promedioTiempoSumTresPotas = []
-nMasm2 = []
-while k < 330:
+promedioTiempoEj3 = []
+while k < len(tiempo):
   subList = tiempo[k:k+30]
-  promedioTiempoSumTresPotas.append(promedio(subList))
-  nMasm2.append(m[k] + n[k])
+  promedioTiempoEj3.append(promedio(subList))
   k += 30
 
 
-promedio1NP = np.array(promedioTiempoPocasPotas)
-promedio2NP = np.array(promedioTiempoSumTresPotas)
+promedio1NP = np.array(promedioTiempoBT)
+promedio2NP = np.array(promedioTiempoEj2)
+promedio3NP = np.array(promedioTiempoEj3)
+nmBT = np.array(nMasmBT)
 nm = np.array(nMasm)
-nm2 = np.array(nMasm2)
 
-
-cota = 'factorial(x)*x'
-deAUno = range(2,7)
-grafCota = graph(cota, deAUno)
-deAUno = np.array(deAUno)
-
-# medianaX  = mediana(x)
-# modaX     = moda(x)
+print(len(promedio3NP))
+print(len(nm))
 
 
 fig = plt.figure()
 fig.patch.set_facecolor('white')
 ax1 = fig.add_subplot(111)
-pylab.plot(nm, promedio1NP,color='red', marker='o', label= 'Entre 1 y 3')
-pylab.plot(nm2, promedio2NP,color='green', marker='<', label= 'Todos 3')
-pylab.plot(deAUno, grafCota,color='black', marker='s', label= 'Cota de Complejidad')
+# pylab.plot(nmBT, promedio1NP,color='red', marker='o', label= '4 GYM')
+pylab.plot(nm, promedio2NP,color='blue', marker='D', label= '5 GYM')
+pylab.plot(nm, promedio3NP,color='green', marker='>', label= '6 GYM')
 
 
-ax1.set_title("Tiempo segun pociones necesarias por GYM")
-ax1.set_xlabel('Cantidad de gimnasios + pokeparadas')
+ax1.set_title("Tiempo segun cantidad de gimnasios")
+ax1.set_xlabel('Cantidad de pokeparadas')
 # ax1.set_xscale('linear')
 ax1.set_ylabel('Tiempo de procesamiento en ns')
 # ax1.set_yscale('linear')
